@@ -1,0 +1,31 @@
+Package: FacileViz
+Type: Package
+Title: Interactive vizualizations for FacileData
+Version: 0.1.0
+Authors@R: c(
+    person("Steve", "Lianoglou", , "lianoglou@dnli.com", c("aut", "cre")),
+    person("Denali Therapeutics", role = c("cph", "fnd"))
+    )
+Description: This package provides basic methods that generate interactive
+    vizualizations for FacileData. The "workhorse" method is the "vizualize" S3
+    generic method defined within, which must return FacileViz (or subclass)
+    objects. Note that the only facile-dependency for this package must be
+    FacileData. Other packages in the ecosystem will import/depend on this.
+Depends:
+    R (>= 3.5)
+Imports:
+    checkmate,
+    broom,
+    FacileData,
+    RColorBrewer,
+    plotly,
+    tidyr,
+    viridis
+Suggests:
+    knitr,
+    testthat
+License: Apache Version 2.0
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.0.1.9000
