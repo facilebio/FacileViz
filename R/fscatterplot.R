@@ -10,8 +10,46 @@ fscatterplot <- function(x, axes,
                          shape_aes = NULL, shape_map = NULL,
                          size_aes = NULL, size_map = NULL,
                          hover_aes = NULL, hover_map = NULL,
-                         hover = NULL, ...) {
+                         hover = NULL,
+                         ...,
+                         # direct plot_ly params:
+                         marker_size = 8,
+                         sizes = c(10, 100)) {
   UseMethod("fscatterplot", x)
+}
+
+fscatterplot.default <- function(x, axes,
+                                 color_aes = NULL, color_map = NULL,
+                                 shape_aes = NULL, shape_map = NULL,
+                                 size_aes = NULL, size_map = NULL,
+                                 hover_aes = NULL, hover_map = NULL,
+                                 hover = NULL,
+                                 ...,
+                                 # direct plot_ly params:
+                                 marker_size = 8,
+                                 sizes = c(10, 100)) {
+  stop("This isn't real just yet, but it would look something like this")
+  # Imagine x is a DGEList, ExpressionSet, SummarizedExperiment, etc.
+  # This will delegate to the appropriate method in FacileBioc or elsewhere
+  fscatterplot(facilitate(x), axes,
+               color_aes = color_aes, color_map = color_map,
+               shape_aes = shape_aes, shape_map = shape_map,
+               size_aes = size_aes, size_map = size_map,
+               hover_aes = hover_aes, hover_map = hover_map,
+               hover = hover, ..., marker_size = marker_size, sizes = sizes)
+}
+
+fscatterplot.FaclieDataStore <- function(x, axes,
+                                         color_aes = NULL, color_map = NULL,
+                                         shape_aes = NULL, shape_map = NULL,
+                                         size_aes = NULL, size_map = NULL,
+                                         hover_aes = NULL, hover_map = NULL,
+                                         hover = NULL,
+                                         ...,
+                                         # direct plot_ly params:
+                                         marker_size = 8,
+                                         sizes = c(10, 100)) {
+
 }
 
 fscatterplot.FacileViz <- function(x, axes,
@@ -19,7 +57,9 @@ fscatterplot.FacileViz <- function(x, axes,
                                    shape_aes = NULL, shape_map = NULL,
                                    size_aes = NULL, size_map = NULL,
                                    hover_aes = NULL, hover_map = NULL,
-                                   hover = NULL, ...) {
+                                   hover = NULL, ...,
+                                   marker_size = 8,
+                                   sizes = c(10, 100)) {
   stop("This isn't real just yet, but it would look something like this")
   # delegate to fscatterpot.{tbl|data.frame}
   fscatterplot(tidy(x), axes,
@@ -27,7 +67,7 @@ fscatterplot.FacileViz <- function(x, axes,
                shape_aes = shape_aes, shape_map = shape_map,
                size_aes = size_aes, size_map = size_map,
                hover_aes = hover_aes, hover_map = hover_map,
-               hover = hover, ...)
+               hover = hover, ..., marker_size = marker_size, sizes = sizes)
 }
 
 #' @rdname fscatterplot
@@ -38,7 +78,9 @@ fscatterplot.data.frame <- function(x, axes,
                                     shape_aes = NULL, shape_map = NULL,
                                     size_aes = NULL, size_map = NULL,
                                     hover_aes = NULL, hover_map = NULL,
-                                    face_aes = NULL, hover = NULL, ...) {
+                                    face_aes = NULL, hover = NULL, ...,
+                                    marker_size = 8,
+                                    sizes = c(10, 100)) {
   assert_character(axes, min.len = 2L, max.len = 3L)
   assert_subset(axes, names(x))
 
@@ -86,6 +128,7 @@ fscatterplot.data.frame <- function(x, axes,
     yaxis <- list(titl = axes[2L])
     p <- plot_ly(xx, x = formula(xf), y = formula(yf),
                  type = "scatter",  mode = "markers",
+                 marker = list(size = marker_size),
                  color = .color, colors = .colors,
                  symbol = .shape, symbols = .shapes,
                  text = ~.hover)
@@ -100,8 +143,8 @@ fscatterplot.data.frame <- function(x, axes,
                  type = "scatter3d", mode = "markers",
                  color = .color, colors = .colors,
                  symbol = .shape, symbols = .shapes,
-                 text = ~.hover,
-                 marker = list(color = colors))
+                 marker = list(size = marker_size),
+                 text = ~.hover)
     p <- layout(p, scene = scene)
   }
 
@@ -119,11 +162,14 @@ fscatterplot.tbl <- function(x, axes,
                              shape_aes = NULL, shape_map = NULL,
                              size_aes = NULL, size_map = NULL,
                              hover_aes = NULL, hover_map = NULL,
-                             face_aes = NULL, hover = NULL, ...) {
+                             face_aes = NULL, hover = NULL, ...,
+                             marker_size = 8,
+                             sizes = c(10, 100)) {
   fscatterplot.data.frame(collect(x, Inf), axes,
                           color_aes = color_aes, color_map = color_map,
                           shape_aes = shape_aes, shape_map = shape_map,
                           size_aes = size_aes, size_map = size_map,
                           hover_aes = hover_aes, hover_map = hover_map,
-                          hover = hover, ...)
+                          hover = hover, ..., marker_size = marker_size,
+                          sizes = sizes)
 }

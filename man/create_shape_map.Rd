@@ -19,3 +19,31 @@ are the different shapes (pch integers)
 Map unique leves of \code{vals} to different shapes. Only works for categorical
 variables.
 }
+\details{
+TODO: Use plotly shapes (currently we use base R pch). This webpage shows
+you the symbols and how to generate them:
+http://www.r-graph-gallery.com/125-the-plotlys-symbols/
+}
+\examples{
+# This isn't a real example. It is the code from the aforementioned page
+# that generates the plotly shapes.
+library(plotly)
+data=expand.grid(c(1:6) , c(1:6))
+data=cbind(data , my_symbol=c(1:36))
+data=data[data$my_symbol<33 , ]
+
+# Make the graph
+my_graph=plot_ly(data , x=~Var1 , y=~Var2 , type="scatter",
+                 mode="markers+text" , hoverinfo="text", text=~my_symbol,
+                 textposition = "bottom right",
+                 marker=list(symbol=~my_symbol, size=40, color="red",
+                             opacity=0.7)) \%>\%
+  layout(
+    hovermode="closest",
+    yaxis=list(autorange="reversed", title="",
+               tickfont=list(color="white")) ,
+    xaxis=list( title="" , tickfont=list(color="white"))
+  )
+# show graph
+my_graph
+}

@@ -298,6 +298,7 @@ with_hover <- function(x, aesthetic, aes_map = NULL,
 
 .with_aes_columns <- function(x, aesthetic, aes_cols, ...) {
   # We aren't doing tidyeval yet, so this can only be a character
+  assert_data_frame(x)
   assert_character(aesthetic, min.len = 1L)
   assert_subset(aesthetic, colnames(x))
   if (length(aesthetic) == 1L) {
