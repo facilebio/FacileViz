@@ -6,7 +6,8 @@
 \alias{with_color.tbl}
 \title{Augment a facile object with a color aesthetic}
 \usage{
-with_color(x, aesthetic, aes_map = NULL, ..., .default_color = I("black"))
+with_color(x, aesthetic, aes_map = NULL, ...,
+  .default_color = I("black"))
 
 \method{with_color}{data.frame}(x, aesthetic = NULL, aes_map = NULL,
   out_column = ".color_aes.", ..., .default_color = "black")

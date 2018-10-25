@@ -7,19 +7,21 @@
 \title{Draws interactive 2 or 3d scatterplots over data}
 \usage{
 fscatterplot(x, axes, color_aes = NULL, color_map = NULL,
-  shape_aes = NULL, shape_map = NULL, size_aes = NULL, size_map = NULL,
-  hover_aes = NULL, hover_map = NULL, hover = NULL, ...,
-  marker_size = 8, sizes = c(10, 100))
-
-\method{fscatterplot}{data.frame}(x, axes, color_aes = NULL,
-  color_map = NULL, shape_aes = NULL, shape_map = NULL, size_aes = NULL,
-  size_map = NULL, hover_aes = NULL, hover_map = NULL, face_aes = NULL,
+  shape_aes = NULL, shape_map = NULL, size_aes = NULL,
+  size_map = NULL, hover_aes = NULL, hover_map = NULL,
   hover = NULL, ..., marker_size = 8, sizes = c(10, 100))
 
+\method{fscatterplot}{data.frame}(x, axes, color_aes = NULL,
+  color_map = NULL, shape_aes = NULL, shape_map = NULL,
+  size_aes = NULL, size_map = NULL, hover_aes = NULL,
+  hover_map = NULL, face_aes = NULL, hover = NULL, ...,
+  marker_size = 8, sizes = c(10, 100))
+
 \method{fscatterplot}{tbl}(x, axes, color_aes = NULL, color_map = NULL,
-  shape_aes = NULL, shape_map = NULL, size_aes = NULL, size_map = NULL,
-  hover_aes = NULL, hover_map = NULL, face_aes = NULL, hover = NULL,
-  ..., marker_size = 8, sizes = c(10, 100))
+  shape_aes = NULL, shape_map = NULL, size_aes = NULL,
+  size_map = NULL, hover_aes = NULL, hover_map = NULL,
+  face_aes = NULL, hover = NULL, ..., marker_size = 8,
+  sizes = c(10, 100))
 }
 \arguments{
 \item{x}{a data object}

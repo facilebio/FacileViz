@@ -2,9 +2,10 @@
 % Please edit documentation in R/plot_expression.R
 \name{plot_expression}
 \alias{plot_expression}
-\title{Plot expression of a gene/feature}
+\title{Plot expression of a gene/feature (this function is not facile)}
 \usage{
-plot_expression(y, gene, group, color_by = NULL, ...)
+plot_expression(y, gene, group = "group", color_by = NULL,
+  wrap_by = "symbol", ...)
 }
 \arguments{
 \item{y}{the DGEList or voomed object your data is in}
