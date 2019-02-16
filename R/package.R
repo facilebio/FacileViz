@@ -3,7 +3,7 @@
 #' @import broom
 #' @import checkmate
 #' @import dplyr
-#' @import FacileDataSet
+#' @import FacileData
 #' @import plotly
 #' @import tidyr
 #' @import ggplot2

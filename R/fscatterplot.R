@@ -12,6 +12,7 @@ fscatterplot <- function(x, axes,
                          hover_aes = NULL, hover_map = NULL,
                          hover = NULL,
                          ...,
+                         xlabel = NULL, ylabel = NULL, zlabel = NULL,
                          # direct plot_ly params:
                          marker_size = 8,
                          sizes = c(10, 100)) {
@@ -25,6 +26,7 @@ fscatterplot.default <- function(x, axes,
                                  hover_aes = NULL, hover_map = NULL,
                                  hover = NULL,
                                  ...,
+                                 xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                  # direct plot_ly params:
                                  marker_size = 8,
                                  sizes = c(10, 100)) {
@@ -46,6 +48,7 @@ fscatterplot.FaclieDataStore <- function(x, axes,
                                          hover_aes = NULL, hover_map = NULL,
                                          hover = NULL,
                                          ...,
+                                         xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                          # direct plot_ly params:
                                          marker_size = 8,
                                          sizes = c(10, 100)) {
@@ -58,6 +61,7 @@ fscatterplot.FacileViz <- function(x, axes,
                                    size_aes = NULL, size_map = NULL,
                                    hover_aes = NULL, hover_map = NULL,
                                    hover = NULL, ...,
+                                   xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                    marker_size = 8,
                                    sizes = c(10, 100)) {
   stop("This isn't real just yet, but it would look something like this")
@@ -67,7 +71,9 @@ fscatterplot.FacileViz <- function(x, axes,
                shape_aes = shape_aes, shape_map = shape_map,
                size_aes = size_aes, size_map = size_map,
                hover_aes = hover_aes, hover_map = hover_map,
-               hover = hover, ..., marker_size = marker_size, sizes = sizes)
+               hover = hover, ...,
+               xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
+               marker_size = marker_size, sizes = sizes)
 }
 
 #' @rdname fscatterplot
@@ -78,7 +84,8 @@ fscatterplot.data.frame <- function(x, axes,
                                     shape_aes = NULL, shape_map = NULL,
                                     size_aes = NULL, size_map = NULL,
                                     hover_aes = NULL, hover_map = NULL,
-                                    face_aes = NULL, hover = NULL, ...,
+                                    facet_aes = NULL, hover = NULL, ...,
+                                    xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                     marker_size = 8,
                                     sizes = c(10, 100)) {
   assert_character(axes, min.len = 2L, max.len = 3L)
@@ -123,9 +130,10 @@ fscatterplot.data.frame <- function(x, axes,
     .shape <- formula(paste0("~", .shape.columns[["variable"]]))
   }
 
+
+  xaxis <- list(title = if (!is.null(xlabel)) xlabel[1L] else axes[1L])
+  yaxis <- list(title = if (!is.null(ylabel)) ylabel[1L] else axes[2L])
   if (length(axes) == 2L) {
-    xaxis <- list(title = axes[1L])
-    yaxis <- list(titl = axes[2L])
     p <- plot_ly(xx, x = formula(xf), y = formula(yf),
                  type = "scatter",  mode = "markers",
                  marker = list(size = marker_size),
@@ -134,9 +142,7 @@ fscatterplot.data.frame <- function(x, axes,
                  text = ~.hover)
     p <- layout(p, xaxis = xaxis, yaxis = yaxis)
   } else {
-    xaxis <- list(title = axes[1L])
-    yaxis <- list(title = axes[3L])
-    zaxis <- list(title = axes[2L])
+    zaxis <- list(title = if (!is.null(zlabel)) zlabel[1L] else axes[3L])
     scene <- list(xaxis = xaxis, yaxis = yaxis, zaxis = zaxis)
 
     p <- plot_ly(xx, x = formula(xf), z = formula(yf), y = formula(zf),
@@ -162,7 +168,8 @@ fscatterplot.tbl <- function(x, axes,
                              shape_aes = NULL, shape_map = NULL,
                              size_aes = NULL, size_map = NULL,
                              hover_aes = NULL, hover_map = NULL,
-                             face_aes = NULL, hover = NULL, ...,
+                             facet_aes = NULL, hover = NULL, ...,
+                             xlabel = NULL, ylabel = NULL, zlabel = NULL,
                              marker_size = 8,
                              sizes = c(10, 100)) {
   fscatterplot.data.frame(collect(x, Inf), axes,
@@ -170,6 +177,8 @@ fscatterplot.tbl <- function(x, axes,
                           shape_aes = shape_aes, shape_map = shape_map,
                           size_aes = size_aes, size_map = size_map,
                           hover_aes = hover_aes, hover_map = hover_map,
-                          hover = hover, ..., marker_size = marker_size,
+                          hover = hover, ...,
+                          xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
+                          marker_size = marker_size,
                           sizes = sizes)
 }

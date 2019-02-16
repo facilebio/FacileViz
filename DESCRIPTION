@@ -16,7 +16,7 @@ Depends:
 Imports:
     checkmate,
     broom,
-    FacileDataSet,
+    FacileData,
     ggplot2,
     RColorBrewer,
     SummarizedExperiment,
@@ -30,4 +30,4 @@ License: Apache Version 2.0
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

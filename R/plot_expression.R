@@ -18,17 +18,20 @@
 #' @param group what column in the $samples (or $targets, for vm) pheno table
 #'   to use to plot split expression across the x axis
 #' @param color_by name of column (like `group` param) to color your points by
+#' @param wrap_by the column in the dataset to wrap the results by. If
+#'   `length(gene) > 1`, you're going to need to wrwap.
 #' @return a ggplot object
 #'
 #' @examples
 #' y <- mbl_load_rnaseq("mouse", dataset = "mbl")
-#' mbl_plot_expression(y, gene = "Fxyd6", group = "group",
-#'                     color_by = "source")
-#' mbl_plot_expression(y, gene = "Fxyd6", group = "genotype",
-#'                     color_by = "source")
+#' plot_expression(y, gene = "Fxyd6", group = "group",
+#'                 color_by = "source")
+#' plot_expression(y, gene = "Fxyd6", group = "genotype",
+#'                 color_by = "source")
 plot_expression <- function(y, gene, group = "group",
                             color_by = NULL,
-                            wrap_by = "symbol", ...) {
+                            wrap_by = "symbol",
+                            inorder = TRUE, ...) {
   assert_character(group, min.len = 1, max.len = 2)
   assert_character(gene, min.len = 1)
 
@@ -48,7 +51,9 @@ plot_expression <- function(y, gene, group = "group",
     warning("Some genes not found from query, only keeping: ",
             paste(gene[!isna], collapse = ","))
     gidx <- gidx[!isna]
+    gene <- gene[!isna]
   }
+
   dat <- tidy(y[gidx,])
 
   # Add column to data.frame to indicate group of observations
@@ -87,6 +92,12 @@ plot_expression <- function(y, gene, group = "group",
       stop("Don't know how to wrap multiple gene plots")
     }
     wrap.by <- colnames(dat)[wrap.idx]
+    if (inorder) {
+      wrap.lvls <- c(gene, sort(unique(dat[[wrap.by]])))
+      wrap.lvls <- intersect(wrap.lvls, dat[[wrap.by]])
+      dat[[wrap.by]] <- factor(dat[[wrap.by]], wrap.lvls)
+    }
+
     gg <- gg + facet_wrap(wrap.by)
   }
 

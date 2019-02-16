@@ -5,7 +5,7 @@
 \title{Plot expression of a gene/feature (this function is not facile)}
 \usage{
 plot_expression(y, gene, group = "group", color_by = NULL,
-  wrap_by = "symbol", ...)
+  wrap_by = "symbol", inorder = TRUE, ...)
 }
 \arguments{
 \item{y}{the DGEList or voomed object your data is in}
@@ -16,6 +16,9 @@ plot_expression(y, gene, group = "group", color_by = NULL,
 to use to plot split expression across the x axis}
 
 \item{color_by}{name of column (like \code{group} param) to color your points by}
+
+\item{wrap_by}{the column in the dataset to wrap the results by. If
+\code{length(gene) > 1}, you're going to need to wrwap.}
 }
 \value{
 a ggplot object
@@ -29,10 +32,10 @@ specified by the \code{color_by} parameter.
 }
 \examples{
 y <- mbl_load_rnaseq("mouse", dataset = "mbl")
-mbl_plot_expression(y, gene = "Fxyd6", group = "group",
-                    color_by = "source")
-mbl_plot_expression(y, gene = "Fxyd6", group = "genotype",
-                    color_by = "source")
+plot_expression(y, gene = "Fxyd6", group = "group",
+                color_by = "source")
+plot_expression(y, gene = "Fxyd6", group = "genotype",
+                color_by = "source")
 }
 \seealso{
 \code{\link[=mbl_tidy]{mbl_tidy()}}
