@@ -6,34 +6,40 @@
 \alias{fscatterplot.tbl}
 \title{Draws interactive 2 or 3d scatterplots over data}
 \usage{
-fscatterplot(x, axes, color_aes = NULL, color_map = NULL,
+fscatterplot(dat, axes, color_aes = NULL, color_map = NULL,
   shape_aes = NULL, shape_map = NULL, size_aes = NULL,
   size_map = NULL, hover_aes = NULL, hover_map = NULL,
   hover = NULL, ..., xlabel = NULL, ylabel = NULL, zlabel = NULL,
-  marker_size = 8, sizes = c(10, 100))
+  marker_size = 8, sizes = c(10, 100), event_source = "A")
 
-\method{fscatterplot}{data.frame}(x, axes, color_aes = NULL,
+\method{fscatterplot}{data.frame}(dat, axes, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,
   size_aes = NULL, size_map = NULL, hover_aes = NULL,
   hover_map = NULL, facet_aes = NULL, hover = NULL, ...,
   xlabel = NULL, ylabel = NULL, zlabel = NULL, marker_size = 8,
-  sizes = c(10, 100))
+  sizes = c(10, 100), event_source = "A")
 
-\method{fscatterplot}{tbl}(x, axes, color_aes = NULL, color_map = NULL,
-  shape_aes = NULL, shape_map = NULL, size_aes = NULL,
-  size_map = NULL, hover_aes = NULL, hover_map = NULL,
-  facet_aes = NULL, hover = NULL, ..., xlabel = NULL,
-  ylabel = NULL, zlabel = NULL, marker_size = 8, sizes = c(10,
-  100))
+\method{fscatterplot}{tbl}(dat, axes, color_aes = NULL,
+  color_map = NULL, shape_aes = NULL, shape_map = NULL,
+  size_aes = NULL, size_map = NULL, hover_aes = NULL,
+  hover_map = NULL, facet_aes = NULL, hover = NULL, ...,
+  xlabel = NULL, ylabel = NULL, zlabel = NULL, marker_size = 8,
+  sizes = c(10, 100), event_source = "A")
 }
 \arguments{
-\item{x}{a data object}
-
 \item{axes}{the definition of the x,y,z axes}
+
+\item{x}{a data object}
 }
 \value{
 a plotly object
 }
 \description{
-Draws interactive 2 or 3d scatterplots over data
+Use the \code{event_source} parameter to link selection/brushing of the plot
+to a listener.
+}
+\examples{
+dat <- data.frame(a = rnorm(100), b = rnorm(100), c = rnorm(100),
+                  class = sample(c("g1", "g2"), 100, replace = TRUE))
+fscatterplot(dat, c("a", "b"), group = "class")
 }

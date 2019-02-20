@@ -1,11 +1,20 @@
 #' Draws interactive 2 or 3d scatterplots over data
 #'
+#' Use the `event_source` parameter to link selection/brushing of the plot
+#' to a listener.
+#'
 #' @rdname fscatterplot
 #' @export
 #' @param x a data object
 #' @param axes the definition of the x,y,z axes
 #' @return a plotly object
-fscatterplot <- function(x, axes,
+#' @examples
+#' dat <- data.frame(a = rnorm(100), b = rnorm(100), c = rnorm(100),
+#'                   class = sample(c("g1", "g2"), 100, replace = TRUE))
+#' fscatterplot(dat, c("a", "b"), group = "class", hover = "class")
+#' fscatterplot(dat, c("a", "b"), group = "class", hover = c("class", "c"))
+#' fscatterplot(dat, c("a", "b", "c"), group = "class", hover = c("class", "c"))
+fscatterplot <- function(dat, axes,
                          color_aes = NULL, color_map = NULL,
                          shape_aes = NULL, shape_map = NULL,
                          size_aes = NULL, size_map = NULL,
@@ -15,11 +24,12 @@ fscatterplot <- function(x, axes,
                          xlabel = NULL, ylabel = NULL, zlabel = NULL,
                          # direct plot_ly params:
                          marker_size = 8,
-                         sizes = c(10, 100)) {
-  UseMethod("fscatterplot", x)
+                         sizes = c(10, 100),
+                         event_source = "A") {
+  UseMethod("fscatterplot", dat)
 }
 
-fscatterplot.default <- function(x, axes,
+fscatterplot.default <- function(dat, axes,
                                  color_aes = NULL, color_map = NULL,
                                  shape_aes = NULL, shape_map = NULL,
                                  size_aes = NULL, size_map = NULL,
@@ -29,19 +39,21 @@ fscatterplot.default <- function(x, axes,
                                  xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                  # direct plot_ly params:
                                  marker_size = 8,
-                                 sizes = c(10, 100)) {
+                                 sizes = c(10, 100),
+                                 event_source = "A") {
   stop("This isn't real just yet, but it would look something like this")
   # Imagine x is a DGEList, ExpressionSet, SummarizedExperiment, etc.
   # This will delegate to the appropriate method in FacileBioc or elsewhere
-  fscatterplot(facilitate(x), axes,
+  fscatterplot(facilitate(dat), axes,
                color_aes = color_aes, color_map = color_map,
                shape_aes = shape_aes, shape_map = shape_map,
                size_aes = size_aes, size_map = size_map,
                hover_aes = hover_aes, hover_map = hover_map,
-               hover = hover, ..., marker_size = marker_size, sizes = sizes)
+               hover = hover, ..., marker_size = marker_size, sizes = sizes,
+               event_source = event_source)
 }
 
-fscatterplot.FaclieDataStore <- function(x, axes,
+fscatterplot.FaclieDataStore <- function(dat, axes,
                                          color_aes = NULL, color_map = NULL,
                                          shape_aes = NULL, shape_map = NULL,
                                          size_aes = NULL, size_map = NULL,
@@ -51,11 +63,12 @@ fscatterplot.FaclieDataStore <- function(x, axes,
                                          xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                          # direct plot_ly params:
                                          marker_size = 8,
-                                         sizes = c(10, 100)) {
+                                         sizes = c(10, 100),
+                                         event_source = "A") {
 
 }
 
-fscatterplot.FacileViz <- function(x, axes,
+fscatterplot.FacileViz <- function(dat, axes,
                                    color_aes = NULL, color_map = NULL,
                                    shape_aes = NULL, shape_map = NULL,
                                    size_aes = NULL, size_map = NULL,
@@ -63,23 +76,25 @@ fscatterplot.FacileViz <- function(x, axes,
                                    hover = NULL, ...,
                                    xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                    marker_size = 8,
-                                   sizes = c(10, 100)) {
+                                   sizes = c(10, 100),
+                                   event_source = "A") {
   stop("This isn't real just yet, but it would look something like this")
   # delegate to fscatterpot.{tbl|data.frame}
-  fscatterplot(tidy(x), axes,
+  fscatterplot(tidy(dat), axes,
                color_aes = color_aes, color_map = color_map,
                shape_aes = shape_aes, shape_map = shape_map,
                size_aes = size_aes, size_map = size_map,
                hover_aes = hover_aes, hover_map = hover_map,
                hover = hover, ...,
                xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
-               marker_size = marker_size, sizes = sizes)
+               marker_size = marker_size, sizes = sizes,
+               event_source = event_source)
 }
 
 #' @rdname fscatterplot
 #' @method fscatterplot data.frame
 #' @export
-fscatterplot.data.frame <- function(x, axes,
+fscatterplot.data.frame <- function(dat, axes,
                                     color_aes = NULL, color_map = NULL,
                                     shape_aes = NULL, shape_map = NULL,
                                     size_aes = NULL, size_map = NULL,
@@ -87,18 +102,19 @@ fscatterplot.data.frame <- function(x, axes,
                                     facet_aes = NULL, hover = NULL, ...,
                                     xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                     marker_size = 8,
-                                    sizes = c(10, 100)) {
+                                    sizes = c(10, 100),
+                                    event_source = "A") {
   assert_character(axes, min.len = 2L, max.len = 3L)
-  assert_subset(axes, names(x))
+  assert_subset(axes, names(dat))
 
-  xx <- x
+  xx <- dat
   xx <- with_color(xx, color_aes, aes_map = color_map, ...)
   xx <- with_shape(xx, shape_aes, aes_map = shape_map, ...)
   # xx <- with_size(xx, size_aes, ...)
   # xx <- with_hover(xx, hover_aes, ...)
 
   if (is.character(hover)) {
-    assert_subset(hover, colnames(x))
+    assert_subset(hover, colnames(dat))
     hvals <- lapply(hover, function(wut) {
       vals <- xx[[wut]]
       if (is.numeric(vals)) vals <- prettyNum(round(vals, 2), big.mark = ",")
@@ -139,7 +155,7 @@ fscatterplot.data.frame <- function(x, axes,
                  marker = list(size = marker_size),
                  color = .color, colors = .colors,
                  symbol = .shape, symbols = .shapes,
-                 text = ~.hover)
+                 text = ~.hover, source = event_source)
     p <- layout(p, xaxis = xaxis, yaxis = yaxis)
   } else {
     zaxis <- list(title = if (!is.null(zlabel)) zlabel[1L] else axes[3L])
@@ -150,12 +166,12 @@ fscatterplot.data.frame <- function(x, axes,
                  color = .color, colors = .colors,
                  symbol = .shape, symbols = .shapes,
                  marker = list(size = marker_size),
-                 text = ~.hover)
+                 text = ~.hover, source = event_source)
     p <- layout(p, scene = scene)
   }
 
   p <- layout(p, dragmode = "select")
-  out <- list(plot = p, input_data = x, params = list())
+  out <- list(plot = p, input_data = dat, params = list())
   class(out) <- c("FacileScatterViz", "FacileViz")
   out
 }
@@ -163,7 +179,7 @@ fscatterplot.data.frame <- function(x, axes,
 #' @rdname fscatterplot
 #' @method fscatterplot tbl
 #' @export
-fscatterplot.tbl <- function(x, axes,
+fscatterplot.tbl <- function(dat, axes,
                              color_aes = NULL, color_map = NULL,
                              shape_aes = NULL, shape_map = NULL,
                              size_aes = NULL, size_map = NULL,
@@ -171,8 +187,9 @@ fscatterplot.tbl <- function(x, axes,
                              facet_aes = NULL, hover = NULL, ...,
                              xlabel = NULL, ylabel = NULL, zlabel = NULL,
                              marker_size = 8,
-                             sizes = c(10, 100)) {
-  fscatterplot.data.frame(collect(x, Inf), axes,
+                             sizes = c(10, 100),
+                             event_source = "A") {
+  fscatterplot.data.frame(collect(dat, Inf), axes,
                           color_aes = color_aes, color_map = color_map,
                           shape_aes = shape_aes, shape_map = shape_map,
                           size_aes = size_aes, size_map = size_map,
@@ -180,5 +197,5 @@ fscatterplot.tbl <- function(x, axes,
                           hover = hover, ...,
                           xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
                           marker_size = marker_size,
-                          sizes = sizes)
+                          sizes = sizes, event_source = event_source)
 }
