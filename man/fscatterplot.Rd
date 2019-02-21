@@ -8,26 +8,36 @@
 \usage{
 fscatterplot(dat, axes, color_aes = NULL, color_map = NULL,
   shape_aes = NULL, shape_map = NULL, size_aes = NULL,
-  size_map = NULL, hover_aes = NULL, hover_map = NULL,
+  size_map = NULL, facet_aes = NULL, facet_nrows = NULL,
   hover = NULL, ..., xlabel = NULL, ylabel = NULL, zlabel = NULL,
   marker_size = 8, sizes = c(10, 100), event_source = "A")
 
 \method{fscatterplot}{data.frame}(dat, axes, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,
-  size_aes = NULL, size_map = NULL, hover_aes = NULL,
-  hover_map = NULL, facet_aes = NULL, hover = NULL, ...,
-  xlabel = NULL, ylabel = NULL, zlabel = NULL, marker_size = 8,
-  sizes = c(10, 100), event_source = "A")
+  size_aes = NULL, size_map = NULL, facet_aes = NULL,
+  facet_nrows = NULL, hover = NULL, ..., xlabel = NULL,
+  ylabel = NULL, zlabel = NULL, marker_size = 8, sizes = c(10,
+  100), event_source = "A")
 
 \method{fscatterplot}{tbl}(dat, axes, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,
-  size_aes = NULL, size_map = NULL, hover_aes = NULL,
-  hover_map = NULL, facet_aes = NULL, hover = NULL, ...,
-  xlabel = NULL, ylabel = NULL, zlabel = NULL, marker_size = 8,
-  sizes = c(10, 100), event_source = "A")
+  size_aes = NULL, size_map = NULL, facet_aes = NULL,
+  facet_nrows = NULL, hover = NULL, ..., xlabel = NULL,
+  ylabel = NULL, zlabel = NULL, marker_size = 8, sizes = c(10,
+  100), event_source = "A")
 }
 \arguments{
 \item{axes}{the definition of the x,y,z axes}
+
+\item{facet_aes}{The name of a column in \code{dat} to use for faceting. If this
+is a length-2 vector, then we try to do a facet_grid (undone.)}
+
+\item{...}{One of the following
+\itemize{
+\item any number of plotly/ggplot2 objects.
+\item a list of plotly/ggplot2 objects.
+\item a tibble with one list-column of plotly/ggplot2 objects.
+}}
 
 \item{x}{a data object}
 }
@@ -40,6 +50,16 @@ to a listener.
 }
 \examples{
 dat <- data.frame(a = rnorm(100), b = rnorm(100), c = rnorm(100),
-                  class = sample(c("g1", "g2"), 100, replace = TRUE))
-fscatterplot(dat, c("a", "b"), group = "class")
+                  class = sample(c("g1", "g2", "g3"), 100, replace = TRUE),
+                  grp = sample(c("n", "o", "p", "q", "r"), 100, replace = TRUE))
+fscatterplot(dat, c("a", "b"), color_aes = "class", hover = "class")
+fscatterplot(dat, c("a", "b"), color_aes = "class", hover = c("class", "c"))
+fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
+             facet_aes = "class", hover = c("class", "c"))
+fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
+             facet_aes = "grp", hover = c("class", "c"))
+
+# 3d
+fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
+             hover = c("class", "c"))
 }

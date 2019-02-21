@@ -98,6 +98,58 @@ aes_map.default <- function(x, aes_name = NULL, ...) {
 
 # with_* =======================================================================
 
+#' Utility function used by most plotting functions that returns a data.frame
+#' with columns mapping the observations to colors, shape, etc (adds columns
+#' for each)
+#'
+#' @export
+with_aesthetics <- function(dat, ...) {
+  UseMethod("with_aesthetics", dat)
+}
+
+#' @export
+with_aesthetics.data.frame <- function(dat, color_aes = NULL, color_map = NULL,
+                                       shape_aes = NULL, shape_map = NULL,
+                                       size_aes = NULL, size_map = NULL,
+                                       hover = NULL, ...) {
+  amaps <- c(color_aes, shape_aes, size_aes, hover)
+  assert_character(amaps)
+  assert_subset(amaps, names(dat))
+
+  xx <- with_color(dat, color_aes, color_map, ...)
+  xx <- with_shape(xx, shape_aes, shape_map, ...)
+
+  if (!is.null(size_aes)) {
+    warning("We are skipping size aesthetic maps for now ...")
+  }
+  # xx <- with_size(xx, size_aes, size_map, ...)
+
+  if (is.character(hover)) {
+    hvals <- lapply(hover, function(wut) {
+      vals <- xx[[wut]]
+      if (is.numeric(vals)) vals <- prettyNum(round(vals, 2), big.mark = ",")
+      if (!is.character(vals)) vals <- as.character(vals)
+      paste0(wut, ": ", vals)
+    })
+    xx[[".hover"]] <- do.call(paste, c(hvals, list(sep = "<br>")))
+  } else {
+    xx[[".hover"]] <- ""
+  }
+
+  xx
+}
+
+with_aesthetics.tbl <- function(dat, color_aes = NULL, color_map = NULL,
+                                shape_aes = NULL, shape_map = NULL,
+                                size_aes = NULL, size_map = NULL,
+                                hover = NULL, ...) {
+  with_aesthetics.data.frame(collect(dat, n = Inf),
+                             color_aes = color_aes, color_map = color_map,
+                             shape_aes = shape_aes, shape_map = shape_map,
+                             size_aes = size_aes, size_map = size_map,
+                             hover = hover, ...)
+}
+
 # with_color -------------------------------------------------------------------
 
 #' Augment a facile object with a color aesthetic
