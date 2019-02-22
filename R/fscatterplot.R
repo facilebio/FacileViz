@@ -115,7 +115,7 @@ fscatterplot.data.frame <- function(dat, axes,
                  color = .color, colors = .colors,
                  symbol = .shape, symbols = .shapes,
                  text = ~.hover, source = event_source)
-    p <- layout(p, xaxis = xaxis, yaxis = yaxis)
+    p <- layout(p, xaxis = xaxis, yaxis = yaxis, dragmode = "select")
   } else {
     zaxis <- list(title = if (!is.null(zlabel)) zlabel[1L] else axes[3L])
     scene <- list(xaxis = xaxis, yaxis = yaxis, zaxis = zaxis)

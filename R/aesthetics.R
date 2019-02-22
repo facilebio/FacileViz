@@ -113,6 +113,8 @@ with_aesthetics.data.frame <- function(dat, color_aes = NULL, color_map = NULL,
                                        size_aes = NULL, size_map = NULL,
                                        hover = NULL, ...) {
   amaps <- c(color_aes, shape_aes, size_aes, hover)
+  if (is.null(amaps)) return(dat)
+
   assert_character(amaps)
   assert_subset(amaps, names(dat))
 
