@@ -20,6 +20,14 @@
 #'   geom_boxplot()
 #' fboxplot(dat, x = "variety", y = "note")
 #'
+#' gg <- ggplot(dat, aes(x = variety, y = note)) +
+#'   geom_boxplot(outlier.shape = NA) +
+#'   geom_jitter(aes(color = treatment), width = 0.1)
+#' gg
+#' ggplotly(gg)
+#'
+#' fboxplot(dat, x = "variety", y = "note", color_aes = "treatment")
+#' fboxplot(dat, x = "variety", y = "note", shape_aes = "treatment")
 #' ggplot(dat, aes(x = variety, y = note)) +
 #'   geom_boxplot() +
 #'   facet_wrap(~ treatment)
@@ -115,6 +123,8 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
 
   p <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover) %>%
     add_boxplot(color = .color, colors = .colors,
+                # symbol = .shape, symbols = .shapes,
+                # marker = list(size = marker_size),
                 boxpoints = boxpoints, pointpos = pointpos) %>%
     layout(xaxis = xaxis, yaxis = yaxis, dragmode = "select")
   p
