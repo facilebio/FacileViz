@@ -2,14 +2,22 @@
 % Please edit documentation in R/fboxplot.R
 \name{fboxplot}
 \alias{fboxplot}
+\alias{fboxplot.data.frame}
 \title{Create an interactive boxplot}
 \usage{
-fboxplot(dat, x, y, color_aes = NULL, color_map = NULL,
+fboxplot(dat, x, y, with_points = FALSE, group_aes = NULL,
+  color_aes = NULL, color_map = NULL, shape_aes = NULL,
+  shape_map = NULL, size_aes = NULL, size_map = NULL,
+  facet_aes = NULL, facet_nrows = NULL, hover = NULL, ...,
+  xlabel = NULL, ylabel = NULL, marker_size = 8, sizes = c(10,
+  100), pointpos = -1.8, event_source = "A")
+
+\method{fboxplot}{data.frame}(dat, x, y, with_points = nrow(dat) < 1000,
+  group_aes = NULL, color_aes = NULL, color_map = NULL,
   shape_aes = NULL, shape_map = NULL, size_aes = NULL,
-  size_map = NULL, hover_aes = NULL, hover_map = NULL,
-  group_aes = NULL, hover = NULL, ..., xlabel = NULL,
-  ylabel = NULL, zlabel = NULL, marker_size = 8, sizes = c(10,
-  100), event_source = "A")
+  size_map = NULL, facet_aes = NULL, facet_nrows = NULL,
+  hover = NULL, ..., xlabel = NULL, ylabel = NULL, marker_size = 8,
+  sizes = c(10, 100), pointpos = -1.8, event_source = "A")
 }
 \arguments{
 \item{dat}{the data source}
@@ -18,16 +26,39 @@ fboxplot(dat, x, y, color_aes = NULL, color_map = NULL,
 
 \item{y}{the (real valued) values for the y}
 
-\item{color_aes}{for the color of boxplot and points}
-
-\item{shape_aes}{for the points}
-
-\item{size_aes}{for the points}
-
-\item{hover_aes}{for the points}
-
-\item{group_aes}{group bar plots along the \code{x} categorical axis}
+\item{group_aes}{column in \code{dat} to group barplots by (not yet implemented)}
 }
 \description{
 Create an interactive boxplot
+}
+\examples{
+dat <- data.frame(
+  variety = rep(LETTERS[1:7], each=40),
+  treatment = rep(c("high","low"),each=20),
+  note = seq(1:280)+sample(1:150, 280, replace=TRUE))
+
+# Dueling banjos
+
+## Ungrouped
+ggplot(dat, aes(x = variety, y = note)) +
+  geom_boxplot()
+fboxplot(dat, x = "variety", y = "note")
+
+gg <- ggplot(dat, aes(x = variety, y = note)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(aes(color = treatment), width = 0.1)
+gg
+ggplotly(gg)
+
+fboxplot(dat, x = "variety", y = "note", color_aes = "treatment")
+fboxplot(dat, x = "variety", y = "note", shape_aes = "treatment")
+ggplot(dat, aes(x = variety, y = note)) +
+  geom_boxplot() +
+  facet_wrap(~ treatment)
+fboxplot(dat, x = "variety", y = "note", facet_aes = "treatment")
+
+## Grouped
+ggplot(dat, aes(x=variety, y=note, fill=treatment)) +
+  geom_boxplot()
+fboxplot(dat, x = "variety", y = "note", group_aes = "treatment")
 }

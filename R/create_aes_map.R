@@ -16,7 +16,7 @@
 #'   `vals`, and the value is the color it maps to. Colors will be recycled
 #'   if there are more levels than colors provided by `map`.
 create_color_map <- function(vals, map = NULL) {
-  is.cat <- is.categorical(vals)
+  is.cat <- test_categorical(vals)
 
   if (is.cat) {
     if (is.null(map)) map <- mucho.colors()
@@ -70,7 +70,7 @@ create_color_map <- function(vals, map = NULL) {
 #' # show graph
 #' my_graph
 create_shape_map <- function(vals, map = NULL) {
-  stopifnot(is.categorical(vals))
+  assert_categorical(vals)
 
   # These work for 2d plots, but 3d plots don't support all the shapes.
   # https://plot.ly/r/reference/#scatter3d-marker-symbol
@@ -118,7 +118,7 @@ mucho.colors <- function() {
 #' @return a character vector like `map` but with recycled entries if the number
 #'   of `length(unique(vals)) > length(map)`
 xref.discrete.map.to.vals <- function(map, vals) {
-  stopifnot(is.categorical(vals))
+  assert_categorical(vals)
   stopifnot(is.character(map) || is.integerish(map))
   map.type <- if (is.character(map)) "char" else "int"
 

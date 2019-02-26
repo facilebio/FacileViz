@@ -10,7 +10,7 @@
 #'   colors provided by the given map name
 expect_daes_map <- function(map, values, expected = NULL,
                             info = "unknown color map test") {
-  stopifnot(is.categorical(values))
+  assert_categorical(values)
   uvals <- if (is.factor(values)) levels(values) else sort(unique(values))
   n.cats <- length(unique(uvals))
 
@@ -29,7 +29,7 @@ expect_daes_map <- function(map, values, expected = NULL,
     expect_equal(length(expected), n.cats)
     # if (is(map, "AsIs")) {
     #   nms <- names(map)
-    #   map <- if (is.categorical(map)) as.character(map) else as.numeric(map)
+    #   map <- if (test_categorical(map)) as.character(map) else as.numeric(map)
     #   names(map) <- nms
     # }
     expect_equal(map, expected, info = info)

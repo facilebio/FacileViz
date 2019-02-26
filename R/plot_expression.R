@@ -125,7 +125,7 @@ plot_expression <- function(y, gene, group = "group",
 #   if (length(aesthetic) == 1L) {
 #     x[[out_column]] <- x[[aesthetic]]
 #   } else {
-#     is.cat <- sapply(x[, aesthetic], is.categorical)
+#     is.cat <- sapply(x[, aesthetic], test_categorical)
 #     assert_true(all(is.cat))
 #     x <- tidyr::unite_(x, out_column, aesthetic, remove = FALSE)
 #   }

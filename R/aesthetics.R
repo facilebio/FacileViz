@@ -363,7 +363,7 @@ with_hover <- function(x, aesthetic, aes_map = NULL,
   if (length(aesthetic) == 1L) {
     x[[aes_cols$variable]] <- x[[aesthetic]]
   } else {
-    is.cat <- sapply(x[, aesthetic], is.categorical)
+    is.cat <- sapply(x[, aesthetic], test_categorical)
     assert_true(all(is.cat))
     x <- tidyr::unite_(x, aes_cols$variable, aesthetic, remove = FALSE)
   }
