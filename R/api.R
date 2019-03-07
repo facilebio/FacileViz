@@ -10,17 +10,6 @@
 # * `fp$params`: The parameters used to configure the plot, made accessible via
 #   `fparams(fp)` (TODO: make fparams S3)
 
-#' Workhorse function to generate interactive vizualizations to FacileData
-#'
-#' @export
-#' @param x A "facile" object, like a `FacileAnalysisResult`, for one.
-#' @return a `FacileViz` object (or subclass, like `FacileAnalysisViz`, which
-#'   encapsulates the components required to create an interactive vizualization
-#'   from `x`
-vizualize <- function(x, ...) {
-  UseMethod("vizualize", x)
-}
-
 # Getters and Setters ----------------------------------------------------------
 #' Retrieve the input object from a FacileViz
 #' @export

@@ -9,15 +9,16 @@
 fscatterplot(dat, axes, color_aes = NULL, color_map = NULL,
   shape_aes = NULL, shape_map = NULL, size_aes = NULL,
   size_map = NULL, facet_aes = NULL, facet_nrows = NULL,
-  hover = NULL, ..., xlabel = NULL, ylabel = NULL, zlabel = NULL,
-  marker_size = 8, sizes = c(10, 100), event_source = "A")
+  hover = NULL, webgl = FALSE, ..., xlabel = NULL, ylabel = NULL,
+  zlabel = NULL, marker_size = 8, sizes = c(10, 100),
+  event_source = "A")
 
 \method{fscatterplot}{data.frame}(dat, axes, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,
   size_aes = NULL, size_map = NULL, facet_aes = NULL,
-  facet_nrows = NULL, hover = NULL, ..., xlabel = NULL,
-  ylabel = NULL, zlabel = NULL, marker_size = 8, sizes = c(10,
-  100), event_source = "A")
+  facet_nrows = NULL, hover = NULL, webgl = FALSE, ...,
+  xlabel = NULL, ylabel = NULL, zlabel = NULL, marker_size = 8,
+  sizes = c(10, 100), event_source = "A")
 
 \method{fscatterplot}{tbl}(dat, axes, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,
@@ -31,6 +32,9 @@ fscatterplot(dat, axes, color_aes = NULL, color_map = NULL,
 
 \item{facet_aes}{The name of a column in \code{dat} to use for faceting. If this
 is a length-2 vector, then we try to do a facet_grid (undone.)}
+
+\item{webgl}{If \code{TRUE}, the plot will be rendered as WebGL, using plotly's
+\code{\link[plotly:toWebGL]{plotly::toWebGL()}} function. Defaults to \code{FALSE} (svg).}
 
 \item{...}{One of the following
 \itemize{
@@ -62,4 +66,6 @@ fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
 # 3d
 fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
              hover = c("class", "c"))
+fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
+             hover = c("class", "c"), webgl = TRUE)
 }

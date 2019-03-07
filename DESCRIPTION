@@ -4,8 +4,7 @@ Title: Interactive vizualizations for FacileData
 Version: 0.1.0
 Authors@R: c(
     person("Steve", "Lianoglou", , "lianoglou@dnli.com", c("aut", "cre")),
-    person("Denali Therapeutics", role = c("cph", "fnd"))
-    )
+    person("Denali Therapeutics", role = c("cph", "fnd")))
 Description: This package provides basic methods that generate interactive
     vizualizations for FacileData. The "workhorse" method is the "vizualize" S3
     generic method defined within, which must return FacileViz (or subclass)
@@ -16,6 +15,7 @@ Depends:
 Imports:
     checkmate,
     broom,
+    DT,
     FacileData,
     ggplot2,
     RColorBrewer,

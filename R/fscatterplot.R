@@ -1,5 +1,8 @@
 #' Draws interactive 2 or 3d scatterplots over data
 #'
+#' When plotting in three dimensions, the first dimension is on the x,
+#' second is y, and third is z.
+#'
 #' Use the `event_source` parameter to link selection/brushing of the plot
 #' to a listener.
 #'
@@ -8,12 +11,16 @@
 #'
 #' @param x a data object
 #' @param axes the definition of the x,y,z axes
+#' @param webgl If `TRUE`, the plot will be rendered as WebGL, using plotly's
+#'   [plotly::toWebGL()] function. Defaults to `FALSE` (svg).
 #' @inheritParams maybe_facet
 #' @return a plotly object
 #' @examples
-#' dat <- data.frame(a = rnorm(100), b = rnorm(100), c = rnorm(100),
-#'                   class = sample(c("g1", "g2", "g3"), 100, replace = TRUE),
-#'                   grp = sample(c("n", "o", "p", "q", "r"), 100, replace = TRUE))
+#' dat <- data.frame(
+#'   a = rnorm(100), b = rnorm(100), c = rnorm(100),
+#'   class = sample(c("g1", "g2", "g3"), 100, replace = TRUE),
+#'   grp = sample(c("n", "o", "p", "q", "r"), 100, replace = TRUE))
+#' dat <- head(dat, 10)
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", hover = "class")
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", hover = c("class", "c"))
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
@@ -22,14 +29,16 @@
 #'              facet_aes = "grp", hover = c("class", "c"))
 #'
 #' # 3d
-#' fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
+#' fscatterplot(dat, c("a", "b", "c"),color_aes = "class",
 #'              hover = c("class", "c"))
+#' fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
+#'              hover = c("class", "c"), webgl = TRUE)
 fscatterplot <- function(dat, axes,
                          color_aes = NULL, color_map = NULL,
                          shape_aes = NULL, shape_map = NULL,
                          size_aes = NULL, size_map = NULL,
                          facet_aes = NULL, facet_nrows = NULL,
-                         hover = NULL,
+                         hover = NULL, webgl = FALSE,
                          ...,
                          xlabel = NULL, ylabel = NULL, zlabel = NULL,
                          # direct plot_ly params:
@@ -47,7 +56,7 @@ fscatterplot.data.frame <- function(dat, axes,
                                     shape_aes = NULL, shape_map = NULL,
                                     size_aes = NULL, size_map = NULL,
                                     facet_aes = NULL, facet_nrows = NULL,
-                                    hover = NULL, ...,
+                                    hover = NULL, webgl = FALSE, ...,
                                     xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                     marker_size = 8,
                                     sizes = c(10, 100),
@@ -93,6 +102,10 @@ fscatterplot.data.frame <- function(dat, axes,
                       ylabel = ylabel, zlabel = zlabel,
                       event_source = event_source)
   out <- list(plot = plot, input_data = dat, params = list())
+
+  if (webgl) {
+    out$plot <- toWebGL(out$plot)
+  }
   class(out) <- c("FacileScatterViz", "FacileViz")
   out
 }
@@ -117,10 +130,20 @@ fscatterplot.data.frame <- function(dat, axes,
                  text = ~.hover, source = event_source)
     p <- layout(p, xaxis = xaxis, yaxis = yaxis, dragmode = "select")
   } else {
+    # camera settings from:
+    # https://plot.ly/python/3d-camera-controls/
+    # https://plot.ly/~klara.roehrl/225/camera-controls-eye-x01-y25-z01/#plot
     zaxis <- list(title = if (!is.null(zlabel)) zlabel[1L] else axes[3L])
-    scene <- list(xaxis = xaxis, yaxis = yaxis, zaxis = zaxis)
+    camera <- list(
+      center = list(x = 0, y = 0, z = 0),
+      up = list(x = 0, y = 0, z = 1),
+      eye = list(x = 0.2, y = 2, z = 0.1))
 
-    p <- plot_ly(xx, x = formula(xf), z = formula(yf), y = formula(zf),
+    scene <- list(xaxis = xaxis, yaxis = zaxis, zaxis = yaxis, camera = camera)
+
+    p <- plot_ly(xx,
+                 x = formula(xf), y = formula(zf), z = formula(yf),
+                 # x = formula(zf), y = formula(xf), z = formula(yf),
                  type = "scatter3d", mode = "markers",
                  color = .color, colors = .colors,
                  symbol = .shape, symbols = .shapes,
