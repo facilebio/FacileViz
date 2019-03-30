@@ -50,6 +50,7 @@ fscatterplot <- function(dat, axes,
 
 #' @rdname fscatterplot
 #' @method fscatterplot data.frame
+#' @importFrom plotly toWebGL
 #' @export
 fscatterplot.data.frame <- function(dat, axes,
                                     color_aes = NULL, color_map = NULL,
@@ -115,6 +116,7 @@ fscatterplot.data.frame <- function(dat, axes,
 #' and such
 #'
 #' @noRd
+#' @importFrom plotly layout plot_ly
 .fscatterplot <- function(xx, axes, xf, yf, zf, facet_aes, facet_nrows,
                           marker_size, .color, .colors,
                           .shape, .shapes, ...,

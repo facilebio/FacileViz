@@ -4,7 +4,7 @@
 \alias{create_color_map}
 \title{Maps colors to categorical values}
 \usage{
-create_color_map(vals, map = NULL)
+create_color_map(vals, map = NULL, sort_levels = !is.factor(vals))
 }
 \arguments{
 \item{vals}{a vector of values to create a colormap over. Curently this is
@@ -13,6 +13,11 @@ will happen when you provide a numeric vector in due time.}
 
 \item{map}{a map specification. defaults to a combination of
 RColorBrewer Set1 and Set2 colors}
+
+\item{sort_levels}{If \code{TRUE}, the unique levels of \code{vals} will be first
+(lexicographically) sorted before hit with colors. By default, if \code{vals}
+is a factor, the order of the levels will be kept. If \code{vals} is a
+character, they will be sorted by default.}
 }
 \value{
 a named character vector, where \code{names()} are the unique levels of

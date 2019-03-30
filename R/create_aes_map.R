@@ -12,10 +12,14 @@
 #'   will happen when you provide a numeric vector in due time.
 #' @param map a map specification. defaults to a combination of
 #'   RColorBrewer Set1 and Set2 colors
+#' @param sort_levels If `TRUE`, the unique levels of `vals` will be first
+#'   (lexicographically) sorted before hit with colors. By default, if `vals`
+#'   is a factor, the order of the levels will be kept. If `vals` is a
+#'   character, they will be sorted by default.
 #' @return a named character vector, where `names()` are the unique levels of
 #'   `vals`, and the value is the color it maps to. Colors will be recycled
 #'   if there are more levels than colors provided by `map`.
-create_color_map <- function(vals, map = NULL) {
+create_color_map <- function(vals, map = NULL, sort_levels = !is.factor(vals)) {
   is.cat <- test_categorical(vals)
 
   if (is.cat) {
@@ -26,7 +30,7 @@ create_color_map <- function(vals, map = NULL) {
     if (!is.character(map)) {
       stop("The color map should be a list of colors by now")
     }
-    out <- xref.discrete.map.to.vals(map, vals)
+    out <- xref.discrete.map.to.vals(map, vals, sort_levels)
   } else {
     stop("Not mapping real values yet")
   }
@@ -109,15 +113,27 @@ mucho.colors <- function() {
 
   # the sixth set1 color is a yellow that is too bright for anyone's good
   muchos <- c(s1[-6], s2[1:8])
+
+  # Now the 5th and 10th are both a very similar orange, remove 10
+  muchos <- muchos[-10]
+
+  # Let's put grey and orange up front, 8 and 5, respecitvely
+  out <- c(muchos[8], muchos[5], muchos[-c(8,5)])
+  out
 }
 
 #' @noRd
 #' @param map named character vector, where names are the entries found in
 #'   `vals`
 #' @param vals a categorical vector (character or factor)
+#' @param sort_levels If `TRUE`, the unique levels of `vals` will be first
+#'   (lexicographically) sorted before hit with colors. By default, if `vals`
+#'   is a factor, the order of the levels will be kept. If `vals` is a
+#'   character, they will be sorted by default.
 #' @return a character vector like `map` but with recycled entries if the number
 #'   of `length(unique(vals)) > length(map)`
-xref.discrete.map.to.vals <- function(map, vals) {
+xref.discrete.map.to.vals <- function(map, vals,
+                                      sort_levels = !is.factor(vals)) {
   assert_categorical(vals)
   stopifnot(is.character(map) || is.integerish(map))
   map.type <- if (is.character(map)) "char" else "int"
@@ -125,7 +141,11 @@ xref.discrete.map.to.vals <- function(map, vals) {
   if (is.factor(vals)) {
     uvals <- levels(vals)
   } else {
-    uvals <- sort(unique(as.character(vals)))
+    uvals <- unique(as.character(vals))
+  }
+
+  if (sort_levels) {
+    uvals <- sort(uvals)
   }
 
   if (is.null(names(map))) {

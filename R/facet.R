@@ -1,3 +1,11 @@
+#' Drives faceting-like behavior for (internal) plotly-generating functions.
+#'
+#' Other FacileViz functions call this function to drive faceting behavior.
+#' This function is largely meant to be internal and is purposefully not
+#' exported yet.
+#'
+#' @importFrom plotly add_annotations subplot
+#'
 #' @param facet_aes The name of a column in `dat` to use for faceting. If this
 #'   is a length-2 vector, then we try to do a facet_grid (undone.)
 #' @inheritParams plotly::subplot

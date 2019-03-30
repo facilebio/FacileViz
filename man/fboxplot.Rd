@@ -32,6 +32,7 @@ fboxplot(dat, x, y, with_points = FALSE, group_aes = NULL,
 Create an interactive boxplot
 }
 \examples{
+library(ggplot2)
 dat <- data.frame(
   variety = rep(LETTERS[1:7], each=40),
   treatment = rep(c("high","low"),each=20),

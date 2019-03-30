@@ -8,6 +8,7 @@
 #' @param group_aes column in `dat` to group barplots by (not yet implemented)
 #'
 #' @examples
+#' library(ggplot2)
 #' dat <- data.frame(
 #'   variety = rep(LETTERS[1:7], each=40),
 #'   treatment = rep(c("high","low"),each=20),
@@ -110,6 +111,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
 #' and such
 #'
 #' @noRd
+#' @importFrom plotly add_boxplot layout plot_ly
 .fboxplot <- function(xx, x, y, with_points, group_aes, facet_aes, facet_nrows,
                       marker_size, .color, .colors, .shape, .shapes, ...,
                       xlabel, ylabel, pointpos, event_source) {

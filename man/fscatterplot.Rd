@@ -49,13 +49,19 @@ is a length-2 vector, then we try to do a facet_grid (undone.)}
 a plotly object
 }
 \description{
+When plotting in three dimensions, the first dimension is on the x,
+second is y, and third is z.
+}
+\details{
 Use the \code{event_source} parameter to link selection/brushing of the plot
 to a listener.
 }
 \examples{
-dat <- data.frame(a = rnorm(100), b = rnorm(100), c = rnorm(100),
-                  class = sample(c("g1", "g2", "g3"), 100, replace = TRUE),
-                  grp = sample(c("n", "o", "p", "q", "r"), 100, replace = TRUE))
+dat <- data.frame(
+  a = rnorm(100), b = rnorm(100), c = rnorm(100),
+  class = sample(c("g1", "g2", "g3"), 100, replace = TRUE),
+  grp = sample(c("n", "o", "p", "q", "r"), 100, replace = TRUE))
+dat <- head(dat, 10)
 fscatterplot(dat, c("a", "b"), color_aes = "class", hover = "class")
 fscatterplot(dat, c("a", "b"), color_aes = "class", hover = c("class", "c"))
 fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
@@ -64,7 +70,7 @@ fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
              facet_aes = "grp", hover = c("class", "c"))
 
 # 3d
-fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
+fscatterplot(dat, c("a", "b", "c"),color_aes = "class",
              hover = c("class", "c"))
 fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
              hover = c("class", "c"), webgl = TRUE)

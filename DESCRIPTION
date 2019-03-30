@@ -19,7 +19,6 @@ Imports:
     FacileData,
     ggplot2,
     RColorBrewer,
-    SummarizedExperiment,
     plotly,
     tidyr,
     viridis
