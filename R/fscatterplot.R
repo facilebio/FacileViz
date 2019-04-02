@@ -9,6 +9,7 @@
 #' @rdname fscatterplot
 #' @export
 #'
+#' @importFrom FacileData test_categorical
 #' @param x a data object
 #' @param axes the definition of the x,y,z axes
 #' @param webgl If `TRUE`, the plot will be rendered as WebGL, using plotly's

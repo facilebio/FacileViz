@@ -2,17 +2,27 @@
 % Please edit documentation in R/create_aes_map.R
 \name{create_color_map}
 \alias{create_color_map}
-\title{Maps colors to categorical values}
+\alias{create_color_map.data.frame}
+\title{Map values to colors.}
 \usage{
-create_color_map(vals, map = NULL, sort_levels = !is.factor(vals))
+create_color_map(x, map = NULL, ...)
+
+\method{create_color_map}{data.frame}(x, map = NULL, shuffle = TRUE,
+  ...)
 }
 \arguments{
-\item{vals}{a vector of values to create a colormap over. Curently this is
-restricted to categorical vectors (character, factor), but something smart
-will happen when you provide a numeric vector in due time.}
+\item{x}{a data.frame or vector of values to create a colormap over. Curently
+this is restricted to categorical vectors (character, factor), but
+something smart will happen when you provide a numeric vector in due time.}
 
 \item{map}{a map specification. defaults to a combination of
 RColorBrewer Set1 and Set2 colors}
+
+\item{shuffle}{When \code{TRUE} (default), the default color map for each column
+will be a shuffled version of the \code{FacileViz:::mucho.colors()} palette. In
+this case, all but the first column will be shuffled. If \code{FALSE}, no
+shuffling is done, and the first, second, third, etc. colors for each
+discrete map will be the same.}
 
 \item{sort_levels}{If \code{TRUE}, the unique levels of \code{vals} will be first
 (lexicographically) sorted before hit with colors. By default, if \code{vals}
@@ -22,10 +32,30 @@ character, they will be sorted by default.}
 \value{
 a named character vector, where \code{names()} are the unique levels of
 \code{vals}, and the value is the color it maps to. Colors will be recycled
-if there are more levels than colors provided by \code{map}.
+if there are more levels than colors provided by \code{map}. If \code{x} is a
+\code{data.frame}, a list of color maps will be returned: one for each column
 }
 \description{
+This is an S3 generic functions which is used to map values to colors for
+plotting. The easiest "no brainer" way to call this would be to pass in
+a data.frame. In this case, this will produce a color map for each of the
+columns of a data.frame
+}
+\details{
+A number of S3  easiest
 Map can be a RColorBrewer name, or a vector of colors. Colors will be
-recycled if \code{length(map) <}
-If \code{vals}, map can be is categoricasl
+recycled if there are more unique levels to a categorical variable than there
+are colors in the available palette.
+}
+\examples{
+dat <- data.frame(
+  a = sample(letters[1:3], 10, replace = TRUE),
+  b = sample(letters[4:5], 10, replace = TRUE),
+  c = factor(sample(letters[6:8], 10, replace = TRUE)),
+  d = rnorm(10),
+  stringsAsFactors = FALSE)
+cols1 <- create_color_map(dat)
+cols2 <- create_color_map(dat, c("Set1", "Set2", "Set3"))
+cols3 <- create_color_map(dat, c(b = "Set1", c = "Set2", "Set3"))
+cols4 <- create_color_map(dat, c(b = "Set1", c = "Set2")
 }

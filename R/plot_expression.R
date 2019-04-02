@@ -116,22 +116,6 @@ plot_expression <- function(y, gene, group = "group",
 }
 
 # Utilify functions ============================================================
-# # Some serious voodoo is going on here
-# .with_aes_columns <- function(x, aesthetic, out_column, ...) {
-#   assert_class(x, "data.frame")
-#   assert_character(aesthetic, min.len = 1, max.len = min(3, ncol(x)))
-#   assert_subset(aesthetic, colnames(x))
-#
-#   if (length(aesthetic) == 1L) {
-#     x[[out_column]] <- x[[aesthetic]]
-#   } else {
-#     is.cat <- sapply(x[, aesthetic], test_categorical)
-#     assert_true(all(is.cat))
-#     x <- tidyr::unite_(x, out_column, aesthetic, remove = FALSE)
-#   }
-#
-#   x
-# }
 
 #' Fast and loose way to identify which row contains a query across a data.frame
 #'

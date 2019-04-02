@@ -3,7 +3,6 @@
 #' @import broom
 #' @import checkmate
 #' @import dplyr
-#' @import FacileData
 #' @import tidyr
 NULL
 

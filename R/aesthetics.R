@@ -355,6 +355,8 @@ with_hover <- function(x, aesthetic, aes_map = NULL,
   list(variable = var.name, value = val.name)
 }
 
+#' @noRd
+#' @importFrom FacileData test_categorical
 .with_aes_columns <- function(x, aesthetic, aes_cols, ...) {
   # We aren't doing tidyeval yet, so this can only be a character
   assert_data_frame(x)

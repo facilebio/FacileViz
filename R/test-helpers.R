@@ -5,6 +5,7 @@
 #' Test for a valid discrete aes map
 #'
 #' @noRd
+#' @importFrom FacileData assert_categorical
 #' @param expected name of the expected RColorBrewer palette used in map. If
 #'   this is provided, then the colors in map are checked to be the same top n
 #'   colors provided by the given map name
@@ -27,11 +28,6 @@ expect_daes_map <- function(map, values, expected = NULL,
       }
     }
     expect_equal(length(expected), n.cats)
-    # if (is(map, "AsIs")) {
-    #   nms <- names(map)
-    #   map <- if (test_categorical(map)) as.character(map) else as.numeric(map)
-    #   names(map) <- nms
-    # }
     expect_equal(map, expected, info = info)
   }
 }
