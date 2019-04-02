@@ -1,4 +1,4 @@
-# Helper functions to create categorical maps for shapes and colors
+# Color Maps ===================================================================
 
 #' Map values to colors.
 #'
@@ -7,12 +7,10 @@
 #' a data.frame. In this case, this will produce a color map for each of the
 #' columns of a data.frame
 #'
-#'
-#'
-#' A number of S3  easiest
-#' Map can be a RColorBrewer name, or a vector of colors. Colors will be
-#' recycled if there are more unique levels to a categorical variable than there
-#' are colors in the available palette.
+#' Map can be an RColorBrewer name, or a vector of colors. When `x` is a
+#' data.frame, you can mix and match "named" palettes with custom ones, by
+#' providing a names list of these, where the names of the `map` list match the
+#' colnames of `x`. See the examples (`cols5`) for an example of that.
 #'
 #' @export
 #' @importFrom FacileData test_categorical
@@ -43,6 +41,9 @@
 #' cols2 <- create_color_map(dat, c("Set1", "Set2", "Set3"))
 #' cols3 <- create_color_map(dat, c(b = "Set1", c = "Set2", "Set3"))
 #' cols4 <- create_color_map(dat, c(b = "Set1", c = "Set2")
+#' cols5 <- create_color_map(
+#'   dat,
+#'   list(a = "Set1", b = c(d = "black", e = "grey")))
 create_color_map <- function(x, map = NULL, ...) {
   UseMethod("create_color_map", x)
 }
@@ -207,6 +208,8 @@ create_color_map.numeric <- function(x, map = NULL, zlim = NULL, ...) {
   }
   col
 }
+
+# Shape Maps ===================================================================
 
 #' Maps shapes to categorical values
 #'
