@@ -6,6 +6,11 @@
 #' Use the `event_source` parameter to link selection/brushing of the plot
 #' to a listener.
 #'
+#' TODO: Get inspired from this marginal density plot and add that functionality
+#' here via the `with_density = TRUE` parameter. When this is TRUE, faceting
+#' should be axed.
+#' https://plotly-r.com/arranging-views.html#fig:joint
+#'
 #' @rdname fscatterplot
 #' @export
 #'
@@ -32,15 +37,18 @@
 #' # 3d
 #' fscatterplot(dat, c("a", "b", "c"),color_aes = "class",
 #'              hover = c("class", "c"))
+#' fscatterplot(dat, c("a", "b", "c"), flat = TRUE, color_aes = "class",
+#'              hover = c("class", "c"))
 #' fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
 #'              hover = c("class", "c"), webgl = TRUE)
-fscatterplot <- function(dat, axes,
+fscatterplot <- function(dat, axes, with_density = FALSE,
                          color_aes = NULL, color_map = NULL,
                          shape_aes = NULL, shape_map = NULL,
                          size_aes = NULL, size_map = NULL,
                          facet_aes = NULL, facet_nrows = NULL,
                          hover = NULL, webgl = FALSE,
                          ...,
+                         flat = FALSE,
                          xlabel = NULL, ylabel = NULL, zlabel = NULL,
                          # direct plot_ly params:
                          marker_size = 8,
@@ -53,12 +61,13 @@ fscatterplot <- function(dat, axes,
 #' @method fscatterplot data.frame
 #' @importFrom plotly toWebGL
 #' @export
-fscatterplot.data.frame <- function(dat, axes,
+fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                                     color_aes = NULL, color_map = NULL,
                                     shape_aes = NULL, shape_map = NULL,
                                     size_aes = NULL, size_map = NULL,
                                     facet_aes = NULL, facet_nrows = NULL,
                                     hover = NULL, webgl = FALSE, ...,
+                                    flat = FALSE,
                                     xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                     marker_size = 8,
                                     sizes = c(10, 100),
@@ -66,6 +75,12 @@ fscatterplot.data.frame <- function(dat, axes,
   assert_character(axes, min.len = 2L, max.len = 3L)
   assert_subset(axes, names(dat))
   assert_subset(c(color_aes, shape_aes, size_aes, facet_aes, hover), names(dat))
+  assert_flag(with_density)
+
+  if (with_density && !is.null(facet_aes)) {
+    warning("Marginal densities not supported with facets. Facets disabled")
+    facet_aes <- NULL
+  }
 
   if (length(axes) == 3L && !is.null(facet_aes)) {
     stop("Can not facet a 3d plot")
@@ -98,10 +113,11 @@ fscatterplot.data.frame <- function(dat, axes,
 
   plot <- maybe_facet(.fscatterplot, xx, facet_aes, facet_nrows,
                       axes = axes, xf = xf, yf = yf, zf = zf,
+                      with_density = with_density,
                       marker_size = marker_size, .color = .color,
                       .colors = .colors, .shape = .shape,
-                      .shapes = .shapes, ..., xlabel = xlabel,
-                      ylabel = ylabel, zlabel = zlabel,
+                      .shapes = .shapes, ..., flat = flat,
+                      xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
                       event_source = event_source)
   out <- list(plot = plot, input_data = dat, params = list())
 
@@ -118,43 +134,67 @@ fscatterplot.data.frame <- function(dat, axes,
 #'
 #' @noRd
 #' @importFrom plotly layout plot_ly
-.fscatterplot <- function(xx, axes, xf, yf, zf, facet_aes, facet_nrows,
-                          marker_size, .color, .colors,
-                          .shape, .shapes, ...,
+.fscatterplot <- function(xx, axes, xf, yf, zf, with_density,
+                          facet_aes, facet_nrows, marker_size,
+                          .color, .colors,
+                          .shape, .shapes, ..., flat,
                           xlabel, ylabel, zlabel, event_source) {
   xaxis <- list(title = if (!is.null(xlabel)) xlabel[1L] else axes[1L])
   yaxis <- list(title = if (!is.null(ylabel)) ylabel[1L] else axes[2L])
+
   if (length(axes) == 2L) {
-    p <- plot_ly(xx, x = formula(xf), y = formula(yf),
-                 type = "scatter",  mode = "markers",
-                 marker = list(size = marker_size),
-                 color = .color, colors = .colors,
-                 symbol = .shape, symbols = .shapes,
-                 text = ~.hover, source = event_source)
-    p <- layout(p, xaxis = xaxis, yaxis = yaxis, dragmode = "select")
+    p <- plot_ly(xx, x = formula(xf), y = formula(yf), source = event_source)
+    p <- add_markers(p, type = "scatter",
+                     color = .color, colors = .colors,
+                     symbol = .shape, marker = list(size = marker_size),
+                     text = ~.hover)
+    p <- config(p, collaborate = FALSE, displaylogo = FALSE)
+    p <- layout(p, xaxis = xaxis, yaxis = yaxis)
   } else {
-    # camera settings from:
-    # https://plot.ly/python/3d-camera-controls/
-    # https://plot.ly/~klara.roehrl/225/camera-controls-eye-x01-y25-z01/#plot
-    zaxis <- list(title = if (!is.null(zlabel)) zlabel[1L] else axes[3L])
-    camera <- list(
-      center = list(x = 0, y = 0, z = 0),
-      up = list(x = 0, y = 0, z = 1),
-      eye = list(x = 0.2, y = 2, z = 0.1))
-
-    scene <- list(xaxis = xaxis, yaxis = zaxis, zaxis = yaxis, camera = camera)
-
-    p <- plot_ly(xx,
-                 x = formula(xf), y = formula(zf), z = formula(yf),
-                 # x = formula(zf), y = formula(xf), z = formula(yf),
-                 type = "scatter3d", mode = "markers",
-                 color = .color, colors = .colors,
-                 symbol = .shape, symbols = .shapes,
-                 marker = list(size = marker_size),
-                 text = ~.hover, source = event_source)
-    p <- layout(p, scene = scene)
-    p <- layout(p, dragmode = "select")
+    if (flat) {
+      plots <- list()
+      axf <- list(xf, yf, zf)
+      lbls <- list(xlabel, ylabel, zlabel)
+      idxs <- list(c(1,2), c(1,3), c(2,3))
+      plots <- lapply(idxs, function(pair) {
+        xi <- pair[[1]]
+        yi <- pair[[2]]
+        pp <- plot_ly(xx, x = formula(axf[[xi]]), y = formula(axf[[yi]]),
+                      source = event_source,
+                      showlegend = all(pair == idxs[[1]]))
+        pp <- add_markers(pp, type = "scatter",
+                          color = .color, colors = .colors,
+                          symbol = .shape, marker = list(size = marker_size),
+                          text = ~.hover)
+        pp <- layout(pp, xaxis = lbls[[xi]], yaxis = lbls[[yi]])
+        pp
+      })
+      p <- subplot(plots, nrows = 1,
+                   shareX = FALSE, shareY = FALSE, titleX = TRUE,
+                   titleY = TRUE, which_layout = "merge")
+    } else {
+      mtype <- "scatter3d"
+      # camera settings from:
+      # https://plot.ly/python/3d-camera-controls/
+      # https://plot.ly/~klara.roehrl/225/camera-controls-eye-x01-y25-z01/#plot
+      zaxis <- list(title = if (!is.null(zlabel)) zlabel[1L] else axes[3L])
+      camera <- list(
+        center = list(x = 0, y = 0, z = 0),
+        up = list(x = 0, y = 0, z = 1),
+        eye = list(x = 0.2, y = 2, z = 0.1))
+      scene <- list(xaxis = xaxis, yaxis = zaxis, zaxis = yaxis, camera = camera)
+      p <- plot_ly(xx, x = formula(xf), y = formula(zf), z = formula(yf),
+                   source = event_source)
+      p <- add_markers(p, type = "scatter3d",
+                       color = .color, colors = .colors,
+                       symbol = .shape, marker = list(size = marker_size),
+                       text = ~.hover)
+      p <- config(p, collaborate = FALSE, displaylogo = FALSE)
+      p <- layout(p, scene = scene)
+    }
   }
+
+  p <- layout(p, dragmode = "select")
   p
 }
 

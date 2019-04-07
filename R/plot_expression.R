@@ -11,7 +11,6 @@
 #' specified by the `color_by` parameter.
 #'
 #' @export
-#' @seealso [mbl_tidy()]
 #'
 #' @param y the DGEList or voomed object your data is in
 #' @param gene the name of the gene identifier or symbol you want to plot.

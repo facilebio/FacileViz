@@ -10,6 +10,4 @@ NULL
 
 #' @importFrom graphics plot
 #' @export plot
-#'
-#' @export tidy
 NULL

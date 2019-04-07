@@ -1,5 +1,8 @@
 #' Create an interactive boxplot
 #'
+#' Look at boxplot section of the new book for guidance.
+#' https://plotly-r.com/boxplots.html
+#'
 #' @export
 #'
 #' @param dat the data source
@@ -111,7 +114,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
 #' and such
 #'
 #' @noRd
-#' @importFrom plotly add_boxplot layout plot_ly
+#' @importFrom plotly add_boxplot config layout plot_ly
 .fboxplot <- function(xx, x, y, with_points, group_aes, facet_aes, facet_nrows,
                       marker_size, .color, .colors, .shape, .shapes, ...,
                       xlabel, ylabel, pointpos, event_source) {
@@ -128,7 +131,8 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                 # symbol = .shape, symbols = .shapes,
                 # marker = list(size = marker_size),
                 boxpoints = boxpoints, pointpos = pointpos) %>%
-    layout(xaxis = xaxis, yaxis = yaxis, dragmode = "select")
+    layout(xaxis = xaxis, yaxis = yaxis, dragmode = "select") %>%
+    config(collaborate = FALSE, displaylogo = FALSE)
   p
 }
 
@@ -160,46 +164,4 @@ fboxplot.tbl <- function(dat, x, y, with_points = FALSE, group_aes = NULL,
                       sizes = sizes,
                       pointpos = pointpos,
                       event_source = event_source)
-}
-
-if (FALSE) {
-  # library
-  library(ggplot2)
-
-  # create a data frame
-  variety=rep(LETTERS[1:7], each=40)
-  treatment=rep(c("high","low"),each=20)
-  note=seq(1:280)+sample(1:150, 280, replace=T)
-
-
-  data=data.frame(variety, treatment ,  note)
-
-
-  # grouped boxplot
-  ggplot(data, aes(x=variety, y=note, fill=treatment)) +
-    geom_boxplot()
-
-  fboxplot(data, x = "variety", y = "note",
-           group = "treatment")
-  fboxplot(data, x = "variety", y = "note",
-           group = "treatment",
-           with_points = TRUE)
-
-  # facet
-  ggplot(data, aes(x=variety, y=note, fill=treatment)) +
-    geom_boxplot() +
-    facet_wrap(~variety)
-
-  fboxplot(data, x = "variety", y = "note",
-           group_aes = "treatment",
-           facet_aes = "variety")
-
-  ggplot(data, aes(x=variety, y=note, fill=treatment)) +
-    geom_boxplot() +
-    facet_wrap(~treatment)
-
-  fboxplot(data, x = "variety", y = "note",
-           group_aes = "treatment",
-           facet_aes = "treatment")
-
 }

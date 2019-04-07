@@ -274,6 +274,53 @@ create_shape_map <- function(vals, map = NULL) {
 }
 
 #' @noRd
+#' @param map named character vector, where names are the entries found in
+#'   `vals`
+#' @param vals a categorical vector (character or factor)
+#' @param sort_levels If `TRUE`, the unique levels of `vals` will be first
+#'   (lexicographically) sorted before hit with colors. By default, if `vals`
+#'   is a factor, the order of the levels will be kept. If `vals` is a
+#'   character, they will be sorted by default.
+#' @return a character vector like `map` but with recycled entries if the number
+#'   of `length(unique(vals)) > length(map)`
+xref.discrete.map.to.vals <- function(map, vals,
+                                      sort_levels = !is.factor(vals)) {
+  assert_categorical(vals)
+  stopifnot(is.character(map) || is.integerish(map))
+  map.type <- if (is.character(map)) "char" else "int"
+
+  if (is.factor(vals)) {
+    uvals <- levels(vals)
+  } else {
+    uvals <- unique(as.character(vals))
+  }
+
+  if (sort_levels) {
+    uvals <- sort(uvals)
+  }
+
+  if (is.null(names(map))) {
+    out.map <- if (map.type == "char") character() else integer()
+    rest.map <- map
+  } else {
+    out.map <- map[names(map) %in% uvals]
+    rest.map <- unname(map[!names(map) %in% names(out.map)])
+  }
+
+  remain <- setdiff(uvals, names(out.map))
+  if (length(remain)) {
+    cols <- unname(c(rest.map, out.map))
+    idxs <- seq(remain) %% length(cols)
+    idxs[idxs == 0] <- length(cols)
+    rest.map <- cols[idxs]
+    names(rest.map) <- remain
+    out.map <- c(out.map, rest.map)
+  }
+
+  out.map
+}
+
+#' @noRd
 #' @importFrom RColorBrewer brewer.pal.info
 is.brewer.map.name <- function(x) {
   test_string(x) && test_choice(x, rownames(brewer.pal.info))
@@ -296,3 +343,4 @@ mucho.colors <- function() {
   out <- c(muchos[8], muchos[5], muchos[-c(8,5)])
   out
 }
+

@@ -30,9 +30,11 @@ is a factor, the order of the levels will be kept. If \code{vals} is a
 character, they will be sorted by default.}
 }
 \value{
-a named character vector, where \code{names()} are the unique levels of
+a named list of colormaps. Maps for discrete variables are named
+character vectors, where \code{names()} are the unique levels of
 \code{vals}, and the value is the color it maps to. Colors will be recycled
-if there are more levels than colors provided by \code{map}. If \code{x} is a
+if there are more levels than colors provided by \code{map}. Colormaps for
+real valued variables are \code{\link[circlize:colorRamp2]{circlize::colorRamp2()}} functions. If \code{x} is a
 \code{data.frame}, a list of color maps will be returned: one for each column
 }
 \description{
@@ -42,10 +44,10 @@ a data.frame. In this case, this will produce a color map for each of the
 columns of a data.frame
 }
 \details{
-A number of S3  easiest
-Map can be a RColorBrewer name, or a vector of colors. Colors will be
-recycled if there are more unique levels to a categorical variable than there
-are colors in the available palette.
+Map can be an RColorBrewer name, or a vector of colors. When \code{x} is a
+data.frame, you can mix and match "named" palettes with custom ones, by
+providing a names list of these, where the names of the \code{map} list match the
+colnames of \code{x}. See the examples (\code{cols5}) for an example of that.
 }
 \examples{
 dat <- data.frame(
@@ -58,4 +60,7 @@ cols1 <- create_color_map(dat)
 cols2 <- create_color_map(dat, c("Set1", "Set2", "Set3"))
 cols3 <- create_color_map(dat, c(b = "Set1", c = "Set2", "Set3"))
 cols4 <- create_color_map(dat, c(b = "Set1", c = "Set2")
+cols5 <- create_color_map(
+  dat,
+  list(a = "Set1", b = c(d = "black", e = "grey")))
 }
