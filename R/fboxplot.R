@@ -132,7 +132,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                 # marker = list(size = marker_size),
                 boxpoints = boxpoints, pointpos = pointpos) %>%
     layout(xaxis = xaxis, yaxis = yaxis, dragmode = "select") %>%
-    config(collaborate = FALSE, displaylogo = FALSE)
+    config(displaylogo = FALSE)
   p
 }
 

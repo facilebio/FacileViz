@@ -148,7 +148,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                      color = .color, colors = .colors,
                      symbol = .shape, marker = list(size = marker_size),
                      text = ~.hover)
-    p <- config(p, collaborate = FALSE, displaylogo = FALSE)
+    p <- config(p, displaylogo = FALSE)
     p <- layout(p, xaxis = xaxis, yaxis = yaxis)
   } else {
     if (flat) {
@@ -189,7 +189,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                        color = .color, colors = .colors,
                        symbol = .shape, marker = list(size = marker_size),
                        text = ~.hover)
-      p <- config(p, collaborate = FALSE, displaylogo = FALSE)
+      p <- config(p, displaylogo = FALSE)
       p <- layout(p, scene = scene)
     }
   }

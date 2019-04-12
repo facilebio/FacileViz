@@ -20,7 +20,7 @@ Imports:
     FacileData,
     ggplot2,
     RColorBrewer,
-    plotly,
+    plotly (>= 4.9.0),
     tidyr,
     viridis
 Suggests:
