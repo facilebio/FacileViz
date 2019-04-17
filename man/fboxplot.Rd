@@ -29,7 +29,8 @@ fboxplot(dat, x, y, with_points = FALSE, group_aes = NULL,
 \item{group_aes}{column in \code{dat} to group barplots by (not yet implemented)}
 }
 \description{
-Create an interactive boxplot
+Look at boxplot section of the new book for guidance.
+https://plotly-r.com/boxplots.html
 }
 \examples{
 library(ggplot2)

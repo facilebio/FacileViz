@@ -6,19 +6,20 @@
 \alias{fscatterplot.tbl}
 \title{Draws interactive 2 or 3d scatterplots over data}
 \usage{
-fscatterplot(dat, axes, color_aes = NULL, color_map = NULL,
-  shape_aes = NULL, shape_map = NULL, size_aes = NULL,
-  size_map = NULL, facet_aes = NULL, facet_nrows = NULL,
-  hover = NULL, webgl = FALSE, ..., xlabel = NULL, ylabel = NULL,
-  zlabel = NULL, marker_size = 8, sizes = c(10, 100),
-  event_source = "A")
-
-\method{fscatterplot}{data.frame}(dat, axes, color_aes = NULL,
+fscatterplot(dat, axes, with_density = FALSE, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,
   size_aes = NULL, size_map = NULL, facet_aes = NULL,
   facet_nrows = NULL, hover = NULL, webgl = FALSE, ...,
-  xlabel = NULL, ylabel = NULL, zlabel = NULL, marker_size = 8,
-  sizes = c(10, 100), event_source = "A")
+  flat = FALSE, xlabel = NULL, ylabel = NULL, zlabel = NULL,
+  marker_size = 8, sizes = c(10, 100), event_source = "A")
+
+\method{fscatterplot}{data.frame}(dat, axes, with_density = FALSE,
+  color_aes = NULL, color_map = NULL, shape_aes = NULL,
+  shape_map = NULL, size_aes = NULL, size_map = NULL,
+  facet_aes = NULL, facet_nrows = NULL, hover = NULL,
+  webgl = FALSE, ..., flat = FALSE, xlabel = NULL, ylabel = NULL,
+  zlabel = NULL, marker_size = 8, sizes = c(10, 100),
+  event_source = "A")
 
 \method{fscatterplot}{tbl}(dat, axes, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,
@@ -55,6 +56,11 @@ second is y, and third is z.
 \details{
 Use the \code{event_source} parameter to link selection/brushing of the plot
 to a listener.
+
+TODO: Get inspired from this marginal density plot and add that functionality
+here via the \code{with_density = TRUE} parameter. When this is TRUE, faceting
+should be axed.
+https://plotly-r.com/arranging-views.html#fig:joint
 }
 \examples{
 dat <- data.frame(
@@ -71,6 +77,8 @@ fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
 
 # 3d
 fscatterplot(dat, c("a", "b", "c"),color_aes = "class",
+             hover = c("class", "c"))
+fscatterplot(dat, c("a", "b", "c"), flat = TRUE, color_aes = "class",
              hover = c("class", "c"))
 fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
              hover = c("class", "c"), webgl = TRUE)

@@ -37,6 +37,3 @@ plot_expression(y, gene = "Fxyd6", group = "group",
 plot_expression(y, gene = "Fxyd6", group = "genotype",
                 color_by = "source")
 }
-\seealso{
-\code{\link[=mbl_tidy]{mbl_tidy()}}
-}

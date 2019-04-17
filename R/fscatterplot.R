@@ -133,7 +133,12 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
 #' and such
 #'
 #' @noRd
-#' @importFrom plotly layout plot_ly
+#' @importFrom plotly
+#'   add_markers
+#'   config
+#'   layout
+#'   plot_ly
+#'   subplot
 .fscatterplot <- function(xx, axes, xf, yf, zf, with_density,
                           facet_aes, facet_nrows, marker_size,
                           .color, .colors,
