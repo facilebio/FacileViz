@@ -9,7 +9,8 @@
 #' @param facet_aes The name of a column in `dat` to use for faceting. If this
 #'   is a length-2 vector, then we try to do a facet_grid (undone.)
 #' @inheritParams plotly::subplot
-maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL, ...,
+maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
+                        has_legend = FALSE, ...,
                         widths = NULL, heights = NULL, margin = 0.02,
                         shareX = TRUE, shareY = TRUE, titleX = shareX,
                         titleY = shareY, which_layout = "merge") {
@@ -33,20 +34,31 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL, ...,
       fdat <- sdat[[name]]
       i <- match(name, names(sdat))
       # We only need to bump the titleX position if only have one row?
-      title.offset <- (arr.inds[i, 2] - 1) * (margin * 2.5)
-      title.offset <- title.offset * (nrows == 1)
+      # title.offset <- (arr.inds[i, 2] - 1) * (margin * 2.5)
+      # title.offset <- title.offset * (nrows == 1)
+      title.offset <- 0
       out <- plotfn(fdat, facet_aes = NULL, ...)
+      # out <- layout(out, width = 350, height = 350)
+      # https://github.com/plotly/plotly.js/blob/master/src/components/annotations/attributes.js
       add_annotations(out, text = sprintf("<b>%s</b>", name),
-                      x = title.offset, y = 1,
-                      xref = "paper", yref = "paper", xanchor = "middle",
-                      yanchor = "middle", showarrow = FALSE)
+                      x = 0, xref = "paper", xanchor = "left",
+                      y = 1, yref = "paper", yanchor = "top", yshift = 10,
+                      # xref = "paper", xanchor = "middle",
+                      # yref = "paper", yanchor = "middle",
+                      showarrow = FALSE)
     }, simplify = FALSE)
     p <- subplot(facets, nrows = nrows, widths = widths,
                  heights = heights, margin = margin, shareX = shareX,
                  shareY = shareY, titleX = titleX, titleY = titleY,
                  which_layout = which_layout)
+    height <- nrows * 250
+
+    p <- layout(p, width = height + 75, height = height)
   } else {
     p <- plotfn(plotdat, ...)
+    width <- 650
+    if (has_legend) width <- width + 100
+    p <- layout(p, width = width, height = 600)
   }
 
   p

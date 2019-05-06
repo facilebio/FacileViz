@@ -90,7 +90,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                         shape_aes = shape_aes, shape_map = shape_map,
                         size_aes = size_aes, size_map = size_map,
                         hover = hover)
-
+  has_legend <- !is.null(color_aes) || !is.null(shape_aes) ||
+    !is.null(size_aes)
   xf <- paste0("~", axes[1])
   yf <- paste0("~", axes[2])
   zf <- paste0("~", axes[3])
@@ -112,6 +113,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   }
 
   plot <- maybe_facet(.fscatterplot, xx, facet_aes, facet_nrows,
+                      has_legend = has_legend,
                       axes = axes, xf = xf, yf = yf, zf = zf,
                       with_density = with_density,
                       marker_size = marker_size, .color = .color,
