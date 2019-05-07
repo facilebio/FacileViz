@@ -11,15 +11,16 @@ fscatterplot(dat, axes, with_density = FALSE, color_aes = NULL,
   size_aes = NULL, size_map = NULL, facet_aes = NULL,
   facet_nrows = NULL, hover = NULL, webgl = FALSE, ...,
   flat = FALSE, xlabel = NULL, ylabel = NULL, zlabel = NULL,
-  marker_size = 8, sizes = c(10, 100), event_source = "A")
+  marker_size = 8, height = 600, width = height + (height/6),
+  sizes = c(10, 100), event_source = "A")
 
 \method{fscatterplot}{data.frame}(dat, axes, with_density = FALSE,
   color_aes = NULL, color_map = NULL, shape_aes = NULL,
   shape_map = NULL, size_aes = NULL, size_map = NULL,
   facet_aes = NULL, facet_nrows = NULL, hover = NULL,
   webgl = FALSE, ..., flat = FALSE, xlabel = NULL, ylabel = NULL,
-  zlabel = NULL, marker_size = 8, sizes = c(10, 100),
-  event_source = "A")
+  zlabel = NULL, marker_size = 8, height = 600, width = height +
+  (height/6), sizes = c(10, 100), event_source = "A")
 
 \method{fscatterplot}{tbl}(dat, axes, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,

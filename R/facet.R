@@ -11,6 +11,14 @@
 #' @inheritParams plotly::subplot
 maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
                         has_legend = FALSE, ...,
+                        # height and width of a plot w/o facets, for squarish
+                        # plots, we usually want the width a littler larger than
+                        # the height.
+                        height = 600,
+                        width = height + (height / 6),
+                        facet_height = 300,
+                        facet_width =  370,
+                        # subplot parameters
                         widths = NULL, heights = NULL, margin = 0.02,
                         shareX = TRUE, shareY = TRUE, titleX = shareX,
                         titleY = shareY, which_layout = "merge") {
@@ -28,37 +36,31 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
     # This is how the number of columns is calculated within the subplot
     # function (plotly v4.8.0)
     ncols <- ceiling(length(sdat) / nrows)
-    arr.inds <- arrayInd(seq(sdat), c(nrows, ncols))
+
+    # In plotly 4.9.0, although the height and width are set in the indivdual
+    # plot_ly calls, we need to pass in the total height and width of the
+    # faceted plot, not the dimmensions of the individual plots.
+    width <- (ncols * facet_width) + (ncols * 10) # last term for margin
+    height <- (nrows * facet_height) + (ncols * 10)
 
     facets <- sapply(names(sdat), function(name) {
       fdat <- sdat[[name]]
       i <- match(name, names(sdat))
-      # We only need to bump the titleX position if only have one row?
-      # title.offset <- (arr.inds[i, 2] - 1) * (margin * 2.5)
-      # title.offset <- title.offset * (nrows == 1)
-      title.offset <- 0
-      out <- plotfn(fdat, facet_aes = NULL, ...)
-      # out <- layout(out, width = 350, height = 350)
+      out <- plotfn(fdat, facet_aes = NULL, ..., width = width,
+                    height = height)
       # https://github.com/plotly/plotly.js/blob/master/src/components/annotations/attributes.js
       add_annotations(out, text = sprintf("<b>%s</b>", name),
                       x = 0, xref = "paper", xanchor = "left",
-                      y = 1, yref = "paper", yanchor = "top", yshift = 10,
-                      # xref = "paper", xanchor = "middle",
-                      # yref = "paper", yanchor = "middle",
+                      y = 1, yref = "paper", yanchor = "top", yshift = 15,
                       showarrow = FALSE)
     }, simplify = FALSE)
     p <- subplot(facets, nrows = nrows, widths = widths,
                  heights = heights, margin = margin, shareX = shareX,
                  shareY = shareY, titleX = titleX, titleY = titleY,
                  which_layout = which_layout)
-    height <- nrows * 250
-
-    p <- layout(p, width = height + 75, height = height)
   } else {
-    p <- plotfn(plotdat, ...)
-    width <- 650
     if (has_legend) width <- width + 100
-    p <- layout(p, width = width, height = 600)
+    p <- plotfn(plotdat, ..., width = width, height = height)
   }
 
   p

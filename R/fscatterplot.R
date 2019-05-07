@@ -52,6 +52,8 @@ fscatterplot <- function(dat, axes, with_density = FALSE,
                          xlabel = NULL, ylabel = NULL, zlabel = NULL,
                          # direct plot_ly params:
                          marker_size = 8,
+                         height = 600,
+                         width = height + (height / 6),
                          sizes = c(10, 100),
                          event_source = "A") {
   UseMethod("fscatterplot", dat)
@@ -70,6 +72,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                                     flat = FALSE,
                                     xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                     marker_size = 8,
+                                    height = 600,
+                                    width = height + (height / 6),
                                     sizes = c(10, 100),
                                     event_source = "A") {
   assert_character(axes, min.len = 2L, max.len = 3L)
@@ -90,7 +94,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                         shape_aes = shape_aes, shape_map = shape_map,
                         size_aes = size_aes, size_map = size_map,
                         hover = hover)
-  has_legend <- !is.null(color_aes) || !is.null(shape_aes) ||
+  has_legend <- !is.null(color_aes) ||
+    !is.null(shape_aes) ||
     !is.null(size_aes)
   xf <- paste0("~", axes[1])
   yf <- paste0("~", axes[2])
@@ -118,7 +123,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                       with_density = with_density,
                       marker_size = marker_size, .color = .color,
                       .colors = .colors, .shape = .shape,
-                      .shapes = .shapes, ..., flat = flat,
+                      .shapes = .shapes, ...,
+                      width = width, height = height, flat = flat,
                       xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
                       event_source = event_source)
   out <- list(plot = plot, input_data = dat, params = list())
@@ -144,13 +150,16 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
 .fscatterplot <- function(xx, axes, xf, yf, zf, with_density,
                           facet_aes, facet_nrows, marker_size,
                           .color, .colors,
-                          .shape, .shapes, ..., flat,
+                          .shape, .shapes, ...,
+                          height = NULL, width = NULL, flat = FALSE,
                           xlabel, ylabel, zlabel, event_source) {
   xaxis <- list(title = if (!is.null(xlabel)) xlabel[1L] else axes[1L])
   yaxis <- list(title = if (!is.null(ylabel)) ylabel[1L] else axes[2L])
 
   if (length(axes) == 2L) {
-    p <- plot_ly(xx, x = formula(xf), y = formula(yf), source = event_source)
+    p <- plot_ly(xx, x = formula(xf), y = formula(yf),
+                 height = height, width = width,
+                 source = event_source)
     p <- add_markers(p, type = "scatter",
                      color = .color, colors = .colors,
                      symbol = .shape, marker = list(size = marker_size),
@@ -168,7 +177,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
         yi <- pair[[2]]
         pp <- plot_ly(xx, x = formula(axf[[xi]]), y = formula(axf[[yi]]),
                       source = event_source,
-                      showlegend = all(pair == idxs[[1]]))
+                      showlegend = all(pair == idxs[[1]]),
+                      height = height, width = width)
         pp <- add_markers(pp, type = "scatter",
                           color = .color, colors = .colors,
                           symbol = .shape, marker = list(size = marker_size),
@@ -189,9 +199,10 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
         center = list(x = 0, y = 0, z = 0),
         up = list(x = 0, y = 0, z = 1),
         eye = list(x = 0.2, y = 2, z = 0.1))
-      scene <- list(xaxis = xaxis, yaxis = zaxis, zaxis = yaxis, camera = camera)
+      scene <- list(xaxis = xaxis, yaxis = zaxis, zaxis = yaxis,
+                    camera = camera)
       p <- plot_ly(xx, x = formula(xf), y = formula(zf), z = formula(yf),
-                   source = event_source)
+                   source = event_source, height = height, width = width)
       p <- add_markers(p, type = "scatter3d",
                        color = .color, colors = .colors,
                        symbol = .shape, marker = list(size = marker_size),

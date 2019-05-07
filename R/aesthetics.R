@@ -111,8 +111,8 @@ with_aesthetics <- function(dat, ...) {
 with_aesthetics.data.frame <- function(dat, color_aes = NULL, color_map = NULL,
                                        shape_aes = NULL, shape_map = NULL,
                                        size_aes = NULL, size_map = NULL,
-                                       hover = NULL, ...) {
-  amaps <- c(color_aes, shape_aes, size_aes, hover)
+                                       hover = NULL, na_to_char = TRUE, ...) {
+  amaps <- unique(c(color_aes, shape_aes, size_aes, hover))
 
   xx <- dat
 
@@ -131,6 +131,29 @@ with_aesthetics.data.frame <- function(dat, color_aes = NULL, color_map = NULL,
   if (is.null(amaps)) {
     return(xx)
   }
+
+  # Replace real NA values with "NA" so that points don't drop out in plotly
+  # plots.
+  if (na_to_char) {
+    for (cov in amaps) {
+      vals <- xx[[cov]]
+      if (test_categorical(vals)) {
+        isna <- is.na(vals)
+        if (any(isna)) {
+          if (is.factor(vals)) {
+            lvls <- c(setdiff(levels(vals), "NA"), "NA")
+          } else {
+            warning("Converting `", cov, "` character to factor for aes map")
+            lvls <- setdiff(sort(unique(vals)), "NA")
+            lvls <- c(lvls, "NA")
+          }
+          vals <- factor(vals, lvls)
+          xx[[cov]][isna] <- "NA"
+        }
+      }
+    }
+  }
+
 
   assert_character(amaps)
   assert_subset(amaps, names(dat))

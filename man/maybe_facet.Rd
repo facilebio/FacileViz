@@ -4,10 +4,11 @@
 \alias{maybe_facet}
 \title{Drives faceting-like behavior for (internal) plotly-generating functions.}
 \usage{
-maybe_facet(plotfn, plotdat, facet_aes, nrows = NULL, ...,
-  widths = NULL, heights = NULL, margin = 0.02, shareX = TRUE,
-  shareY = TRUE, titleX = shareX, titleY = shareY,
-  which_layout = "merge")
+maybe_facet(plotfn, plotdat, facet_aes, nrows = NULL,
+  has_legend = FALSE, ..., height = 600, width = height + (height/6),
+  facet_height = 250, facet_width = 250, widths = NULL,
+  heights = NULL, margin = 0.02, shareX = TRUE, shareY = TRUE,
+  titleX = shareX, titleY = shareY, which_layout = "merge")
 }
 \arguments{
 \item{facet_aes}{The name of a column in \code{dat} to use for faceting. If this
