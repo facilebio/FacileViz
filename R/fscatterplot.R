@@ -94,9 +94,11 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                         shape_aes = shape_aes, shape_map = shape_map,
                         size_aes = size_aes, size_map = size_map,
                         hover = hover)
+
   has_legend <- !is.null(color_aes) ||
     !is.null(shape_aes) ||
     !is.null(size_aes)
+
   xf <- paste0("~", axes[1])
   yf <- paste0("~", axes[2])
   zf <- paste0("~", axes[3])
@@ -152,14 +154,35 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                           .color, .colors,
                           .shape, .shapes, ...,
                           height = NULL, width = NULL, flat = FALSE,
-                          xlabel, ylabel, zlabel, event_source) {
+                          xlabel, ylabel, zlabel, event_source,
+                          legendgroup = NULL, showlegend = TRUE) {
   xaxis <- list(title = if (!is.null(xlabel)) xlabel[1L] else axes[1L])
   yaxis <- list(title = if (!is.null(ylabel)) ylabel[1L] else axes[2L])
+
+  nofacet <- missing(facet_aes) || length(axes) == 3L
+
+  lgroup <- local({
+    if (nofacet) {
+      out <- NULL
+    } else {
+      lcols <- c(".color_aes.variable", ".shape_aes.variable")
+      out <- lcols[sapply(lcols, function(v) !is.null(xx[[v]]))]
+      if (length(out) == 0) {
+        out <- NULL
+      } else if (length(out) == 1L) {
+        out <- paste("~", out)
+      } else {
+        out <- formula(sprintf("~ paste(%s)", paste(out, collapse = ",")))
+      }
+    }
+  })
 
   if (length(axes) == 2L) {
     p <- plot_ly(xx, x = formula(xf), y = formula(yf),
                  height = height, width = width,
-                 source = event_source)
+                 source = event_source,
+                 legendgroup = if (is.null(lgroup)) NULL else formula(lgroup),
+                 showlegend = showlegend)
     p <- add_markers(p, type = "scatter",
                      color = .color, colors = .colors,
                      symbol = .shape, marker = list(size = marker_size),
@@ -177,8 +200,9 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
         yi <- pair[[2]]
         pp <- plot_ly(xx, x = formula(axf[[xi]]), y = formula(axf[[yi]]),
                       source = event_source,
-                      showlegend = all(pair == idxs[[1]]),
-                      height = height, width = width)
+                      showlegend = FALSE,
+                      height = height, width = width,
+                      legendgroup = lgroup, showlegend = showlegend)
         pp <- add_markers(pp, type = "scatter",
                           color = .color, colors = .colors,
                           symbol = .shape, marker = list(size = marker_size),
@@ -189,6 +213,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
       p <- subplot(plots, nrows = 1,
                    shareX = FALSE, shareY = FALSE, titleX = TRUE,
                    titleY = TRUE, which_layout = "merge")
+      p <- unify_legend(p)
     } else {
       mtype <- "scatter3d"
       # camera settings from:

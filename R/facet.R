@@ -46,8 +46,10 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
     facets <- sapply(names(sdat), function(name) {
       fdat <- sdat[[name]]
       i <- match(name, names(sdat))
+      showlegend <- has_legend && name == names(sdat)[1L]
+      # message(name, ": ", showlegend)
       out <- plotfn(fdat, facet_aes = NULL, ..., width = width,
-                    height = height)
+                    height = height, showlegend = showlegend)
       # https://github.com/plotly/plotly.js/blob/master/src/components/annotations/attributes.js
       add_annotations(out, text = sprintf("<b>%s</b>", name),
                       x = 0, xref = "paper", xanchor = "left",
@@ -58,10 +60,52 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
                  heights = heights, margin = margin, shareX = shareX,
                  shareY = shareY, titleX = titleX, titleY = titleY,
                  which_layout = which_layout)
+    p <- unify_legend(p)
   } else {
     if (has_legend) width <- width + 100
     p <- plotfn(plotdat, ..., width = width, height = height)
   }
 
   p
+}
+
+#' Hacks into plotly internals merge legends across subplots.
+#'
+#' This is important when the subplot that has `showlegend = TRUE` doesn't have
+#' all the data points to cover the entirety of the data/legend key.
+#'
+#' This is SUUUUUUUUPER brittle. Also note that your `plot_ly` calls need to
+#' use `legendgroup` correctly.
+#'
+#' @export
+#' @param x plotly object
+#' @return A mangled `x`
+#' @examples
+#' dat <- tibble(
+#'   x = 1:6,
+#'   y = 1:6,
+#'   a = c("a", "a", "b", "c", "b", "d"),
+#'   b = c("x", "y", "y", "y", "z", "z"))
+#' colors <- c(a = "blue", b = "red", c = "green", d = "orange")
+#' plots <- sapply(unique(dat$b), function(val) {
+#'   xdat <- filter(dat, b == val)
+#'   # You need go guess the appropriate subplot to set `showlegend = TRUE`,
+#'   # but there are none that have all values of `a`.
+#'   plot_ly(xdat, x = ~x, y = ~y, legendgroup = ~a, showlegend = val == "y") %>%
+#'     add_markers(type = "scatter", color = ~a, colors = colors)
+#' }, simplify = FALSE)
+#'
+#' # compare
+#'
+#' (sb <- subplot(plots))
+#' unify_legend(sb)
+unify_legend <- function(x, ...) {
+  assert_class(x, "plotly")
+  x <- plotly::plotly_build(x)
+  grps <- lapply(x$x$data, '[[', "legendgroup")
+  showit <- !duplicated(unlist(grps))
+  for (i in seq(x$x$data)) {
+    x$x$data[[i]]$showlegend <- showit[i]
+  }
+  x
 }
