@@ -29,7 +29,7 @@
 #' dat <- head(dat, 10)
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", hover = "class")
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", hover = c("class", "c"))
-#' fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
+#' fscatterplot(dat, c("a", "b"), color_aes = "class",
 #'              facet_aes = "class", hover = c("class", "c"),
 #'              facet_nrows = 2)
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
@@ -40,7 +40,7 @@
 #'              hover = c("class", "c"))
 #' fscatterplot(dat, c("a", "b", "c"), flat = TRUE, color_aes = "class",
 #'              hover = c("class", "c"))
-#' fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
+#' fscatterplot(dat, c("a", "b", "c"), color_aes = "class", shape_aes = "grp",
 #'              hover = c("class", "c"), webgl = TRUE)
 fscatterplot <- function(dat, axes, with_density = FALSE,
                          color_aes = NULL, color_map = NULL,
@@ -121,7 +121,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   }
 
   plot <- maybe_facet(.fscatterplot, xx, facet_aes, facet_nrows,
-                      has_legend = has_legend, legend_unify = TRUE,
+                      has_legend = has_legend, plot_type = "scatter",
                       axes = axes, xf = xf, yf = yf, zf = zf,
                       with_density = with_density,
                       marker_size = marker_size, .color = .color,
@@ -186,7 +186,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                  showlegend = showlegend)
     p <- add_markers(p, type = "scatter",
                      color = .color, colors = .colors,
-                     symbol = .shape, marker = list(size = marker_size),
+                     symbol = .shape, symbols = .shapes,
+                     marker = list(size = marker_size),
                      text = ~.hover)
     p <- config(p, displaylogo = FALSE)
     p <- layout(p, xaxis = xaxis, yaxis = yaxis)
@@ -206,7 +207,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                       legendgroup = lgroup, showlegend = showlegend)
         pp <- add_markers(pp, type = "scatter",
                           color = .color, colors = .colors,
-                          symbol = .shape, marker = list(size = marker_size),
+                          symbol = .shape, symbols = .shapes,
+                          marker = list(size = marker_size),
                           text = ~.hover)
         pp <- layout(pp, xaxis = lbls[[xi]], yaxis = lbls[[yi]])
         pp
@@ -231,7 +233,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                    source = event_source, height = height, width = width)
       p <- add_markers(p, type = "scatter3d",
                        color = .color, colors = .colors,
-                       symbol = .shape, marker = list(size = marker_size),
+                       symbol = .shape, symbol = .shapes,
+                       lsmarker = list(size = marker_size),
                        text = ~.hover)
       p <- config(p, displaylogo = FALSE)
       p <- layout(p, scene = scene)

@@ -9,7 +9,7 @@
 #'   is a length-2 vector, then we try to do a facet_grid (undone.)
 #' @inheritParams plotly::subplot
 maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
-                        has_legend = FALSE, legend_unify = FALSE, ...,
+                        has_legend = FALSE, plot_type = NULL, ...,
                         # height and width of a plot w/o facets, for squarish
                         # plots, we usually want the width a littler larger than
                         # the height.
@@ -62,8 +62,8 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
                  heights = heights, margin = margin, shareX = shareX,
                  shareY = shareY, titleX = titleX, titleY = titleY,
                  which_layout = which_layout)
-    if (has_legend && legend_unify) {
-      p <- unify_legend(p)
+    if (has_legend) {
+      p <- unify_legend(p, plot_type)
     }
   } else {
     if (has_legend) width <- width + 100
@@ -103,13 +103,34 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
 #'
 #' (sb <- subplot(plots))
 #' unify_legend(sb)
-unify_legend <- function(x, ...) {
+unify_legend <- function(x, type = c("scatter", "box", "box+points"), ...) {
   assert_class(x, "plotly")
+  type <- match.arg(type)
   x <- plotly::plotly_build(x)
-  grps <- lapply(x$x$data, '[[', "legendgroup")
-  showit <- !duplicated(unlist(grps))
+
+  # type == "box"
+  #   When $type is "box", boxpoints = "outliers" and the legendgroup vectors
+  #   per plot element (ie. x$x$data)
+  # type == "box+points"
+  #   we are drawin a box trace and a marker trace
+  # to the number of points in the box
+  lgroup <- lapply(x$x$data, "[[", "legendgroup")
+  pltype <- sapply(x$x$data, "[[", "type")
+  pltgroup <- paste(lgroup, pltype, sep = ".")
+
+  showit <- sapply(x$x$data, "[[", "showlegend")
+
+  if (type == "scatter") {
+    showit <- !duplicated(unlist(lgroup))
+  } else if (type == "box") {
+    showit <- !duplicated(unlist(lgroup))
+  } else if (type == "box+points") {
+    showit <- pltype == "scatter" & !duplicated(pltgroup)
+  }
+
   for (i in seq(x$x$data)) {
     x$x$data[[i]]$showlegend <- showit[i]
   }
+
   x
 }

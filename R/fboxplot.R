@@ -46,6 +46,9 @@
 #'
 #' # Grouped boxplot with fboxplot
 #' fboxplot(dat, "clarity", "price", facet_aes = "cut")
+#' fboxplot(dat, "clarity", "price", facet_aes = "cut", with_points = TRUE)
+#' fboxplot(dat, "clarity", "price", facet_aes = "cut",
+#'          color_aes = "clarity", with_points = TRUE)
 fboxplot <- function(dat, x, y, with_points = FALSE, group_aes = NULL,
                      color_aes = NULL, color_map = NULL,
                      shape_aes = NULL, shape_map = NULL,
@@ -93,6 +96,17 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   xtickvals <- seq(nlevels(dat[[x]]))
   xticktext <- levels(dat[[x]])
 
+  if (!is.null(color_aes) && !with_points && color_aes != x) {
+    warning("You can't color a boxplot without points by anything other than ",
+            "the category on the x-axis")
+    color_aes <- x
+  }
+
+  if (!with_points && !is.null(shape_aes)) {
+    warning("You can't specify a shape aesthetic when with_points is FALSE")
+    shape_aes <- NULL
+  }
+
   has_legend <- !is.null(color_aes) ||
     !is.null(shape_aes) ||
     !is.null(size_aes)
@@ -122,8 +136,9 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
     !is.null(shape_aes) ||
     !is.null(size_aes)
 
+  plot_type <- if (with_points) "box+points" else "box"
   plot <- maybe_facet(.fboxplot, xx, facet_aes, facet_nrows,
-                      has_legend = has_legend, legend_unify = TRUE,
+                      has_legend = has_legend, plot_type = plot_type,
                       x = x, y = y, with_points = with_points,
                       group_aes = group_aes, marker_size = marker_size,
                       .color = .color, .colors = .colors,
@@ -150,18 +165,6 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   xaxis <- list(title = x)
   yaxis <- list(title = y)
 
-  yf <- paste0("~", y)
-  pf <- sprintf("~jitter(as.numeric(%s))", x)
-  if (with_points) {
-    boxpoints <- FALSE
-    xf <- sprintf("~as.numeric(%s)", x)
-    boxlegend <- FALSE
-  } else {
-    xf <- paste0("~", x)
-    boxpoints <- "outliers"
-    boxlegend <- TRUE
-  }
-
   nofacet <- missing(facet_aes)
 
   lgroup <- local({
@@ -179,33 +182,38 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
       }
     }
   })
-browser()
 
-  p <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
-               showlegend = showlegend,
-               legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
-    add_boxplot(pointpos = 0, boxpoints = boxpoints, color = .color,
-                colors = .colors, showlegend = boxlegend && showlegend,
-                legendgroup = if (is.null(lgroup)) NULL else formula(lgroup))
+  yf <- paste0("~", y)
   if (with_points) {
-    p <- add_markers(p, x = formula(pf), y = formula(yf),
-                     color = .color, colors = .colors,
-                     legendgroup = if (is.null(lgroup)) NULL else formula(lgroup))
-    xaxis <- list(title = x, tickvals = xtickvals, ticktext = xticktext)
-    p <- layout(p, xaxis = xaxis)
-  } else {
-    # will only draw a boxplot
-    # can add layout(boxmode = "group") for grouping
-  }
+    xf <- sprintf("~as.numeric(%s)", x)
+    pf <- sprintf("~jitter(as.numeric(%s))", x)
+    xaxis <- list(tickvals = xtickvals, ticktext = xticktext, title = x)
 
-  p <- config(p, displaylogo = FALSE)
-  # p <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover) %>%
-  #   add_boxplot(boxpoints = boxpoints,color = .color, colors = .colors,
-  #               boxpoints = boxpoints, pointpos = 0) %>%
-  #   layout(boxmode = if (grouped) "group" else "overlay") %>%
-  #   config(displaylogo = FALSE)
-  # p
-  p
+    plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
+                   showlegend = showlegend) %>%
+      add_boxplot(boxpoints = FALSE,
+                  line = list(color = "black"),
+                  fillcolor = "white",
+                  showlegend = FALSE) %>%
+                  # legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
+      add_markers(x = formula(pf), y = formula(yf),
+                  color = .color, colors = .colors,
+
+                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
+      layout(xaxis = xaxis)
+
+  } else {
+    xf <- paste0("~", x)
+    plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
+                   showlegend = showlegend) %>%
+      add_boxplot(boxpoints = "outliers", pointpos = 0,
+                  color = .color, colors = .colors,
+                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup))
+
+  }
+  plt <- layout(plt, dragmode = "select")
+  plt <- config(plt, displaylogo = FALSE)
+  plt
 }
 
 fboxplot.tbl <- function(dat, x, y, with_points = FALSE, group_aes = NULL,
