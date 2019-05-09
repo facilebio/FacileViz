@@ -30,7 +30,8 @@
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", hover = "class")
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", hover = c("class", "c"))
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
-#'              facet_aes = "class", hover = c("class", "c"))
+#'              facet_aes = "class", hover = c("class", "c"),
+#'              facet_nrows = 2)
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
 #'              facet_aes = "grp", hover = c("class", "c"))
 #'
@@ -120,7 +121,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   }
 
   plot <- maybe_facet(.fscatterplot, xx, facet_aes, facet_nrows,
-                      has_legend = has_legend,
+                      has_legend = has_legend, legend_unify = TRUE,
                       axes = axes, xf = xf, yf = yf, zf = zf,
                       with_density = with_density,
                       marker_size = marker_size, .color = .color,
@@ -172,7 +173,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
       } else if (length(out) == 1L) {
         out <- paste("~", out)
       } else {
-        out <- formula(sprintf("~ paste(%s)", paste(out, collapse = ",")))
+        out <- sprintf("~ paste(%s)", paste(out, collapse = ","))
       }
     }
   })

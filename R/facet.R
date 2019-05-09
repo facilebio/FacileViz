@@ -4,13 +4,12 @@
 #' This function is largely meant to be internal and is purposefully not
 #' exported yet.
 #'
-#' @importFrom plotly add_annotations subplot
-#'
+#' @importFrom plotly add_annotations subplot toRGB
 #' @param facet_aes The name of a column in `dat` to use for faceting. If this
 #'   is a length-2 vector, then we try to do a facet_grid (undone.)
 #' @inheritParams plotly::subplot
 maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
-                        has_legend = FALSE, ...,
+                        has_legend = FALSE, legend_unify = FALSE, ...,
                         # height and width of a plot w/o facets, for squarish
                         # plots, we usually want the width a littler larger than
                         # the height.
@@ -50,6 +49,9 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
       # message(name, ": ", showlegend)
       out <- plotfn(fdat, facet_aes = NULL, ..., width = width,
                     height = height, showlegend = showlegend)
+      # Add borders to plot
+      lineopts <- list(linecolor = toRGB("black"), linewidth = 2, showline = TRUE)
+      out <- layout(out, xaxis = lineopts, yaxis = lineopts)
       # https://github.com/plotly/plotly.js/blob/master/src/components/annotations/attributes.js
       add_annotations(out, text = sprintf("<b>%s</b>", name),
                       x = 0, xref = "paper", xanchor = "left",
@@ -60,7 +62,9 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
                  heights = heights, margin = margin, shareX = shareX,
                  shareY = shareY, titleX = titleX, titleY = titleY,
                  which_layout = which_layout)
-    p <- unify_legend(p)
+    if (has_legend && legend_unify) {
+      p <- unify_legend(p)
+    }
   } else {
     if (has_legend) width <- width + 100
     p <- plotfn(plotdat, ..., width = width, height = height)

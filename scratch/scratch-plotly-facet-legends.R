@@ -33,3 +33,35 @@ gg <- ggplot(dat, aes(x, y)) +
   geom_point(aes(color = a)) +
   facet_wrap(~ b)
 ggplotly(gg)
+
+
+library(dplyr)
+library(plotly)
+set.seed(123)
+
+dat <- data.frame(
+  a = rnorm(100), b = rnorm(100), c = rnorm(100),
+  class = sample(c("g1", "g2", "g3"), 100, replace = TRUE),
+  grp = sample(c("n", "o", "p", "q", "r"), 100, replace = TRUE))
+
+axopts <- list(linecolor = toRGB("black"), linewidth = 2, showline = TRUE)
+xaxopts <- list(linecolor = toRGB("black"), linewidth = 2, showline = TRUE,
+                range = range(dat$a))
+yaxopts <- list(linecolor = toRGB("black"), linewidth = 2, showline = TRUE,
+                range = range(dat$b))
+plots <- dat %>%
+  group_by(class) %>%
+  do(plot = {
+    plot_ly(., x = ~a, y = ~b, legendgroup = ~grp,
+            showlegend = .$class[1] == "g1") %>%
+      add_markers(color = ~grp) %>%
+      layout(xaxis = axopts, yaxis = axopts)
+  })
+subplot(plots, nrows = 2, shareX = TRUE, shareY = TRUE)
+subplot(plots, nrows = 2, shareX = FALSE, shareY = FALSE)
+
+library(cowplot)
+ggplot(dat, aes(a, b)) +
+  geom_point(aes(color = grp)) +
+  facet_wrap(~ class, nrow = 2) +
+  theme_classic()

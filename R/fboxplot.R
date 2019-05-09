@@ -3,6 +3,10 @@
 #' Look at boxplot section of the new book for guidance.
 #' https://plotly-r.com/boxplots.html
 #'
+#' For now, instead of enabling a "grouping" variable, `fboxplot` we just enable
+#' what is possible via faceting. See the examples section for inspiration on
+#' how we can use a facet to approximate a "grouped" boxplot.
+#'
 #' @export
 #'
 #' @param dat the data source
@@ -11,36 +15,37 @@
 #' @param group_aes column in `dat` to group barplots by (not yet implemented)
 #'
 #' @examples
-#' library(ggplot2)
-#' dat <- data.frame(
-#'   variety = rep(LETTERS[1:7], each=40),
-#'   treatment = rep(c("high","low"),each=20),
-#'   note = seq(1:280)+sample(1:150, 280, replace=TRUE))
+#' dat <- sample_n(diamonds, 2000)
 #'
-#' # Dueling banjos
+#' # Grouped boxplots
+#' plot_ly(dat, x = ~cut, y = ~price) %>%
+#'   add_boxplot(color = ~clarity) %>%
+#'   layout(boxmode = "group")
 #'
-#' ## Ungrouped
-#' ggplot(dat, aes(x = variety, y = note)) +
-#'   geom_boxplot()
-#' fboxplot(dat, x = "variety", y = "note")
+#' # Grouped boxlpot by facet
+#' plots <- dat %>%
+#'   group_by(cut) %>%
+#'   do(plot = {
+#'     name <- as.character(.$cut[1L])
+#'     plot_ly(., x = ~as.numeric(clarity), y = ~price, legendgroup = ~clarity,
+#'             showlegend = .$cut[1] == diamonds$cut[1]) %>%
+#'       add_boxplot(pointpos = 0,
+#'                   boxpoints = FALSE,
+#'                   color = ~ clarity,
+#'                   # line = list(color = "black"),
+#'                   showlegend = FALSE) %>%
+#'       add_markers(x = ~jitter(as.numeric(clarity)), y = ~price,
+#'                   color = ~ clarity) %>%
+#'       add_annotations(text = sprintf("<b>%s</b>", name),
+#'                       x = 0, xref = "paper", xanchor = "left",
+#'                       y = 1, yref = "paper", yanchor = "top", yshift = 15,
+#'                       showarrow = FALSE) %>%
+#'       layout(xaxis = list(tickvals = 1:8, ticktext = levels(diamonds$clarity)))
+#'   })
+#' subplot(plots, nrows = 1, shareY = TRUE)
 #'
-#' gg <- ggplot(dat, aes(x = variety, y = note)) +
-#'   geom_boxplot(outlier.shape = NA) +
-#'   geom_jitter(aes(color = treatment), width = 0.1)
-#' gg
-#' ggplotly(gg)
-#'
-#' fboxplot(dat, x = "variety", y = "note", color_aes = "treatment")
-#' fboxplot(dat, x = "variety", y = "note", shape_aes = "treatment")
-#' ggplot(dat, aes(x = variety, y = note)) +
-#'   geom_boxplot() +
-#'   facet_wrap(~ treatment)
-#' fboxplot(dat, x = "variety", y = "note", facet_aes = "treatment")
-#'
-#' ## Grouped
-#' ggplot(dat, aes(x=variety, y=note, fill=treatment)) +
-#'   geom_boxplot()
-#' fboxplot(dat, x = "variety", y = "note", group_aes = "treatment")
+#' # Grouped boxplot with fboxplot
+#' fboxplot(dat, "clarity", "price", facet_aes = "cut")
 fboxplot <- function(dat, x, y, with_points = FALSE, group_aes = NULL,
                      color_aes = NULL, color_map = NULL,
                      shape_aes = NULL, shape_map = NULL,
@@ -77,6 +82,20 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   assert_string(x)
   assert_string(y)
   assert_subset(c(x, y), names(dat))
+  assert_categorical(dat[[x]])
+  if (!is.factor(dat[[x]])) {
+    dat[[x]] <- factor(dat[[x]])
+  }
+  dat[[x]] <- droplevels(dat[[x]])
+
+  assert_numeric(dat[[y]])
+
+  xtickvals <- seq(nlevels(dat[[x]]))
+  xticktext <- levels(dat[[x]])
+
+  has_legend <- !is.null(color_aes) ||
+    !is.null(shape_aes) ||
+    !is.null(size_aes)
 
   xx <- with_aesthetics(dat, color_aes = color_aes, color_map = color_map,
                         shape_aes = shape_aes, shape_map = shape_map,
@@ -99,12 +118,19 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
     .shape <- formula(paste0("~", .shape.columns[["variable"]]))
   }
 
+  has_legend <- !is.null(color_aes) ||
+    !is.null(shape_aes) ||
+    !is.null(size_aes)
+
   plot <- maybe_facet(.fboxplot, xx, facet_aes, facet_nrows,
-                      x, y, with_points, group_aes,
-                      marker_size = marker_size, .color = .color,
-                      .colors = .colors, .shape = .shape, .shapes = .shapes,
+                      has_legend = has_legend, legend_unify = TRUE,
+                      x = x, y = y, with_points = with_points,
+                      group_aes = group_aes, marker_size = marker_size,
+                      .color = .color, .colors = .colors,
+                      .shape = .shape, .shapes = .shapes,
                       ..., xlabel = xlabel, ylabel = ylabel,
                       pointpos = pointpos,
+                      xtickvals = xtickvals, xticktext = xticktext,
                       event_source = event_source)
   plot
 }
@@ -115,24 +141,70 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
 #'
 #' @noRd
 #' @importFrom plotly add_boxplot config layout plot_ly
-.fboxplot <- function(xx, x, y, with_points, group_aes, facet_aes, facet_nrows,
+.fboxplot <- function(xx, x, y, with_points, facet_aes, group_aes, facet_nrows,
                       marker_size, .color, .colors, .shape, .shapes, ...,
-                      xlabel, ylabel, pointpos, event_source) {
+                      xlabel, ylabel, pointpos,
+                      xtickvals, xticktext,
+                      legendgroup = NULL, showlegend = TRUE,
+                      event_source) {
   xaxis <- list(title = x)
   yaxis <- list(title = y)
 
-  xf <- paste0("~", x)
   yf <- paste0("~", y)
+  pf <- sprintf("~jitter(as.numeric(%s))", x)
+  if (with_points) {
+    boxpoints <- FALSE
+    xf <- sprintf("~as.numeric(%s)", x)
+    boxlegend <- FALSE
+  } else {
+    xf <- paste0("~", x)
+    boxpoints <- "outliers"
+    boxlegend <- TRUE
+  }
 
-  boxpoints <- if (with_points) "all" else "suspectedoutliers"
+  nofacet <- missing(facet_aes)
 
-  p <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover) %>%
-    add_boxplot(color = .color, colors = .colors,
-                # symbol = .shape, symbols = .shapes,
-                # marker = list(size = marker_size),
-                boxpoints = boxpoints, pointpos = pointpos) %>%
-    layout(xaxis = xaxis, yaxis = yaxis, dragmode = "select") %>%
-    config(displaylogo = FALSE)
+  lgroup <- local({
+    if (nofacet) {
+      out <- NULL
+    } else {
+      lcols <- c(".color_aes.variable", ".shape_aes.variable")
+      out <- lcols[sapply(lcols, function(v) !is.null(xx[[v]]))]
+      if (length(out) == 0) {
+        out <- NULL
+      } else if (length(out) == 1L) {
+        out <- paste("~", out)
+      } else {
+        out <- sprintf("~ paste(%s)", paste(out, collapse = ","))
+      }
+    }
+  })
+browser()
+
+  p <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
+               showlegend = showlegend,
+               legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
+    add_boxplot(pointpos = 0, boxpoints = boxpoints, color = .color,
+                colors = .colors, showlegend = boxlegend && showlegend,
+                legendgroup = if (is.null(lgroup)) NULL else formula(lgroup))
+  if (with_points) {
+    p <- add_markers(p, x = formula(pf), y = formula(yf),
+                     color = .color, colors = .colors,
+                     legendgroup = if (is.null(lgroup)) NULL else formula(lgroup))
+    xaxis <- list(title = x, tickvals = xtickvals, ticktext = xticktext)
+    p <- layout(p, xaxis = xaxis)
+  } else {
+    # will only draw a boxplot
+    # can add layout(boxmode = "group") for grouping
+  }
+
+  p <- config(p, displaylogo = FALSE)
+  # p <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover) %>%
+  #   add_boxplot(boxpoints = boxpoints,color = .color, colors = .colors,
+  #               boxpoints = boxpoints, pointpos = 0) %>%
+  #   layout(boxmode = if (grouped) "group" else "overlay") %>%
+  #   config(displaylogo = FALSE)
+  # p
   p
 }
 

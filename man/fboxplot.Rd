@@ -32,35 +32,3 @@ fboxplot(dat, x, y, with_points = FALSE, group_aes = NULL,
 Look at boxplot section of the new book for guidance.
 https://plotly-r.com/boxplots.html
 }
-\examples{
-library(ggplot2)
-dat <- data.frame(
-  variety = rep(LETTERS[1:7], each=40),
-  treatment = rep(c("high","low"),each=20),
-  note = seq(1:280)+sample(1:150, 280, replace=TRUE))
-
-# Dueling banjos
-
-## Ungrouped
-ggplot(dat, aes(x = variety, y = note)) +
-  geom_boxplot()
-fboxplot(dat, x = "variety", y = "note")
-
-gg <- ggplot(dat, aes(x = variety, y = note)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_jitter(aes(color = treatment), width = 0.1)
-gg
-ggplotly(gg)
-
-fboxplot(dat, x = "variety", y = "note", color_aes = "treatment")
-fboxplot(dat, x = "variety", y = "note", shape_aes = "treatment")
-ggplot(dat, aes(x = variety, y = note)) +
-  geom_boxplot() +
-  facet_wrap(~ treatment)
-fboxplot(dat, x = "variety", y = "note", facet_aes = "treatment")
-
-## Grouped
-ggplot(dat, aes(x=variety, y=note, fill=treatment)) +
-  geom_boxplot()
-fboxplot(dat, x = "variety", y = "note", group_aes = "treatment")
-}
