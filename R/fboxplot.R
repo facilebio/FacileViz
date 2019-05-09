@@ -7,6 +7,18 @@
 #' what is possible via faceting. See the examples section for inspiration on
 #' how we can use a facet to approximate a "grouped" boxplot.
 #'
+#' @section Mapping aesthetics to geometries:
+#'
+#' When `with_points = FALSE`, the `color_aes` can only be set to the value of
+#' the `x` categorical axis, if anything at all.
+#'
+#' When `with_points = TRUE`, the boxes will be colored white, and the points
+#' will be colored by the aesthetic.
+#'
+#' I can't figure out how to get the shape stuff working in conjunction with
+#' the `unify_legend` logic required to make faceted legends work in the more
+#' general case. This is a WIP.
+#'
 #' @export
 #'
 #' @param dat the data source
