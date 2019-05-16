@@ -234,7 +234,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
       p <- add_markers(p, type = "scatter3d",
                        color = .color, colors = .colors,
                        symbol = .shape, symbol = .shapes,
-                       lsmarker = list(size = marker_size),
+                       marker = list(size = marker_size),
                        text = ~.hover)
       p <- config(p, displaylogo = FALSE)
       p <- layout(p, scene = scene)
