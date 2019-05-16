@@ -27,7 +27,7 @@
 #' @param group_aes column in `dat` to group barplots by (not yet implemented)
 #'
 #' @examples
-#' dat <- sample_n(diamonds, 2000)
+#' dat <- dplyr::sample_n(diamonds, 2000)
 #'
 #' # Grouped boxplots
 #' plot_ly(dat, x = ~cut, y = ~price) %>%
@@ -67,10 +67,14 @@ fboxplot <- function(dat, x, y, with_points = FALSE, group_aes = NULL,
                      size_aes = NULL, size_map = NULL,
                      facet_aes = NULL, facet_nrows = NULL,
                      hover = NULL,
+                     na_x = c("remove", "keep"),
+                     na_y = c("remove", "keep"),
                      ...,
                      xlabel = NULL, ylabel = NULL,
                      # direct plot_ly params:
                      marker_size = 8,
+                     height = 600,
+                     width = height + (height / 6),
                      sizes = c(10, 100),
                      pointpos = -1.8,
                      event_source = "A") {
@@ -87,10 +91,14 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                                 size_aes = NULL, size_map = NULL,
                                 facet_aes = NULL, facet_nrows = NULL,
                                 hover = NULL,
+                                na_x = c("remove", "keep"),
+                                na_y = c("remove", "keep"),
                                 ...,
                                 xlabel = NULL, ylabel = NULL,
                                 # direct plot_ly params:
                                 marker_size = 8,
+                                height = 600,
+                                width = height + (height / 6),
                                 sizes = c(10, 100),
                                 pointpos = -1.8,
                                 event_source = "A") {
@@ -98,6 +106,27 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   assert_string(y)
   assert_subset(c(x, y), names(dat))
   assert_categorical(dat[[x]])
+  na_x <- match.arg(na_x)
+  na_y <- match.arg(na_y)
+
+  if (na_x == "keep") {
+    vals <- dat[[x]]
+    isna <- is.na(vals)
+    if (any(isna)) {
+      if (is.factor(vals)) {
+        lvls <- c(levels(vals), "NA.")
+        vals <- as.character(vals)
+      } else {
+        lvls <- NULL
+      }
+      vals[isna] <- "NA."
+      if (!is.null(lvls)) {
+        vals <- factor(vals, lvls)
+      }
+      dat[[x]] <- vals
+    }
+  }
+
   if (!is.factor(dat[[x]])) {
     dat[[x]] <- factor(dat[[x]])
   }
@@ -149,17 +178,25 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
     !is.null(size_aes)
 
   plot_type <- if (with_points) "box+points" else "box"
+
   plot <- maybe_facet(.fboxplot, xx, facet_aes, facet_nrows,
                       has_legend = has_legend, plot_type = plot_type,
                       x = x, y = y, with_points = with_points,
                       group_aes = group_aes, marker_size = marker_size,
                       .color = .color, .colors = .colors,
                       .shape = .shape, .shapes = .shapes,
-                      ..., xlabel = xlabel, ylabel = ylabel,
+                      ...,
+                      width = width, height = height,
+                      xlabel = xlabel, ylabel = ylabel,
                       pointpos = pointpos,
                       xtickvals = xtickvals, xticktext = xticktext,
                       event_source = event_source)
-  plot
+
+  out <- list(plot = plot, input_data = dat, params = list())
+  class(out) <- c("FacileBoxPlotViz", "FacileViz")
+  out
+
+  out
 }
 
 #' The lowest-level scatterplot funciton that generates a plotly plot object.
@@ -170,6 +207,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
 #' @importFrom plotly add_boxplot config layout plot_ly
 .fboxplot <- function(xx, x, y, with_points, facet_aes, group_aes, facet_nrows,
                       marker_size, .color, .colors, .shape, .shapes, ...,
+                      height = NULL, width = NULL,
                       xlabel, ylabel, pointpos,
                       xtickvals, xticktext,
                       legendgroup = NULL, showlegend = TRUE,
@@ -202,7 +240,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
     xaxis <- list(tickvals = xtickvals, ticktext = xticktext, title = x)
 
     plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
-                   showlegend = showlegend) %>%
+                   showlegend = showlegend, height = height, width = width) %>%
       add_boxplot(boxpoints = FALSE,
                   line = list(color = "black"),
                   fillcolor = "white",
@@ -210,14 +248,13 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                   # legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
       add_markers(x = formula(pf), y = formula(yf),
                   color = .color, colors = .colors,
-
                   legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
       layout(xaxis = xaxis)
 
   } else {
     xf <- paste0("~", x)
     plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
-                   showlegend = showlegend) %>%
+                   showlegend = showlegend, height = height, width = width) %>%
       add_boxplot(boxpoints = "outliers", pointpos = 0,
                   color = .color, colors = .colors,
                   legendgroup = if (is.null(lgroup)) NULL else formula(lgroup))

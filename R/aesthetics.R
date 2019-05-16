@@ -132,7 +132,7 @@ with_aesthetics.data.frame <- function(dat, color_aes = NULL, color_map = NULL,
     return(xx)
   }
 
-  # Replace real NA values with "NA" so that points don't drop out in plotly
+  # Replace real NA values with "NA." so that points don't drop out in plotly
   # plots.
   if (na_to_char) {
     for (cov in amaps) {
@@ -141,14 +141,15 @@ with_aesthetics.data.frame <- function(dat, color_aes = NULL, color_map = NULL,
         isna <- is.na(vals)
         if (any(isna)) {
           if (is.factor(vals)) {
-            lvls <- c(setdiff(levels(vals), "NA"), "NA")
+            lvls <- c(setdiff(levels(vals), c("NA", "NA.")), "NA.")
           } else {
             warning("Converting `", cov, "` character to factor for aes map")
-            lvls <- setdiff(sort(unique(vals)), "NA")
-            lvls <- c(lvls, "NA")
+            lvls <- setdiff(sort(unique(vals)), "NA.")
+            lvls <- c(lvls, "NA.")
           }
-          vals <- factor(vals, lvls)
-          xx[[cov]][isna] <- "NA"
+          vals <- as.character(vals)
+          vals[isna] <- "NA."
+          xx[[cov]] <- factor(vals, lvls)
         }
       }
     }

@@ -37,17 +37,33 @@ ggplot(dat, aes(x = variety, y = note)) +
   facet_wrap(~ treatment)
 fboxplot(dat, x = "variety", y = "note", facet_aes = "treatment")
 
-## Grouped
+## Grouped ---------------------------------------------------------------------
 gg <- ggplot(dat, aes(x=variety, y=note, fill=treatment)) +
   geom_boxplot() +
   geom_jitter(position = position_jitterdodge())
 gg
 
-plot_ly(dat, x = ~variety, y = ~note) %>%
+# grouped layout boxmode
+text <- ~sprintf("treatment: %s<br>variety: %s", treatment, variety)
+plot_ly(dat, x = ~variety, y = ~note, text = text) %>%
   # add_boxplot(boxpoints = FALSE, showlegend = FALSE, fillcolor = "white") %>%
   add_boxplot(boxpoints = "all", color = ~ treatment, pointpos = 0) %>%
   layout(boxmode = "group")
 
+# by interaction
+plot_ly(dat, x = ~interaction(treatment, variety), y = ~note, text = text) %>%
+  add_boxplot(boxpoints = "all", color = ~ treatment, pointpos = 0)
+
+# using facet insteqd of groups
+plots <- dat %>%
+  group_by(variety) %>%
+  do(plot = {
+    plot_ly(., x = ~treatment, y = ~note) %>%
+      add_boxplot(boxpoints = "all", color = ~treatment, pointpos = 0)
+  })
+subplot(plots, nrows = 1, shareX = TRUE, shareY = TRUE)
+
+# diamonds ---------------------------------------------------------------------
 
 # From rbook
 plot_ly(diamonds, x = ~interaction(clarity, cut), y = ~price) %>%
