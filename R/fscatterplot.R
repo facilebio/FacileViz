@@ -76,11 +76,15 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                                     height = 600,
                                     width = height + (height / 6),
                                     sizes = c(10, 100),
-                                    event_source = "A") {
+                                    key = NULL, event_source = "A") {
   assert_character(axes, min.len = 2L, max.len = 3L)
   assert_subset(axes, names(dat))
   assert_subset(c(color_aes, shape_aes, size_aes, facet_aes, hover), names(dat))
   assert_flag(with_density)
+
+  if (!is.null(key)) {
+    assert_choice(key, colnames(dat))
+  }
 
   if (with_density && !is.null(facet_aes)) {
     warning("Marginal densities not supported with facets. Facets disabled")
@@ -129,7 +133,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                       .shapes = .shapes, ...,
                       width = width, height = height, flat = flat,
                       xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
-                      event_source = event_source)
+                      key = key, event_source = event_source)
   out <- list(plot = plot, input_data = dat, params = list())
 
   if (webgl) {
@@ -155,10 +159,11 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                           .color, .colors,
                           .shape, .shapes, ...,
                           height = NULL, width = NULL, flat = FALSE,
-                          xlabel, ylabel, zlabel, event_source,
+                          xlabel, ylabel, zlabel, key, event_source,
                           legendgroup = NULL, showlegend = TRUE) {
   xaxis <- list(title = if (!is.null(xlabel)) xlabel[1L] else axes[1L])
   yaxis <- list(title = if (!is.null(ylabel)) ylabel[1L] else axes[2L])
+  if (!is.null(key)) key <- paste0("~", key)
 
   nofacet <- missing(facet_aes) || length(axes) == 3L
 
@@ -181,7 +186,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   if (length(axes) == 2L) {
     p <- plot_ly(xx, x = formula(xf), y = formula(yf),
                  height = height, width = width,
-                 source = event_source,
+                 source = event_source, key = formula(key),
                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup),
                  showlegend = showlegend)
     p <- add_markers(p, type = "scatter",
@@ -201,7 +206,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
         xi <- pair[[1]]
         yi <- pair[[2]]
         pp <- plot_ly(xx, x = formula(axf[[xi]]), y = formula(axf[[yi]]),
-                      source = event_source,
+                      source = event_source, key = formula(key),
                       showlegend = FALSE,
                       height = height, width = width,
                       legendgroup = lgroup, showlegend = showlegend)
@@ -230,7 +235,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
       scene <- list(xaxis = xaxis, yaxis = zaxis, zaxis = yaxis,
                     camera = camera)
       p <- plot_ly(xx, x = formula(xf), y = formula(zf), z = formula(yf),
-                   source = event_source, height = height, width = width)
+                   source = event_source, key = fprmula(key),
+                   height = height, width = width)
       p <- add_markers(p, type = "scatter3d",
                        color = .color, colors = .colors,
                        symbol = .shape, symbol = .shapes,

@@ -101,6 +101,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                                 width = height + (height / 6),
                                 sizes = c(10, 100),
                                 pointpos = -1.8,
+                                key = NULL,
                                 event_source = "A") {
   assert_string(x)
   assert_string(y)
@@ -108,6 +109,9 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   assert_categorical(dat[[x]])
   na_x <- match.arg(na_x)
   na_y <- match.arg(na_y)
+  if (!is.null(key)) {
+    assert_choice(key, colnames(dat))
+  }
 
   if (na_x == "keep") {
     vals <- dat[[x]]
@@ -190,7 +194,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                       xlabel = xlabel, ylabel = ylabel,
                       pointpos = pointpos,
                       xtickvals = xtickvals, xticktext = xticktext,
-                      event_source = event_source)
+                      key = key, event_source = event_source)
 
   out <- list(plot = plot, input_data = dat, params = list())
   class(out) <- c("FacileBoxPlotViz", "FacileViz")
@@ -211,10 +215,11 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                       xlabel, ylabel, pointpos,
                       xtickvals, xticktext,
                       legendgroup = NULL, showlegend = TRUE,
-                      event_source) {
+                      key, event_source) {
   xaxis <- list(title = x)
   yaxis <- list(title = y)
 
+  if (!is.null(key)) key <- paste0("~", key)
   nofacet <- missing(facet_aes)
 
   lgroup <- local({
@@ -240,7 +245,8 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
     xaxis <- list(tickvals = xtickvals, ticktext = xticktext, title = x)
 
     plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
-                   showlegend = showlegend, height = height, width = width) %>%
+                   showlegend = showlegend, height = height, width = width,
+                   source = event_source, key = formula(key)) %>%
       add_boxplot(boxpoints = FALSE,
                   line = list(color = "black"),
                   fillcolor = "white",
@@ -254,7 +260,8 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   } else {
     xf <- paste0("~", x)
     plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
-                   showlegend = showlegend, height = height, width = width) %>%
+                   showlegend = showlegend, height = height, width = width,
+                   source = event_source, key = formula(key)) %>%
       add_boxplot(boxpoints = "outliers", pointpos = 0,
                   color = .color, colors = .colors,
                   legendgroup = if (is.null(lgroup)) NULL else formula(lgroup))
