@@ -158,6 +158,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                           facet_aes, facet_nrows, marker_size,
                           .color, .colors,
                           .shape, .shapes, ...,
+                          legendside = NULL,
                           height = NULL, width = NULL, flat = FALSE,
                           xlabel, ylabel, zlabel, key, event_source,
                           legendgroup = NULL, showlegend = TRUE) {
@@ -235,7 +236,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
       scene <- list(xaxis = xaxis, yaxis = zaxis, zaxis = yaxis,
                     camera = camera)
       p <- plot_ly(xx, x = formula(xf), y = formula(zf), z = formula(yf),
-                   source = event_source, key = fprmula(key),
+                   source = event_source, key = formula(key),
                    height = height, width = width)
       p <- add_markers(p, type = "scatter3d",
                        color = .color, colors = .colors,
@@ -248,6 +249,9 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   }
 
   p <- layout(p, dragmode = "select")
+  if (nofacet && isTRUE(legendside == "bottom")) {
+    p <- layout(p, legend = list(orientation = "h"))
+  }
   p
 }
 

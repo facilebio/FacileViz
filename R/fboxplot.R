@@ -27,6 +27,7 @@
 #' @param group_aes column in `dat` to group barplots by (not yet implemented)
 #'
 #' @examples
+#' data("diamonds", package = "ggplot2")
 #' dat <- dplyr::sample_n(diamonds, 2000)
 #'
 #' # Grouped boxplots
@@ -57,6 +58,7 @@
 #' subplot(plots, nrows = 1, shareY = TRUE)
 #'
 #' # Grouped boxplot with fboxplot
+#' fboxplot(dat, "clarity", "price", color_aes = "cut", with_points = TRUE)
 #' fboxplot(dat, "clarity", "price", facet_aes = "cut")
 #' fboxplot(dat, "clarity", "price", facet_aes = "cut", with_points = TRUE)
 #' fboxplot(dat, "clarity", "price", facet_aes = "cut",
@@ -94,6 +96,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                                 na_x = c("remove", "keep"),
                                 na_y = c("remove", "keep"),
                                 ...,
+                                legendside = NULL,
                                 xlabel = NULL, ylabel = NULL,
                                 # direct plot_ly params:
                                 marker_size = 8,
@@ -192,6 +195,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                       ...,
                       width = width, height = height,
                       xlabel = xlabel, ylabel = ylabel,
+                      legendside = legendside,
                       pointpos = pointpos,
                       xtickvals = xtickvals, xticktext = xticktext,
                       key = key, event_source = event_source)
@@ -215,9 +219,10 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                       xlabel, ylabel, pointpos,
                       xtickvals, xticktext,
                       legendgroup = NULL, showlegend = TRUE,
+                      legendside = NULL,
                       key, event_source) {
-  xaxis <- list(title = x)
-  yaxis <- list(title = y)
+  xaxis <- list(title = xlabel)
+  yaxis <- list(title = ylabel)
 
   if (!is.null(key)) key <- paste0("~", key)
   nofacet <- missing(facet_aes)
@@ -242,7 +247,8 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   if (with_points) {
     xf <- sprintf("~as.numeric(%s)", x)
     pf <- sprintf("~jitter(as.numeric(%s))", x)
-    xaxis <- list(tickvals = xtickvals, ticktext = xticktext, title = x)
+    if (is.null(xlabel)) xlabel <- x # otherwise it's as.numeric()
+    xaxis <- list(tickvals = xtickvals, ticktext = xticktext, title = xlabel)
 
     plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
                    showlegend = showlegend, height = height, width = width,
@@ -264,10 +270,14 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                    source = event_source, key = formula(key)) %>%
       add_boxplot(boxpoints = "outliers", pointpos = 0,
                   color = .color, colors = .colors,
-                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup))
+                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
+      layout(xaxis = xaxis, yaxis = yaxis)
 
   }
   plt <- layout(plt, dragmode = "select")
+  if (nofacet && isTRUE(legendside == "bottom")) {
+    plt <- layout(plt, legend = list(orientation = "h"))
+  }
   plt <- config(plt, displaylogo = FALSE)
   plt
 }

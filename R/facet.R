@@ -17,6 +17,7 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
                         width = height + (height / 6),
                         facet_height = 300,
                         facet_width =  370,
+                        legendside = NULL,
                         # subplot parameters
                         widths = NULL, heights = NULL, margin = 0.02,
                         shareX = TRUE, shareY = TRUE, titleX = shareX,
@@ -66,8 +67,11 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
       p <- unify_legend(p, plot_type)
     }
   } else {
-    if (has_legend) width <- width + 100
-    p <- plotfn(plotdat, ..., width = width, height = height)
+    if (has_legend && !isTRUE(legendside == "bottom")) {
+      width <- width + 100
+    }
+    p <- plotfn(plotdat, ..., legendside = legendside,
+                width = width, height = height)
   }
 
   p
