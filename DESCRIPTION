@@ -1,9 +1,10 @@
 Package: FacileViz
 Type: Package
 Title: Interactive vizualizations for FacileData
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
-    person("Steve", "Lianoglou", , "lianoglou@dnli.com", c("aut", "cre")),
+    person("Steve", "Lianoglou", , "lianoglou@dnli.com", c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-0924-1754")),
     person("Denali Therapeutics", role = c("cph", "fnd")))
 Description: This package provides basic methods that generate interactive
     vizualizations for FacileData. The "workhorse" method is the "vizualize" S3

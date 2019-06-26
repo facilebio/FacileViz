@@ -261,7 +261,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
       add_markers(x = formula(pf), y = formula(yf),
                   color = .color, colors = .colors,
                   legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
-      layout(xaxis = xaxis)
+      layout(xaxis = xaxis, yaxis = yaxis)
 
   } else {
     xf <- paste0("~", x)
