@@ -20,7 +20,7 @@ fscatterplot(dat, axes, with_density = FALSE, color_aes = NULL,
   facet_aes = NULL, facet_nrows = NULL, hover = NULL,
   webgl = FALSE, ..., flat = FALSE, xlabel = NULL, ylabel = NULL,
   zlabel = NULL, marker_size = 8, height = 600, width = height +
-  (height/6), sizes = c(10, 100), event_source = "A")
+  (height/6), sizes = c(10, 100), key = NULL, event_source = "A")
 
 \method{fscatterplot}{tbl}(dat, axes, color_aes = NULL,
   color_map = NULL, shape_aes = NULL, shape_map = NULL,
@@ -71,8 +71,9 @@ dat <- data.frame(
 dat <- head(dat, 10)
 fscatterplot(dat, c("a", "b"), color_aes = "class", hover = "class")
 fscatterplot(dat, c("a", "b"), color_aes = "class", hover = c("class", "c"))
-fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
-             facet_aes = "class", hover = c("class", "c"))
+fscatterplot(dat, c("a", "b"), color_aes = "class",
+             facet_aes = "class", hover = c("class", "c"),
+             facet_nrows = 2)
 fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
              facet_aes = "grp", hover = c("class", "c"))
 
@@ -81,6 +82,6 @@ fscatterplot(dat, c("a", "b", "c"),color_aes = "class",
              hover = c("class", "c"))
 fscatterplot(dat, c("a", "b", "c"), flat = TRUE, color_aes = "class",
              hover = c("class", "c"))
-fscatterplot(dat, c("a", "b", "c"), color_aes = "class",
+fscatterplot(dat, c("a", "b", "c"), color_aes = "class", shape_aes = "grp",
              hover = c("class", "c"), webgl = TRUE)
 }

@@ -8,16 +8,21 @@
 fboxplot(dat, x, y, with_points = FALSE, group_aes = NULL,
   color_aes = NULL, color_map = NULL, shape_aes = NULL,
   shape_map = NULL, size_aes = NULL, size_map = NULL,
-  facet_aes = NULL, facet_nrows = NULL, hover = NULL, ...,
-  xlabel = NULL, ylabel = NULL, marker_size = 8, sizes = c(10,
-  100), pointpos = -1.8, event_source = "A")
+  facet_aes = NULL, facet_nrows = NULL, hover = NULL,
+  na_x = c("remove", "keep"), na_y = c("remove", "keep"), ...,
+  xlabel = NULL, ylabel = NULL, marker_size = 8, height = 600,
+  width = height + (height/6), sizes = c(10, 100), pointpos = -1.8,
+  event_source = "A")
 
 \method{fboxplot}{data.frame}(dat, x, y, with_points = nrow(dat) < 1000,
   group_aes = NULL, color_aes = NULL, color_map = NULL,
   shape_aes = NULL, shape_map = NULL, size_aes = NULL,
   size_map = NULL, facet_aes = NULL, facet_nrows = NULL,
-  hover = NULL, ..., xlabel = NULL, ylabel = NULL, marker_size = 8,
-  sizes = c(10, 100), pointpos = -1.8, event_source = "A")
+  hover = NULL, na_x = c("remove", "keep"), na_y = c("remove",
+  "keep"), ..., legendside = NULL, xlabel = NULL, ylabel = NULL,
+  marker_size = 8, height = 600, width = height + (height/6),
+  sizes = c(10, 100), pointpos = -1.8, key = NULL,
+  event_source = "A")
 }
 \arguments{
 \item{dat}{the data source}
@@ -31,4 +36,61 @@ fboxplot(dat, x, y, with_points = FALSE, group_aes = NULL,
 \description{
 Look at boxplot section of the new book for guidance.
 https://plotly-r.com/boxplots.html
+}
+\details{
+For now, instead of enabling a "grouping" variable, \code{fboxplot} we just enable
+what is possible via faceting. See the examples section for inspiration on
+how we can use a facet to approximate a "grouped" boxplot.
+}
+\section{Mapping aesthetics to geometries}{
+
+
+When \code{with_points = FALSE}, the \code{color_aes} can only be set to the value of
+the \code{x} categorical axis, if anything at all.
+
+When \code{with_points = TRUE}, the boxes will be colored white, and the points
+will be colored by the aesthetic.
+
+I can't figure out how to get the shape stuff working in conjunction with
+the \code{unify_legend} logic required to make faceted legends work in the more
+general case. This is a WIP.
+}
+
+\examples{
+data("diamonds", package = "ggplot2")
+dat <- dplyr::sample_n(diamonds, 2000)
+
+# Grouped boxplots
+plot_ly(dat, x = ~cut, y = ~price) \%>\%
+  add_boxplot(color = ~clarity) \%>\%
+  layout(boxmode = "group")
+
+# Grouped boxlpot by facet
+plots <- dat \%>\%
+  group_by(cut) \%>\%
+  do(plot = {
+    name <- as.character(.$cut[1L])
+    plot_ly(., x = ~as.numeric(clarity), y = ~price, legendgroup = ~clarity,
+            showlegend = .$cut[1] == diamonds$cut[1]) \%>\%
+      add_boxplot(pointpos = 0,
+                  boxpoints = FALSE,
+                  color = ~ clarity,
+                  # line = list(color = "black"),
+                  showlegend = FALSE) \%>\%
+      add_markers(x = ~jitter(as.numeric(clarity)), y = ~price,
+                  color = ~ clarity) \%>\%
+      add_annotations(text = sprintf("<b>\%s</b>", name),
+                      x = 0, xref = "paper", xanchor = "left",
+                      y = 1, yref = "paper", yanchor = "top", yshift = 15,
+                      showarrow = FALSE) \%>\%
+      layout(xaxis = list(tickvals = 1:8, ticktext = levels(diamonds$clarity)))
+  })
+subplot(plots, nrows = 1, shareY = TRUE)
+
+# Grouped boxplot with fboxplot
+fboxplot(dat, "clarity", "price", color_aes = "cut", with_points = TRUE)
+fboxplot(dat, "clarity", "price", facet_aes = "cut")
+fboxplot(dat, "clarity", "price", facet_aes = "cut", with_points = TRUE)
+fboxplot(dat, "clarity", "price", facet_aes = "cut",
+         color_aes = "clarity", with_points = TRUE)
 }

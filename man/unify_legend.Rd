@@ -4,7 +4,7 @@
 \alias{unify_legend}
 \title{Hacks into plotly internals merge legends across subplots.}
 \usage{
-unify_legend(x, ...)
+unify_legend(x, type = c("scatter", "box", "box+points"), ...)
 }
 \arguments{
 \item{x}{plotly object}

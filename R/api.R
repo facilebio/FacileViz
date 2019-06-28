@@ -68,12 +68,11 @@ print.FacileViz <- function(x, ..., view = interactive()) {
   invisible(print(plot(x), ..., view = view))
 }
 
-# Letting the knit_print method pass through from
-# plotly -> htmlwidgets::knit_print seems to be doing the right thing
-# for now
-# knit_print.Viz <- function(x, ..., options = NULL) {
-#   # delegates to htmlwidgets::knit_print.htmlwdiget
-#   knitr::knit_print(plot(x))
-# }
-#
+#' Ensures FacileViz objects are knit properly
+#'
+#' @export
+#' @importFrom knitr knit_print
+knit_print.FacileViz <- function(x, ...) {
+  knit_print(plot(x))
+}
 
