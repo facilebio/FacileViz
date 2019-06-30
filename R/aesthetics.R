@@ -90,7 +90,7 @@ aes_map.default <- function(x, aes_name = NULL, ...) {
   assert_string(aes_name)
   assert_subset(aes_name, aes_names())
   if (aes_name %in% names(amap)) {
-    warning("Replacing aesthetic map: ", aes_name)
+    # warning("Replacing aesthetic map: ", aes_name)
   }
   amap[[aes_name]] <- value
   amap
@@ -103,6 +103,11 @@ aes_map.default <- function(x, aes_name = NULL, ...) {
 #' for each)
 #'
 #' @export
+#' @examples
+#' x <- data.frame(x = 1:5, y = 1:5, z = 1:5,
+#'                 b = letters[1:5], c = letters[6:10],
+#'                 d = letters[11:15])
+#' xx <- with_aesthetics(x, color_aes = c("b", "c"), shape_aes = "d")
 with_aesthetics <- function(dat, ...) {
   UseMethod("with_aesthetics", dat)
 }
@@ -386,6 +391,7 @@ with_hover <- function(x, aesthetic, aes_map = NULL,
   assert_data_frame(x)
   assert_character(aesthetic, min.len = 1L)
   assert_subset(aesthetic, colnames(x))
+  amap <- aes_map(x)
   if (length(aesthetic) == 1L) {
     x[[aes_cols$variable]] <- x[[aesthetic]]
   } else {
@@ -394,5 +400,6 @@ with_hover <- function(x, aesthetic, aes_map = NULL,
     x <- tidyr::unite_(x, aes_cols$variable, aesthetic, sep = "__",
                        remove = FALSE)
   }
+  aes_map(x) <- amap
   x
 }

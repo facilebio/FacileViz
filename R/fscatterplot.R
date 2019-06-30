@@ -95,6 +95,10 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
     stop("Can not facet a 3d plot")
   }
 
+  if (is.null(hover)) {
+    hover <- c(color_aes, shape_aes, size_aes)
+  }
+
   xx <- with_aesthetics(dat, color_aes = color_aes, color_map = color_map,
                         shape_aes = shape_aes, shape_map = shape_map,
                         size_aes = size_aes, size_map = size_map,
@@ -250,7 +254,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
 
   p <- layout(p, dragmode = "select")
   if (nofacet && isTRUE(legendside == "bottom")) {
-    p <- layout(p, legend = list(orientation = "h"))
+    p <- layout(p, legend = list(orientation = "h", y = -0.3))
   }
   p
 }

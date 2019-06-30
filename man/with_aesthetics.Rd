@@ -13,3 +13,9 @@ Utility function used by most plotting functions that returns a data.frame
 with columns mapping the observations to colors, shape, etc (adds columns
 for each)
 }
+\examples{
+x <- data.frame(x = 1:5, y = 1:5, z = 1:5,
+                b = letters[1:5], c = letters[6:10],
+                d = letters[11:15])
+xx <- with_aesthetics(x, color_aes = c("b", "c"), shape_aes = "d")
+}

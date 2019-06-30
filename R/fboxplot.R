@@ -276,7 +276,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   }
   plt <- layout(plt, dragmode = "select")
   if (nofacet && isTRUE(legendside == "bottom")) {
-    plt <- layout(plt, legend = list(orientation = "h"))
+    plt <- layout(plt, legend = list(orientation = "h", y = -0.3))
   }
   plt <- config(plt, displaylogo = FALSE)
   plt
