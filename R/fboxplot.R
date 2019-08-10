@@ -72,7 +72,8 @@ fboxplot <- function(dat, x, y, with_points = FALSE, group_aes = NULL,
                      na_x = c("remove", "keep"),
                      na_y = c("remove", "keep"),
                      ...,
-                     xlabel = NULL, ylabel = NULL,
+                     xlabel = NULL, ylabel = NULL, title = NULL,
+                     showlegend = TRUE,
                      # direct plot_ly params:
                      marker_size = 8,
                      height = 600,
@@ -97,7 +98,8 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                                 na_y = c("remove", "keep"),
                                 ...,
                                 legendside = NULL,
-                                xlabel = NULL, ylabel = NULL,
+                                xlabel = NULL, ylabel = NULL, title = NULL,
+                                showlegend = TRUE,
                                 # direct plot_ly params:
                                 marker_size = 8,
                                 height = 600,
@@ -194,8 +196,8 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                       .shape = .shape, .shapes = .shapes,
                       ...,
                       width = width, height = height,
-                      xlabel = xlabel, ylabel = ylabel,
-                      legendside = legendside,
+                      xlabel = xlabel, ylabel = ylabel, title = title,
+                      legendside = legendside, showlegend = showlegend,
                       pointpos = pointpos,
                       xtickvals = xtickvals, xticktext = xticktext,
                       key = key, event_source = event_source)
@@ -216,7 +218,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
 .fboxplot <- function(xx, x, y, with_points, facet_aes, group_aes, facet_nrows,
                       marker_size, .color, .colors, .shape, .shapes, ...,
                       height = NULL, width = NULL,
-                      xlabel, ylabel, pointpos,
+                      xlabel, ylabel, title, pointpos,
                       xtickvals, xticktext,
                       legendgroup = NULL, showlegend = TRUE,
                       legendside = NULL,
@@ -277,6 +279,9 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   plt <- layout(plt, dragmode = "select")
   if (nofacet && isTRUE(legendside == "bottom")) {
     plt <- layout(plt, legend = list(orientation = "h", y = -0.3))
+  }
+  if (!is.null(title)) {
+    plt <- layout(plt, title = title)
   }
   plt <- config(plt, displaylogo = FALSE)
   plt

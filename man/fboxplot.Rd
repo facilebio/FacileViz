@@ -10,9 +10,9 @@ fboxplot(dat, x, y, with_points = FALSE, group_aes = NULL,
   shape_map = NULL, size_aes = NULL, size_map = NULL,
   facet_aes = NULL, facet_nrows = NULL, hover = NULL,
   na_x = c("remove", "keep"), na_y = c("remove", "keep"), ...,
-  xlabel = NULL, ylabel = NULL, marker_size = 8, height = 600,
-  width = height + (height/6), sizes = c(10, 100), pointpos = -1.8,
-  event_source = "A")
+  xlabel = NULL, ylabel = NULL, title = NULL, showlegend = TRUE,
+  marker_size = 8, height = 600, width = height + (height/6),
+  sizes = c(10, 100), pointpos = -1.8, event_source = "A")
 
 \method{fboxplot}{data.frame}(dat, x, y, with_points = nrow(dat) < 1000,
   group_aes = NULL, color_aes = NULL, color_map = NULL,
@@ -20,9 +20,9 @@ fboxplot(dat, x, y, with_points = FALSE, group_aes = NULL,
   size_map = NULL, facet_aes = NULL, facet_nrows = NULL,
   hover = NULL, na_x = c("remove", "keep"), na_y = c("remove",
   "keep"), ..., legendside = NULL, xlabel = NULL, ylabel = NULL,
-  marker_size = 8, height = 600, width = height + (height/6),
-  sizes = c(10, 100), pointpos = -1.8, key = NULL,
-  event_source = "A")
+  title = NULL, showlegend = TRUE, marker_size = 8, height = 600,
+  width = height + (height/6), sizes = c(10, 100), pointpos = -1.8,
+  key = NULL, event_source = "A")
 }
 \arguments{
 \item{dat}{the data source}

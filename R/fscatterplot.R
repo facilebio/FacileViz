@@ -47,7 +47,7 @@ fscatterplot <- function(dat, axes, with_density = FALSE,
                          shape_aes = NULL, shape_map = NULL,
                          size_aes = NULL, size_map = NULL,
                          facet_aes = NULL, facet_nrows = NULL,
-                         hover = NULL, webgl = FALSE,
+                         hover = NULL, webgl = FALSE, showlegend = TRUE,
                          ...,
                          flat = FALSE,
                          xlabel = NULL, ylabel = NULL, zlabel = NULL,
@@ -69,7 +69,9 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                                     shape_aes = NULL, shape_map = NULL,
                                     size_aes = NULL, size_map = NULL,
                                     facet_aes = NULL, facet_nrows = NULL,
-                                    hover = NULL, webgl = FALSE, ...,
+                                    hover = NULL, webgl = FALSE,
+                                    showlegend = TRUE,
+                                    ...,
                                     flat = FALSE,
                                     xlabel = NULL, ylabel = NULL, zlabel = NULL,
                                     marker_size = 8,
@@ -136,6 +138,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                       .colors = .colors, .shape = .shape,
                       .shapes = .shapes, ...,
                       width = width, height = height, flat = flat,
+                      showlegend = showlegend,
                       xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
                       key = key, event_source = event_source)
   out <- list(plot = plot, input_data = dat, params = list())
@@ -212,7 +215,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
         yi <- pair[[2]]
         pp <- plot_ly(xx, x = formula(axf[[xi]]), y = formula(axf[[yi]]),
                       source = event_source, key = formula(key),
-                      showlegend = FALSE,
+                      # showlegend = FALSE,
                       height = height, width = width,
                       legendgroup = lgroup, showlegend = showlegend)
         pp <- add_markers(pp, type = "scatter",
@@ -241,7 +244,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                     camera = camera)
       p <- plot_ly(xx, x = formula(xf), y = formula(zf), z = formula(yf),
                    source = event_source, key = formula(key),
-                   height = height, width = width)
+                   height = height, width = width, showlegend = showlegend)
       p <- add_markers(p, type = "scatter3d",
                        color = .color, colors = .colors,
                        symbol = .shape, symbol = .shapes,
@@ -253,8 +256,10 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   }
 
   p <- layout(p, dragmode = "select")
-  if (nofacet && isTRUE(legendside == "bottom")) {
-    p <- layout(p, legend = list(orientation = "h", y = -0.3))
+  if (nofacet) {
+    if (isTRUE(legendside == "bottom")) {
+      p <- layout(p, legend = list(orientation = "h", y = -0.3))
+    }
   }
   p
 }
@@ -267,6 +272,7 @@ fscatterplot.default <- function(dat, axes,
                                  hover = NULL,
                                  ...,
                                  xlabel = NULL, ylabel = NULL, zlabel = NULL,
+                                 showlegend = TRUE,
                                  # direct plot_ly params:
                                  marker_size = 8,
                                  sizes = c(10, 100),
@@ -279,7 +285,9 @@ fscatterplot.default <- function(dat, axes,
                shape_aes = shape_aes, shape_map = shape_map,
                size_aes = size_aes, size_map = size_map,
                facet_aes = facet_aes, facet_nrows = facet_nrows,
-               hover = hover, ..., marker_size = marker_size, sizes = sizes,
+               hover = hover, ...,
+               showlegend = showlegend,
+               marker_size = marker_size, sizes = sizes,
                event_source = event_source)
 }
 

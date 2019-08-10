@@ -18,6 +18,7 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
                         facet_height = 300,
                         facet_width =  370,
                         legendside = NULL,
+                        showlegend = TRUE,
                         # subplot parameters
                         widths = NULL, heights = NULL, margin = 0.02,
                         shareX = TRUE, shareY = TRUE, titleX = shareX,
@@ -46,7 +47,10 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
     facets <- sapply(names(sdat), function(name) {
       fdat <- sdat[[name]]
       i <- match(name, names(sdat))
-      showlegend <- has_legend && name == names(sdat)[1L]
+      showlegend <- has_legend &&
+        name == names(sdat)[1L] &&
+        !isTRUE(legendside == "none") &&
+        showlegend
       # message(name, ": ", showlegend)
       out <- plotfn(fdat, facet_aes = NULL, ..., width = width,
                     height = height, showlegend = showlegend)
@@ -63,14 +67,18 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
                  heights = heights, margin = margin, shareX = shareX,
                  shareY = shareY, titleX = titleX, titleY = titleY,
                  which_layout = which_layout)
-    if (has_legend) {
+    if (has_legend && showlegend) {
       p <- unify_legend(p, plot_type)
     }
   } else {
-    if (has_legend && !isTRUE(legendside == "bottom")) {
+    width.adjust <- !is.null(width) &&
+      has_legend &&
+      !isTRUE(legendside %in% c("bottom", "none")) &&
+      showlegend
+    if (width.adjust) {
       width <- width + 100
     }
-    p <- plotfn(plotdat, ..., legendside = legendside,
+    p <- plotfn(plotdat, ..., legendside = legendside, showlegend = showlegend,
                 width = width, height = height)
   }
 
