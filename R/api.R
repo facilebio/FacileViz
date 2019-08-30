@@ -11,13 +11,22 @@
 #   `fparams(fp)` (TODO: make fparams S3)
 
 # Getters and Setters ----------------------------------------------------------
+
 #' Retrieve the input object from a FacileViz
 #' @export
 input_data <- function(x, ...) UseMethod("input_data", x)
 
+#' @noRd
+#' @export
+input_data.FacileViz <- function(x, ...) x[["input_data"]]
+
 #' Extracts the data used for plotting
 #' @export
 plot_data <- function(x, ...) UseMethod("plot_data", x)
+
+#' @noRd
+#' @export
+plot_data.FacileViz <- function(x, ...) plotly::plotly_data(plot(x))
 
 #' Extract a FacileAnalysisResult from something
 #' @export

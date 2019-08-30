@@ -203,7 +203,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                      marker = list(size = marker_size),
                      text = ~.hover)
     p <- config(p, displaylogo = FALSE)
-    p <- layout(p, xaxis = xaxis, yaxis = yaxis)
+    p <- layout(p, xaxis = xaxis, yaxis = yaxis, dragmode = "select")
   } else {
     if (flat) {
       plots <- list()
@@ -223,7 +223,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                           symbol = .shape, symbols = .shapes,
                           marker = list(size = marker_size),
                           text = ~.hover)
-        pp <- layout(pp, xaxis = lbls[[xi]], yaxis = lbls[[yi]])
+        pp <- layout(pp, xaxis = lbls[[xi]], yaxis = lbls[[yi]],
+                     dragmode = "select")
         pp
       })
       p <- subplot(plots, nrows = 1,
@@ -251,7 +252,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                        marker = list(size = marker_size),
                        text = ~.hover)
       p <- config(p, displaylogo = FALSE)
-      p <- layout(p, scene = scene)
+      p <- layout(p, scene = scene, dragmode = "select")
     }
   }
 
