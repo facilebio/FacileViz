@@ -150,7 +150,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   out
 }
 
-#' The lowest-level scatterplot funciton that generates a plotly plot object.
+#' The lowest-level scatterplot function that generates a plotly plot object.
 #' The caller will decorate the result with all the appropriate class info
 #' and such
 #'
@@ -248,7 +248,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                    height = height, width = width, showlegend = showlegend)
       p <- add_markers(p, type = "scatter3d",
                        color = .color, colors = .colors,
-                       symbol = .shape, symbol = .shapes,
+                       symbol = .shape, symbols = .shapes,
                        marker = list(size = marker_size),
                        text = ~.hover)
       p <- config(p, displaylogo = FALSE)
