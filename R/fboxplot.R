@@ -114,9 +114,9 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   assert_categorical(dat[[x]])
   na_x <- match.arg(na_x)
   na_y <- match.arg(na_y)
-  if (!is.null(key)) {
-    assert_choice(key, colnames(dat))
-  }
+
+  dat <- enkey(dat, key, ...)
+  keycol <- attr(dat, "key_column")
 
   if (na_x == "keep") {
     vals <- dat[[x]]

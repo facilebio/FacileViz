@@ -84,9 +84,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   assert_subset(c(color_aes, shape_aes, size_aes, facet_aes, hover), names(dat))
   assert_flag(with_density)
 
-  if (!is.null(key)) {
-    assert_choice(key, colnames(dat))
-  }
+  dat <- enkey(dat, key, ...)
 
   if (with_density && !is.null(facet_aes)) {
     warning("Marginal densities not supported with facets. Facets disabled")
