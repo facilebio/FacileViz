@@ -4,13 +4,14 @@
 \alias{enkey}
 \title{Sets the "key" column for a data.frame}
 \usage{
-enkey(x, key, key_column = ".data_key.", ...)
+enkey(x, key = NULL, key_column = ".data_key.", ...)
 }
 \arguments{
 \item{x}{the data.frame}
 
 \item{key}{The name(s) of the columns to use as a unique key into the
-dataset.}
+dataset. If key is \code{NULL} (default), then x[\link{key_column}] is added and set
+to \code{1:nrow(x)}.}
 }
 \value{
 \code{x} with the appropriate key set.

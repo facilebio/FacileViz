@@ -48,6 +48,7 @@ fscatterplot <- function(dat, axes, with_density = FALSE,
                          size_aes = NULL, size_map = NULL,
                          facet_aes = NULL, facet_nrows = NULL,
                          hover = NULL, webgl = FALSE, showlegend = TRUE,
+                         legendside = c("bottom", "right", "none"),
                          ...,
                          flat = FALSE,
                          xlabel = NULL, ylabel = NULL, zlabel = NULL,
@@ -71,6 +72,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                                     facet_aes = NULL, facet_nrows = NULL,
                                     hover = NULL, webgl = FALSE,
                                     showlegend = TRUE,
+                                    legendside = c("bottom", "right", "none"),
                                     ...,
                                     flat = FALSE,
                                     xlabel = NULL, ylabel = NULL, zlabel = NULL,
@@ -83,6 +85,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   assert_subset(axes, names(dat))
   assert_subset(c(color_aes, shape_aes, size_aes, facet_aes, hover), names(dat))
   assert_flag(with_density)
+  legendside <- match.arg(legendside)
 
   dat <- enkey(dat, key, ...)
 
@@ -136,7 +139,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                       .colors = .colors, .shape = .shape,
                       .shapes = .shapes, ...,
                       width = width, height = height, flat = flat,
-                      showlegend = showlegend,
+                      showlegend = showlegend, legendside = legendside,
                       xlabel = xlabel, ylabel = ylabel, zlabel = zlabel,
                       key = key, event_source = event_source)
   out <- list(plot = plot, input_data = dat, params = list())
@@ -258,6 +261,8 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   if (nofacet) {
     if (isTRUE(legendside == "bottom")) {
       p <- layout(p, legend = list(orientation = "h", y = -0.3))
+    } else if (isTRUE(legendside == "none")) {
+      p <- layout(p, showlegend = FALSE)
     }
   }
   p

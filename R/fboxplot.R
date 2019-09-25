@@ -97,7 +97,7 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
                                 na_x = c("remove", "keep"),
                                 na_y = c("remove", "keep"),
                                 ...,
-                                legendside = NULL,
+                                legendside = c("bottom", "right", "none"),
                                 xlabel = NULL, ylabel = NULL, title = NULL,
                                 showlegend = TRUE,
                                 # direct plot_ly params:
@@ -112,6 +112,8 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   assert_string(y)
   assert_subset(c(x, y), names(dat))
   assert_categorical(dat[[x]])
+  legendside <- match.arg(legendside)
+
   na_x <- match.arg(na_x)
   na_y <- match.arg(na_y)
 
@@ -278,7 +280,10 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   plt <- layout(plt, dragmode = "select")
   if (nofacet && isTRUE(legendside == "bottom")) {
     plt <- layout(plt, legend = list(orientation = "h", y = -0.3))
+  } else if (isTRUE(legendside == "none")) {
+    plt <- layout(plt, showlegend = FALSE)
   }
+
   if (!is.null(title)) {
     plt <- layout(plt, title = title)
   }
