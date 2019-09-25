@@ -116,7 +116,6 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   na_y <- match.arg(na_y)
 
   dat <- enkey(dat, key, ...)
-  keycol <- attr(dat, "key_column")
 
   if (na_x == "keep") {
     vals <- dat[[x]]
