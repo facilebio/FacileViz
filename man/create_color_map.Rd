@@ -5,10 +5,9 @@
 \alias{create_color_map.data.frame}
 \title{Map values to colors.}
 \usage{
-create_color_map(x, map = NULL, ...)
+create_color_map(x, map = NULL, variant = NULL, ...)
 
-\method{create_color_map}{data.frame}(x, map = NULL, shuffle = TRUE,
-  ...)
+\method{create_color_map}{data.frame}(x, map = NULL, variant = NULL, shuffle = TRUE, ...)
 }
 \arguments{
 \item{x}{a data.frame or vector of values to create a colormap over. Curently
@@ -57,8 +56,14 @@ dat <- data.frame(
   d = rnorm(10),
   stringsAsFactors = FALSE)
 cols1 <- create_color_map(dat)
-cols2 <- create_color_map(dat, c("Set1", "Set2", "Set3"))
-cols3 <- create_color_map(dat, c(b = "Set1", c = "Set2", "Set3"))
+cols2 <- create_color_map(dat, c(a = "Set2", b = "Set1", "Set3"))
+cols3 <- create_color_map(dat, c(a = "viridis", c = "Set2", "Set3"))
+if (interactive()) {
+  scales::show_col(cols1$a)
+  scales::show_col(cols2$a)
+  scales::show_col(cols3$a)
+  with(dplyr::arrange(dat, d), plot(d, col = cols3$d(d), pch = 16))
+}
 cols4 <- create_color_map(dat, c(b = "Set1", c = "Set2")
 cols5 <- create_color_map(
   dat,

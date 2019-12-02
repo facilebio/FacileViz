@@ -6,14 +6,25 @@
 \alias{with_color.tbl}
 \title{Augment a facile object with a color aesthetic}
 \usage{
-with_color(x, aesthetic, aes_map = NULL, ...,
-  .default_color = I("black"))
+with_color(x, aesthetic, aes_map = NULL, ..., .default_color = I("black"))
 
-\method{with_color}{data.frame}(x, aesthetic = NULL, aes_map = NULL,
-  out_column = ".color_aes.", ..., .default_color = "black")
+\method{with_color}{data.frame}(
+  x,
+  aesthetic = NULL,
+  aes_map = NULL,
+  out_column = ".color_aes.",
+  ...,
+  .default_color = "black"
+)
 
-\method{with_color}{tbl}(x, aesthetic = NULL, aes_map = NULL,
-  out_column = ".color_aes.", ..., .default_color = I("black"))
+\method{with_color}{tbl}(
+  x,
+  aesthetic = NULL,
+  aes_map = NULL,
+  out_column = ".color_aes.",
+  ...,
+  .default_color = I("black")
+)
 }
 \arguments{
 \item{x}{an object to colorize (currently just data.frame or tbls)}
@@ -26,14 +37,12 @@ the column(s) used to map observations to colors.}
 \item{aes_map}{the "logic" to use to map \code{aesthetic} to color. This can be
 something like the name of an RColorBrewer map.}
 
-\item{...}{arguments to pass down to specific implementations}
+\item{...}{moar things}
 
 \item{.default_color}{the default color used when only one level exists}
 
 \item{out_column}{the name of the column that is appended to \code{x} that will
 hold the colors}
-
-\item{...}{moar things}
 }
 \value{
 the object \code{x} with an upated \code{aes_map(x, "color")}
@@ -67,6 +76,7 @@ x <- tibble(
   score = rnorm(20))
 x <- with_color(x, aesthetic = "category", "Set3")
 y <- with_color(x, aesthetic = "category", "Set1")
+z <- with_color(x, aesthetic = "category", "viridis")
 }
 \seealso{
 \code{\link[=aes_map]{aes_map()}}

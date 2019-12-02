@@ -31,7 +31,7 @@ the named \code{value} list
 \itemize{
 \item \code{aes_map} retrieves all aesthetic maps, or the map for an individual
 aesthetic when \code{aes_name} is specified.
-\item \code{aes_map()<-} resets the map, wholesale.
+\item \verb{aes_map()<-} resets the map, wholesale.
 }
 }
 \examples{

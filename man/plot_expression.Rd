@@ -4,8 +4,15 @@
 \alias{plot_expression}
 \title{Plot expression of a gene/feature (this function is not facile)}
 \usage{
-plot_expression(y, gene, group = "group", color_by = NULL,
-  wrap_by = "symbol", inorder = TRUE, ...)
+plot_expression(
+  y,
+  gene,
+  group = "group",
+  color_by = NULL,
+  wrap_by = "symbol",
+  inorder = TRUE,
+  ...
+)
 }
 \arguments{
 \item{y}{the DGEList or voomed object your data is in}
