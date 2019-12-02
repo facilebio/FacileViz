@@ -247,6 +247,7 @@ with_color.default <- function(x, aesthetic, aes_map = NULL, ...,
 #'   score = rnorm(20))
 #' x <- with_color(x, aesthetic = "category", "Set3")
 #' y <- with_color(x, aesthetic = "category", "Set1")
+#' z <- with_color(x, aesthetic = "category", "viridis")
 with_color.data.frame <- function(x, aesthetic = NULL, aes_map = NULL,
                                   out_column = ".color_aes.", ...,
                                   .default_color = "black") {

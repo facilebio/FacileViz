@@ -38,13 +38,19 @@
 #'   d = rnorm(10),
 #'   stringsAsFactors = FALSE)
 #' cols1 <- create_color_map(dat)
-#' cols2 <- create_color_map(dat, c("Set1", "Set2", "Set3"))
-#' cols3 <- create_color_map(dat, c(b = "Set1", c = "Set2", "Set3"))
+#' cols2 <- create_color_map(dat, c(a = "Set2", b = "Set1", "Set3"))
+#' cols3 <- create_color_map(dat, c(a = "viridis", c = "Set2", "Set3"))
+#' if (interactive()) {
+#'   scales::show_col(cols1$a)
+#'   scales::show_col(cols2$a)
+#'   scales::show_col(cols3$a)
+#'   with(dplyr::arrange(dat, d), plot(d, col = cols3$d(d), pch = 16))
+#' }
 #' cols4 <- create_color_map(dat, c(b = "Set1", c = "Set2")
 #' cols5 <- create_color_map(
 #'   dat,
 #'   list(a = "Set1", b = c(d = "black", e = "grey")))
-create_color_map <- function(x, map = NULL, ...) {
+create_color_map <- function(x, map = NULL, variant = NULL, ...) {
   UseMethod("create_color_map", x)
 }
 
@@ -56,7 +62,8 @@ create_color_map <- function(x, map = NULL, ...) {
 #'   this case, all but the first column will be shuffled. If `FALSE`, no
 #'   shuffling is done, and the first, second, third, etc. colors for each
 #'   discrete map will be the same.
-create_color_map.data.frame <- function(x, map = NULL, shuffle = TRUE, ...) {
+create_color_map.data.frame <- function(x, map = NULL, variant = NULL,
+                                        shuffle = TRUE, ...) {
   defaults <- lapply(seq(x), function(i) {
     if (test_categorical(x[[i]])) {
       if (i == 1L || !shuffle) mucho.colors() else sample(mucho.colors())
@@ -93,18 +100,23 @@ create_color_map.data.frame <- function(x, map = NULL, shuffle = TRUE, ...) {
 
 #' @noRd
 #' @export
-create_color_map.character <- function(x, map = NULL, sort_levels = TRUE, ...) {
-  .create_color_map.categorical(x, map = map, sort_levels = sort_levels, ...)
+create_color_map.character <- function(x, map = NULL, variant = NULL,
+                                       sort_levels = TRUE, ...) {
+  .create_color_map.categorical(x, map = map, variant = variant,
+                                sort_levels = sort_levels, ...)
 }
 
 #' @noRd
 #' @export
-create_color_map.factor <- function(x, map = NULL, sort_levels = FALSE, ...) {
-  .create_color_map.categorical(x, map = map, sort_levels = sort_levels, ...)
+create_color_map.factor <- function(x, map = NULL, variant = NULL,
+                                    sort_levels = FALSE, ...) {
+  .create_color_map.categorical(x, map = map, variant = variant,
+                                sort_levels = sort_levels, ...)
 }
 
 #' Internal method that handles both chracter and factor vectors
 #' because create_color_map.atomic doesn't work
+#'
 #' @noRd
 #' @param sort_levels If `TRUE`, the unique levels of `vals` will be first
 #'   (lexicographically) sorted before hit with colors. By default, if `vals`
@@ -112,11 +124,20 @@ create_color_map.factor <- function(x, map = NULL, sort_levels = FALSE, ...) {
 #'   character, they will be sorted by default.
 #' @return a character vector like `map` but with recycled entries if the number
 #'   of `length(unique(vals)) > length(map)`
-.create_color_map.categorical <- function(x, map = NULL,
+.create_color_map.categorical <- function(x, map = NULL, variant = NULL,
                                           sort_levels = !is.factor(x), ...) {
   assert_categorical(x)
-  if (is.null(map)) map <- mucho.colors()
-  if (is.brewer.map.name(map)) {
+  if (is.factor(x)) {
+    uvals <- levels(x)
+  } else {
+    uvals <- unique(as.character(x))
+  }
+
+  if (is.null(map)) {
+    map <- mucho.colors()
+  } else if (test_string(map) && map == "viridis") {
+    map <- scales::viridis_pal()(length(uvals))
+  } else if (is.brewer.map.name(map)) {
     map <- suppressWarnings(brewer.pal(20, map))
   }
 
@@ -127,12 +148,6 @@ create_color_map.factor <- function(x, map = NULL, sort_levels = FALSE, ...) {
   # we used to allow an "integerish" map vector, but not sure what that was
   # at the moment ... and the is.integerish method has gone missing (2019-04-01)
   map.type <- if (is.character(map)) "char" else "int"
-
-  if (is.factor(x)) {
-    uvals <- levels(x)
-  } else {
-    uvals <- unique(as.character(x))
-  }
 
   if (sort_levels) {
     uvals <- sort(uvals)
@@ -172,7 +187,8 @@ create_color_map.factor <- function(x, map = NULL, sort_levels = FALSE, ...) {
 #' @importFrom circlize colorRamp2
 create_color_map.numeric <- function(x, map = NULL, zlim = NULL, ...) {
   if (!is.null(map)) {
-    warning("map parameter is curently ignored for numeric color maps")
+    warning("map parameter is curently ignored for numeric color maps, ",
+            "only viridis is used")
   }
   # Is 0 close to the center of the score distribution?
   mean.x <- mean(x)
