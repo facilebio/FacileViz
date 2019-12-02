@@ -220,7 +220,7 @@ create_color_map.numeric <- function(x, map = NULL, zlim = NULL, ...) {
     }
     breaks[1] <- fpost[1]
     breaks[21] <- fpost[2]
-    col <- colorRamp2(breaks, viridis::viridis(21))
+    col <- colorRamp2(breaks, scales::viridis_pal()(21))
   }
   col
 }
