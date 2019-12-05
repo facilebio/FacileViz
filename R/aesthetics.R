@@ -244,17 +244,19 @@ with_color.default <- function(x, aesthetic, aes_map = NULL, ...,
 #' x <- tibble(
 #'   category = sample(c("a", "b", "c"), 20, replace = TRUE),
 #'   subcat = sample(c("y", "z"), 20, replace = TRUE),
-#'   score = rnorm(20))
+#'   zscore = rnorm(20),
+#'   score = runif(20, min = 0, max = 1))
 #' x <- with_color(x, aesthetic = "category", "Set3")
 #' y <- with_color(x, aesthetic = "category", "Set1")
 #' z <- with_color(x, aesthetic = "category", "viridis")
+#' m <- with_color(x, aesthetic = "score")
 with_color.data.frame <- function(x, aesthetic = NULL, aes_map = NULL,
                                   out_column = ".color_aes.", ...,
                                   .default_color = "black") {
   stopifnot(is(x, "data.frame") || is(x, "tbl"))
   aes_cols <- .aes_varval_colnames(out_column, x)
-
   if (!is.null(aesthetic) && length(aesthetic) > 0L) {
+    aes_cols[["label"]] <- paste(aesthetic, collapse = "_")
     x <- .with_aes_columns(x, aesthetic, aes_cols)
     cmap <- create_color_map(x[[aes_cols$variable]], map = aes_map, ...)
     if (is.character(cmap)) {
@@ -263,10 +265,13 @@ with_color.data.frame <- function(x, aesthetic = NULL, aes_map = NULL,
       } else {
         x[[aes_cols$value]] <- I(cmap[x[[aes_cols$variable]]])
       }
-    } else {
+    } else if (is.function(cmap)) {
       # maybe aes_map was some type of colorRamp-like or viridis-likefunction,
       # then what?
-      stop("colorRamp functions not handled yet")
+      # stop("colorRamp functions not handled yet")
+      x[[aes_cols$value]] <- cmap(x[[aes_cols$variable]])
+    } else {
+      stop("Don't know what type of color ramp we are working with here")
     }
     attr(cmap, "columns") <- aes_cols
     aes_map(x, "color") <- cmap

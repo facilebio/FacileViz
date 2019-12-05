@@ -190,19 +190,42 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
         out <- sprintf("~ paste(%s)", paste(out, collapse = ","))
       }
     }
+    out
   })
 
+  amap <- aes_map(xx)
+  lname <-
   if (length(axes) == 2L) {
     p <- plot_ly(xx, x = formula(xf), y = formula(yf),
                  height = height, width = width,
                  source = event_source, key = formula(key),
                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup),
                  showlegend = showlegend)
-    p <- add_markers(p, type = "scatter",
-                     color = .color, colors = .colors,
-                     symbol = .shape, symbols = .shapes,
-                     marker = list(size = marker_size),
-                     text = ~.hover)
+    if (is.function(.colors)) {
+      # continous color (using colorscale). The way we do this now sucks when
+      # shooting data to plotly: I can't pass plotly a custom colorRamp-like
+      # function, so just using its default (viridis)
+      p <- add_markers(p, type = "scatter",
+                       color = .color,
+                       symbol = .shape, symbols = .shapes,
+                       marker = list(size = marker_size),
+                       text = ~.hover)
+      if (showlegend) {
+        # for colorbars over a zscore, you can do
+        # colorbar(p, limits = c(-1, 1))
+        color_colname <- attr(amap$color, "columns")[["label"]]
+        p <- colorbar(p, title = color_colname)
+      }
+    } else {
+      # we've got our own mapping: discrete colors seems to work fine with
+      # plotly the way we currently do it.
+      p <- add_markers(p, type = "scatter",
+                       color = .color,
+                       colors = .colors,
+                       symbol = .shape, symbols = .shapes,
+                       marker = list(size = marker_size),
+                       text = ~.hover)
+    }
     p <- config(p, displaylogo = FALSE)
     p <- layout(p, xaxis = xaxis, yaxis = yaxis, dragmode = "select")
   } else {
