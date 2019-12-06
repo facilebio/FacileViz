@@ -73,10 +73,12 @@ to color observations by combinations of columns, not just a single column.
 x <- tibble(
   category = sample(c("a", "b", "c"), 20, replace = TRUE),
   subcat = sample(c("y", "z"), 20, replace = TRUE),
-  score = rnorm(20))
+  zscore = rnorm(20),
+  score = runif(20, min = 0, max = 1))
 x <- with_color(x, aesthetic = "category", "Set3")
 y <- with_color(x, aesthetic = "category", "Set1")
 z <- with_color(x, aesthetic = "category", "viridis")
+m <- with_color(x, aesthetic = "score")
 }
 \seealso{
 \code{\link[=aes_map]{aes_map()}}

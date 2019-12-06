@@ -158,6 +158,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
 #' @noRd
 #' @importFrom plotly
 #'   add_markers
+#'   colorbar
 #'   config
 #'   layout
 #'   plot_ly
@@ -169,7 +170,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                           legendside = NULL,
                           height = NULL, width = NULL, flat = FALSE,
                           xlabel, ylabel, zlabel, key, event_source,
-                          legendgroup = NULL, showlegend = TRUE) {
+                          legendgroup = NULL, showlegend = TRUE, title = NULL) {
   xaxis <- list(title = if (!is.null(xlabel)) xlabel[1L] else axes[1L])
   yaxis <- list(title = if (!is.null(ylabel)) ylabel[1L] else axes[2L])
   if (!is.null(key)) key <- paste0("~", key)
@@ -288,6 +289,11 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
       p <- layout(p, showlegend = FALSE)
     }
   }
+
+  if (test_string(title)) {
+    p <- layout(p, title = title)
+  }
+
   p
 }
 
