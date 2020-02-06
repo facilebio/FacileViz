@@ -403,8 +403,7 @@ with_hover <- function(x, aesthetic, aes_map = NULL,
   } else {
     is.cat <- sapply(x[, aesthetic], test_categorical)
     assert_true(all(is.cat))
-    x <- tidyr::unite_(x, aes_cols$variable, aesthetic, sep = "__",
-                       remove = FALSE)
+    x <- unite(x, aes_cols$variable, {{aesthetic}}, sep = "__", remove = FALSE)
   }
   aes_map(x) <- amap
   x
