@@ -114,6 +114,13 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
   assert_categorical(dat[[x]])
   legendside <- match.arg(legendside)
 
+  if (unselected(group_aes)) group_aes <- NULL
+  if (unselected(color_aes)) color_aes <- NULL
+  if (unselected(shape_aes)) shape_aes <- NULL
+  if (unselected(facet_aes)) facet_aes <- NULL
+  if (unselected(size_aes)) size_aes <- NULL
+  if (unselected(hover)) hover <- NULL
+
   na_x <- match.arg(na_x)
   na_y <- match.arg(na_y)
 

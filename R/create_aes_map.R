@@ -264,7 +264,7 @@ create_color_map.numeric <- function(x, map = NULL, zlim = NULL, ...) {
 #'   )
 #' # show graph
 #' my_graph
-create_shape_map <- function(vals, map = NULL) {
+create_shape_map <- function(vals, map = NULL, ..., is3d = FALSE) {
   assert_categorical(vals)
 
   # These work for 2d plots, but 3d plots don't support all the shapes.
@@ -281,10 +281,17 @@ create_shape_map <- function(vals, map = NULL) {
   #   first <- c(27, 3, 17, 1, 2, 13)
   #   map <- c(first, setdiff(shapes, first))
   # }
-
-  map <- c(
+  if (!is.null(map)) {
+    warning("We don't support custom shape maps  yet", immediate. = TRUE)
+  }
+  safe.map <- c(
     "circle",      "square",      "diamond", "cross", "x",
     "circle-open", "square-open", "diamond-open")
+  if (is3d || is.null(map) || !is.character()) {
+    map <- safe.map
+  } else {
+    map <- safe.map
+  }
   out <- xref.discrete.map.to.vals(map, vals)
   out
 }

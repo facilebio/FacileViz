@@ -4,7 +4,7 @@
 \alias{create_shape_map}
 \title{Maps shapes to categorical values}
 \usage{
-create_shape_map(vals, map = NULL)
+create_shape_map(vals, map = NULL, ..., is3d = FALSE)
 }
 \arguments{
 \item{vals}{a vector of categorical values}

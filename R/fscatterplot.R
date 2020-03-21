@@ -24,10 +24,12 @@
 #' @examples
 #' dat <- data.frame(
 #'   a = rnorm(100), b = rnorm(100), c = rnorm(100),
+#'   score = runif(100, min = 0, max = 1),
 #'   class = sample(c("g1", "g2", "g3"), 100, replace = TRUE),
 #'   grp = sample(c("n", "o", "p", "q", "r"), 100, replace = TRUE))
 #' dat <- head(dat, 10)
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", hover = "class")
+#' fscatterplot(dat, c("a", "b"), color_aes = "score", hover = "class")
 #' fscatterplot(dat, c("a", "b"), color_aes = "class", hover = c("class", "c"))
 #' fscatterplot(dat, c("a", "b"), color_aes = "class",
 #'              facet_aes = "class", hover = c("class", "c"),
@@ -37,6 +39,8 @@
 #'
 #' # 3d
 #' fscatterplot(dat, c("a", "b", "c"),color_aes = "class",
+#'              hover = c("class", "c"))
+#' fscatterplot(dat, c("a", "b", "c"),color_aes = "score",
 #'              hover = c("class", "c"))
 #' fscatterplot(dat, c("a", "b", "c"), flat = TRUE, color_aes = "class",
 #'              hover = c("class", "c"))
@@ -83,6 +87,13 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                                     key = NULL, event_source = "A") {
   assert_character(axes, min.len = 2L, max.len = 3L)
   assert_subset(axes, names(dat))
+
+  if (unselected(color_aes)) color_aes <- NULL
+  if (unselected(shape_aes)) shape_aes <- NULL
+  if (unselected(size_aes)) size_aes <- NULL
+  if (unselected(facet_aes)) facet_aes <- NULL
+  if (unselected(hover)) hover <- NULL
+
   assert_subset(c(color_aes, shape_aes, size_aes, facet_aes, hover), names(dat))
   assert_flag(with_density)
   legendside <- match.arg(legendside)
@@ -195,7 +206,107 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   })
 
   amap <- aes_map(xx)
-  lname <-
+
+  if (length(axes) == 2L) {
+    marker.type <- "scatter"
+    p <- plot_ly(xx, x = formula(xf), y = formula(yf),
+                 height = height, width = width,
+                 source = event_source, key = formula(key),
+                 legendgroup = if (is.null(lgroup)) NULL else formula(lgroup),
+                 showlegend = showlegend)
+    p <- layout(p, xaxis = xaxis, yaxis = yaxis, dragmode = "select")
+  } else {
+    marker.type <- "scatter3d"
+    p <- plot_ly(xx, x = formula(xf), y = formula(zf), z = formula(yf),
+                 source = event_source, key = formula(key),
+                 height = height, width = width, showlegend = showlegend)
+    zaxis <- list(title = if (!is.null(zlabel)) zlabel[1L] else axes[3L])
+    camera <- list(
+      center = list(x = 0, y = 0, z = 0),
+      up = list(x = 0, y = 0, z = 1),
+      eye = list(x = 0.2, y = 2, z = 0.1))
+    scene <- list(xaxis = xaxis, yaxis = zaxis, zaxis = yaxis, camera = camera)
+    p <- layout(p, scene = scene, dragmode = "select")
+  }
+
+  if (is.function(.colors)) {
+    # continuous color (using colorscale). The way we do this now sucks when
+    # shooting data to plotly: I can't pass plotly a custom colorRamp-like
+    # function, so just using its default (viridis)
+    p <- add_markers(p, type = marker.type,
+                     color = .color,
+                     symbol = .shape, symbols = .shapes,
+                     marker = list(size = marker_size),
+                     text = ~.hover)
+    if (showlegend) {
+      # for colorbars over a zscore, you can do
+      # colorbar(p, limits = c(-1, 1))
+      color_colname <- attr(amap$color, "columns")[["label"]]
+      p <- colorbar(p, title = color_colname)
+    }
+  } else {
+    # we've got our own mapping: discrete colors seems to work fine with
+    # plotly the way we currently do it.
+    p <- add_markers(p, type = marker.type,
+                     color = .color,
+                     colors = .colors,
+                     symbol = .shape, symbols = .shapes,
+                     marker = list(size = marker_size),
+                     text = ~.hover)
+  }
+
+  p <- config(p, displaylogo = FALSE)
+
+  if (nofacet) {
+    if (isTRUE(legendside == "bottom")) {
+      p <- layout(p, legend = list(orientation = "h", y = -0.3))
+    } else if (isTRUE(legendside == "none")) {
+      p <- layout(p, showlegend = FALSE)
+    }
+  }
+
+  if (test_string(title)) {
+    p <- layout(p, title = title)
+  }
+
+  p
+}
+
+# Scratch ----------------------------------------------------------------------
+
+#' @noRd
+.fscatterplot.original <- function(xx, axes, xf, yf, zf, with_density,
+                          facet_aes, facet_nrows, marker_size,
+                          .color, .colors,
+                          .shape, .shapes, ...,
+                          legendside = NULL,
+                          height = NULL, width = NULL, flat = FALSE,
+                          xlabel, ylabel, zlabel, key, event_source,
+                          legendgroup = NULL, showlegend = TRUE, title = NULL) {
+  xaxis <- list(title = if (!is.null(xlabel)) xlabel[1L] else axes[1L])
+  yaxis <- list(title = if (!is.null(ylabel)) ylabel[1L] else axes[2L])
+  if (!is.null(key)) key <- paste0("~", key)
+
+  nofacet <- missing(facet_aes) || length(axes) == 3L
+
+  lgroup <- local({
+    if (nofacet) {
+      out <- NULL
+    } else {
+      lcols <- c(".color_aes.variable", ".shape_aes.variable")
+      out <- lcols[sapply(lcols, function(v) !is.null(xx[[v]]))]
+      if (length(out) == 0) {
+        out <- NULL
+      } else if (length(out) == 1L) {
+        out <- paste("~", out)
+      } else {
+        out <- sprintf("~ paste(%s)", paste(out, collapse = ","))
+      }
+    }
+    out
+  })
+
+  amap <- aes_map(xx)
   if (length(axes) == 2L) {
     p <- plot_ly(xx, x = formula(xf), y = formula(yf),
                  height = height, width = width,
@@ -203,7 +314,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup),
                  showlegend = showlegend)
     if (is.function(.colors)) {
-      # continous color (using colorscale). The way we do this now sucks when
+      # continuous color (using colorscale). The way we do this now sucks when
       # shooting data to plotly: I can't pass plotly a custom colorRamp-like
       # function, so just using its default (viridis)
       p <- add_markers(p, type = "scatter",
@@ -297,6 +408,7 @@ fscatterplot.data.frame <- function(dat, axes, with_density = FALSE,
   p
 }
 
+#' @noRd
 fscatterplot.default <- function(dat, axes,
                                  color_aes = NULL, color_map = NULL,
                                  shape_aes = NULL, shape_map = NULL,

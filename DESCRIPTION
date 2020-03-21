@@ -1,7 +1,7 @@
 Package: FacileViz
 Type: Package
 Title: Interactive vizualizations for FacileData
-Version: 0.1.9
+Version: 0.1.10
 Authors@R: c(
     person("Steve", "Lianoglou", , "lianoglou@dnli.com", c("aut", "cre"),
       comment = c(ORCID = "0000-0002-0924-1754")),
@@ -11,6 +11,8 @@ Description: This package provides basic methods that generate interactive
     generic method defined within, which must return FacileViz (or subclass)
     objects. Note that the only facile-dependency for this package must be
     FacileData. Other packages in the ecosystem will import/depend on this.
+URL: https://github.com/facilebio/FacileViz
+BugReports: https://github.com/facilebio/FacileViz/issues
 Depends:
     R (>= 3.5)
 Imports:
