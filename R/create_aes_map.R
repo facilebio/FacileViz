@@ -362,8 +362,11 @@ mucho.colors <- function() {
   # Now the 5th and 10th are both a very similar orange, remove 10
   muchos <- muchos[-10]
 
-  # Let's put grey and orange up front, 8 and 5, respecitvely
+  # Let's put grey orange up front, positions 8 and 5, respecitvely
   out <- c(muchos[8], muchos[5], muchos[-c(8,5)])
+  # and make cornflower blue third (and the 4th position (a blue), is red )
+  out[4] <- out[3]
+  out[3] <- "#6495ED" # cornflower blue
   out
 }
 
