@@ -5,14 +5,15 @@
 
 <!-- badges: start -->
 
+[![R build
+status](https://github.com/facilebio/FacileViz/workflows/R-CMD-check/badge.svg)](https://github.com/facilebio/FacileViz/actions)
+![pkgdown](https://github.com/facilebio/FacileViz/workflows/pkgdown/badge.svg)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle:
 Experimental](https://img.shields.io/badge/lifecycle-experimental-blue.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-<!--
-[![Travis build status](https://travis-ci.org/facilebio/FacileViz.svg?branch=master)](https://travis-ci.org/facilebio/FacileViz)
-[![Codecov test coverage](https://codecov.io/gh/facilebio/FacileViz/branch/master/graph/badge.svg)](https://codecov.io/gh/facilebio/FacileViz?branch=master)
---> <!-- badges: end -->
+[![codecov](https://codecov.io/gh/facilebio/FacileViz/branch/master/graph/badge.svg)](https://codecov.io/gh/facilebio/FacileViz)
+<!-- badges: end -->
 
 The purpose of this package is to provide helper functions to the
 facile.bio ecosystem that produce javascript-based visualizations.
