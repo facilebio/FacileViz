@@ -19,6 +19,7 @@ Imports:
     checkmate,
     broom,
     circlize,
+    dplyr,
     DT,
     FacileData,
     knitr,
