@@ -21,6 +21,7 @@ This is SUUUUUUUUPER brittle. Also note that your \code{plot_ly} calls need to
 use \code{legendgroup} correctly.
 }
 \examples{
+library(plotly)
 dat <- data.frame(
   x = 1:6,
   y = 1:6,
@@ -28,7 +29,7 @@ dat <- data.frame(
   b = c("x", "y", "y", "y", "z", "z"))
 colors <- c(a = "blue", b = "red", c = "green", d = "orange")
 plots <- sapply(unique(dat$b), function(val) {
-  xdat <- filter(dat, b == val)
+  xdat <- subset(dat, b == val)
   # You need go guess the appropriate subplot to set `showlegend = TRUE`,
   # but there are none that have all values of `a`.
   plot_ly(xdat, x = ~x, y = ~y, legendgroup = ~a, showlegend = val == "y") \%>\%

@@ -97,6 +97,7 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
 #' @param x plotly object
 #' @return A mangled `x`
 #' @examples
+#' library(plotly)
 #' dat <- data.frame(
 #'   x = 1:6,
 #'   y = 1:6,
@@ -104,7 +105,7 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
 #'   b = c("x", "y", "y", "y", "z", "z"))
 #' colors <- c(a = "blue", b = "red", c = "green", d = "orange")
 #' plots <- sapply(unique(dat$b), function(val) {
-#'   xdat <- filter(dat, b == val)
+#'   xdat <- subset(dat, b == val)
 #'   # You need go guess the appropriate subplot to set `showlegend = TRUE`,
 #'   # but there are none that have all values of `a`.
 #'   plot_ly(xdat, x = ~x, y = ~y, legendgroup = ~a, showlegend = val == "y") %>%
