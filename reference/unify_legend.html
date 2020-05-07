@@ -139,23 +139,24 @@ all the data points to cover the entirety of the data/legend key.</p>
 use <code>legendgroup</code> correctly.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>plotly</span>)
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>6</span>,
   <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>6</span>,
   <span class='kw'>a</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"b"</span>, <span class='st'>"d"</span>),
   <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>, <span class='st'>"y"</span>, <span class='st'>"y"</span>, <span class='st'>"z"</span>, <span class='st'>"z"</span>))
 <span class='no'>colors</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='st'>"blue"</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='st'>"red"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"green"</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='st'>"orange"</span>)
 <span class='no'>plots</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>dat</span>$<span class='no'>b</span>), <span class='kw'>function</span>(<span class='no'>val</span>) {
-  <span class='no'>xdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='no'>dat</span>, <span class='no'>b</span> <span class='kw'>==</span> <span class='no'>val</span>)
+  <span class='no'>xdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>dat</span>, <span class='no'>b</span> <span class='kw'>==</span> <span class='no'>val</span>)
   <span class='co'># You need go guess the appropriate subplot to set `showlegend = TRUE`,</span>
   <span class='co'># but there are none that have all values of `a`.</span>
-  <span class='fu'>plot_ly</span>(<span class='no'>xdat</span>, <span class='kw'>x</span> <span class='kw'>=</span> ~<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> ~<span class='no'>y</span>, <span class='kw'>legendgroup</span> <span class='kw'>=</span> ~<span class='no'>a</span>, <span class='kw'>showlegend</span> <span class='kw'>=</span> <span class='no'>val</span> <span class='kw'>==</span> <span class='st'>"y"</span>) <span class='kw'>%&gt;%</span>
-    <span class='fu'>add_markers</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"scatter"</span>, <span class='kw'>color</span> <span class='kw'>=</span> ~<span class='no'>a</span>, <span class='kw'>colors</span> <span class='kw'>=</span> <span class='no'>colors</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/plotly/man/plot_ly.html'>plot_ly</a></span>(<span class='no'>xdat</span>, <span class='kw'>x</span> <span class='kw'>=</span> ~<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> ~<span class='no'>y</span>, <span class='kw'>legendgroup</span> <span class='kw'>=</span> ~<span class='no'>a</span>, <span class='kw'>showlegend</span> <span class='kw'>=</span> <span class='no'>val</span> <span class='kw'>==</span> <span class='st'>"y"</span>) <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/plotly/man/add_trace.html'>add_markers</a></span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"scatter"</span>, <span class='kw'>color</span> <span class='kw'>=</span> ~<span class='no'>a</span>, <span class='kw'>colors</span> <span class='kw'>=</span> <span class='no'>colors</span>)
 }, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># compare</span>
 
-(<span class='no'>sb</span> <span class='kw'>&lt;-</span> <span class='fu'>subplot</span>(<span class='no'>plots</span>))
+(<span class='no'>sb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plotly/man/subplot.html'>subplot</a></span>(<span class='no'>plots</span>))
 <span class='fu'>unify_legend</span>(<span class='no'>sb</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
