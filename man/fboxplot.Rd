@@ -100,6 +100,7 @@ general case. This is a WIP.
 }
 
 \examples{
+library(plotly)
 data("diamonds", package = "ggplot2")
 dat <- dplyr::sample_n(diamonds, 2000)
 

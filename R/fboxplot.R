@@ -27,6 +27,7 @@
 #' @param group_aes column in `dat` to group barplots by (not yet implemented)
 #'
 #' @examples
+#' library(plotly)
 #' data("diamonds", package = "ggplot2")
 #' dat <- dplyr::sample_n(diamonds, 2000)
 #'
