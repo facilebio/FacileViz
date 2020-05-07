@@ -64,7 +64,7 @@ if (interactive()) {
   scales::show_col(cols3$a)
   with(dplyr::arrange(dat, d), plot(d, col = cols3$d(d), pch = 16))
 }
-cols4 <- create_color_map(dat, c(b = "Set1", c = "Set2")
+cols4 <- create_color_map(dat, c(b = "Set1", c = "Set2"))
 cols5 <- create_color_map(
   dat,
   list(a = "Set1", b = c(d = "black", e = "grey")))

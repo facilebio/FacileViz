@@ -121,10 +121,12 @@ https://plotly-r.com/arranging-views.html#fig:joint
 \examples{
 dat <- data.frame(
   a = rnorm(100), b = rnorm(100), c = rnorm(100),
+  score = runif(100, min = 0, max = 1),
   class = sample(c("g1", "g2", "g3"), 100, replace = TRUE),
   grp = sample(c("n", "o", "p", "q", "r"), 100, replace = TRUE))
 dat <- head(dat, 10)
 fscatterplot(dat, c("a", "b"), color_aes = "class", hover = "class")
+fscatterplot(dat, c("a", "b"), color_aes = "score", hover = "class")
 fscatterplot(dat, c("a", "b"), color_aes = "class", hover = c("class", "c"))
 fscatterplot(dat, c("a", "b"), color_aes = "class",
              facet_aes = "class", hover = c("class", "c"),
@@ -134,6 +136,8 @@ fscatterplot(dat, c("a", "b"), color_aes = "class", shape_aes = "grp",
 
 # 3d
 fscatterplot(dat, c("a", "b", "c"),color_aes = "class",
+             hover = c("class", "c"))
+fscatterplot(dat, c("a", "b", "c"),color_aes = "score",
              hover = c("class", "c"))
 fscatterplot(dat, c("a", "b", "c"), flat = TRUE, color_aes = "class",
              hover = c("class", "c"))
