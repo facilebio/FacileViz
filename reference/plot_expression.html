@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot expression of a gene/feature (this function is not facile) — plot_expression • FacileViz</title>
+<title>Plot expression of a gene from a DGEList (this function is not facile) — plot_expression • FacileViz</title>
 
 
 <!-- jquery -->
@@ -39,12 +39,13 @@
 
 
 
-<meta property="og:title" content="Plot expression of a gene/feature (this function is not facile) — plot_expression" />
+<meta property="og:title" content="Plot expression of a gene from a DGEList (this function is not facile) — plot_expression" />
 <meta property="og:description" content="This is a conveniencde function that takes your expression object
 (DGEList, or &quot;voomed&quot; object) and plots the expression of one gene (gene)
 across the entire dataset grouped by the sample covariate specified by
 group. You can optionally color each point by a second sample covariate
-specified by the color_by parameter." />
+specified by the color_by parameter.# y is a DGEList
+plot_expression(y, gene = &quot;Fxyd6&quot;, group = &quot;genotype&quot;, color_by = &quot;source&quot;)" />
 
 
 
@@ -112,7 +113,7 @@ specified by the color_by parameter." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot expression of a gene/feature (this function is not facile)</h1>
+    <h1>Plot expression of a gene from a DGEList (this function is not facile)</h1>
     <small class="dont-index">Source: <a href='https://github.com/facilebio/FacileViz/blob/master/R/plot_expression.R'><code>R/plot_expression.R</code></a></small>
     <div class="hidden name"><code>plot_expression.Rd</code></div>
     </div>
@@ -122,7 +123,8 @@ specified by the color_by parameter." />
 (<code>DGEList</code>, or "voomed" object) and plots the expression of one gene (<code>gene</code>)
 across the entire dataset grouped by the sample covariate specified by
 <code>group</code>. You can optionally color each point by a second sample covariate
-specified by the <code>color_by</code> parameter.</p>
+specified by the <code>color_by</code> parameter.<div class="r"></p><pre><span class='co'># y is a DGEList</span>
+<span class='fu'>plot_expression</span>(<span class='no'>y</span>, <span class='kw'>gene</span> <span class='kw'>=</span> <span class='st'>"Fxyd6"</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"genotype"</span>, <span class='kw'>color_by</span> <span class='kw'>=</span> <span class='st'>"source"</span>)</pre><p></div></p>
     </div>
 
     <pre class="usage"><span class='fu'>plot_expression</span>(
@@ -166,10 +168,6 @@ to use to plot split expression across the x axis</p></td>
 
     <p>a ggplot object</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'>mbl_load_rnaseq</span>(<span class='st'>"mouse"</span>, <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='st'>"mbl"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in mbl_load_rnaseq("mouse", dataset = "mbl"): could not find function "mbl_load_rnaseq"</span></div><div class='input'><span class='fu'>plot_expression</span>(<span class='no'>y</span>, <span class='kw'>gene</span> <span class='kw'>=</span> <span class='st'>"Fxyd6"</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"group"</span>,
-                <span class='kw'>color_by</span> <span class='kw'>=</span> <span class='st'>"source"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is(y, "DGEList"): object 'y' not found</span></div><div class='input'><span class='fu'>plot_expression</span>(<span class='no'>y</span>, <span class='kw'>gene</span> <span class='kw'>=</span> <span class='st'>"Fxyd6"</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"genotype"</span>,
-                <span class='kw'>color_by</span> <span class='kw'>=</span> <span class='st'>"source"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is(y, "DGEList"): object 'y' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
