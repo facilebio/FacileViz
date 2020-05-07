@@ -1,7 +1,7 @@
 # This was just a handy function developed for the mbl2018 pacakge, so putting
 # it here until we have a better FacileViz version
 
-#' Plot expression of a gene/feature (this function is not facile)
+#' Plot expression of a gene from a DGEList (this function is not facile)
 #'
 #' @description
 #' This is a conveniencde function that takes your expression object
@@ -9,6 +9,11 @@
 #' across the entire dataset grouped by the sample covariate specified by
 #' `group`. You can optionally color each point by a second sample covariate
 #' specified by the `color_by` parameter.
+#'
+#' ```r
+#' # y is a DGEList
+#' plot_expression(y, gene = "Fxyd6", group = "genotype", color_by = "source")
+#' ````
 #'
 #' @export
 #'
@@ -21,12 +26,6 @@
 #'   `length(gene) > 1`, you're going to need to wrwap.
 #' @return a ggplot object
 #'
-#' @examples
-#' y <- mbl_load_rnaseq("mouse", dataset = "mbl")
-#' plot_expression(y, gene = "Fxyd6", group = "group",
-#'                 color_by = "source")
-#' plot_expression(y, gene = "Fxyd6", group = "genotype",
-#'                 color_by = "source")
 plot_expression <- function(y, gene, group = "group",
                             color_by = NULL,
                             wrap_by = "symbol",
