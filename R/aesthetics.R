@@ -241,7 +241,7 @@ with_color.default <- function(x, aesthetic, aes_map = NULL, ...,
 #'   the observations in the rows of `x`
 #'
 #' @examples
-#' x <- tibble(
+#' x <- data.frame(
 #'   category = sample(c("a", "b", "c"), 20, replace = TRUE),
 #'   subcat = sample(c("y", "z"), 20, replace = TRUE),
 #'   zscore = rnorm(20),

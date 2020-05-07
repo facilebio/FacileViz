@@ -97,7 +97,7 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
 #' @param x plotly object
 #' @return A mangled `x`
 #' @examples
-#' dat <- tibble(
+#' dat <- data.frame(
 #'   x = 1:6,
 #'   y = 1:6,
 #'   a = c("a", "a", "b", "c", "b", "d"),

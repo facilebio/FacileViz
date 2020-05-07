@@ -70,7 +70,7 @@ to color observations by combinations of columns, not just a single column.
 }
 
 \examples{
-x <- tibble(
+x <- data.frame(
   category = sample(c("a", "b", "c"), 20, replace = TRUE),
   subcat = sample(c("y", "z"), 20, replace = TRUE),
   zscore = rnorm(20),

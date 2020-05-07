@@ -21,7 +21,7 @@ This is SUUUUUUUUPER brittle. Also note that your \code{plot_ly} calls need to
 use \code{legendgroup} correctly.
 }
 \examples{
-dat <- tibble(
+dat <- data.frame(
   x = 1:6,
   y = 1:6,
   a = c("a", "a", "b", "c", "b", "d"),
