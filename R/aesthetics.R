@@ -398,12 +398,14 @@ with_hover <- function(x, aesthetic, aes_map = NULL,
   assert_character(aesthetic, min.len = 1L)
   assert_subset(aesthetic, colnames(x))
   amap <- aes_map(x)
+  avar <- aes_cols$variable
   if (length(aesthetic) == 1L) {
-    x[[aes_cols$variable]] <- x[[aesthetic]]
+    x[[avar]] <- x[[aesthetic]]
   } else {
     is.cat <- sapply(x[, aesthetic], test_categorical)
     assert_true(all(is.cat))
-    x <- unite(x, aes_cols$variable, {{aesthetic}}, sep = "__", remove = FALSE)
+    x <- unite(x, {{avar}}, one_of(aesthetic),
+               sep = "__", remove = FALSE)
   }
   aes_map(x) <- amap
   x
