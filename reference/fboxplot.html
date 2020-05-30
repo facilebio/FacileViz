@@ -224,7 +224,7 @@ general case. This is a WIP.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>plotly</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"diamonds"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"ggplot2"</span>)
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample.html'>sample_n</a></span>(<span class='no'>diamonds</span>, <span class='fl'>2000</span>)
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample_n.html'>sample_n</a></span>(<span class='no'>diamonds</span>, <span class='fl'>2000</span>)
 
 <span class='co'># Grouped boxplots</span>
 <span class='fu'><a href='https://rdrr.io/pkg/plotly/man/plot_ly.html'>plot_ly</a></span>(<span class='no'>dat</span>, <span class='kw'>x</span> <span class='kw'>=</span> ~<span class='no'>cut</span>, <span class='kw'>y</span> <span class='kw'>=</span> ~<span class='no'>price</span>) <span class='kw'>%&gt;%</span>
