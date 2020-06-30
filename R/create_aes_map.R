@@ -114,6 +114,14 @@ create_color_map.factor <- function(x, map = NULL, variant = NULL,
                                 sort_levels = sort_levels, ...)
 }
 
+#' @noRd
+#' @export
+create_color_map.logical <- function(x, map = NULL, variant = NULL,
+                                     sort_levels = FALSE, ...) {
+  create_color_map(as.character(x), map = map, variant = variant,
+                   sort_levels = sort_levels, ...)
+}
+
 #' Internal method that handles both chracter and factor vectors
 #' because create_color_map.atomic doesn't work
 #'

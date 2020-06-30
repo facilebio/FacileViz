@@ -263,7 +263,16 @@ with_color.data.frame <- function(x, aesthetic = NULL, aes_map = NULL,
       if (length(cmap) == 1L) {
         x[[aes_cols$value]] <- I(.default_color)
       } else {
-        x[[aes_cols$value]] <- I(cmap[x[[aes_cols$variable]]])
+        # x[[aes_cols$value]] <- I(cmap[x[[aes_cols$variable]]])
+        cmap.idx <- x[[aes_cols$variable]]
+        if (is.logical(cmap.idx)) {
+          # if x[[aes_cols$variable]] is a logical covariate, the TRUE/FALSE
+          # indexing will create a vector that doesn't work when indexed like
+          # that so we turn it to a character first so that it's "TRUE" and
+          # "FALSE", which will match the names of the color map
+          cmap.idx <- as.character(cmap.idx)
+        }
+        x[[aes_cols$value]] <- I(unname(cmap[cmap.idx]))
       }
     } else if (is.function(cmap)) {
       # maybe aes_map was some type of colorRamp-like or viridis-likefunction,
