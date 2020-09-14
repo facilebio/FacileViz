@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • FacileViz</title>
+<title>Update the styling of the individual facets of a ggplot. — modify_facets • FacileViz</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Update the styling of the individual facets of a ggplot. — modify_facets" />
+<meta property="og:description" content="Change label and background/fill colors of the ribbons." />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,146 +106,65 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Update the styling of the individual facets of a ggplot.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/facilebio/FacileViz/blob/master/R/modify_facets.R'><code>R/modify_facets.R</code></a></small>
+    <div class="hidden name"><code>modify_facets.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Change label and background/fill colors of the ribbons.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>modify_facets</span>(<span class='no'>x</span>, <span class='no'>specs</span>, <span class='no'>...</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="aes_map.html">aes_map()</a></code> <code><a href="aes_map.html">`aes_map&lt;-`()</a></code> </p>
-        </td>
-        <td><p>Set and retrieve mappings for facile objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="analysis_result.html">analysis_result()</a></code> </p>
-        </td>
-        <td><p>Extract a FacileAnalysisResult from something</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_color_map.html">create_color_map()</a></code> </p>
-        </td>
-        <td><p>Map values to colors.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_shape_map.html">create_shape_map()</a></code> </p>
-        </td>
-        <td><p>Maps shapes to categorical values</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dot-search_df_columns.html">.search_df_columns()</a></code> </p>
-        </td>
-        <td><p>Fast and loose way to identify which row contains a query across a data.frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="enkey.html">enkey()</a></code> </p>
-        </td>
-        <td><p>Sets the "key" column for a data.frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fboxplot.html">fboxplot()</a></code> </p>
-        </td>
-        <td><p>Create an interactive boxplot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fscatterplot.html">fscatterplot()</a></code> </p>
-        </td>
-        <td><p>Draws interactive 2 or 3d scatterplots over data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="input_data.html">input_data()</a></code> </p>
-        </td>
-        <td><p>Retrieve the input object from a FacileViz</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="knit_print.FacileViz.html">knit_print(<i>&lt;FacileViz&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Ensures FacileViz objects are knit properly</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="maybe_facet.html">maybe_facet()</a></code> </p>
-        </td>
-        <td><p>Drives faceting-like behavior for (internal) plotly-generating functions.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="modify_facets.html">modify_facets()</a></code> </p>
-        </td>
-        <td><p>Update the styling of the individual facets of a ggplot.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_data.html">plot_data()</a></code> </p>
-        </td>
-        <td><p>Extracts the data used for plotting</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_expression.html">plot_expression()</a></code> </p>
-        </td>
-        <td><p>Plot expression of a gene from a DGEList (this function is not facile)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="unify_legend.html">unify_legend()</a></code> </p>
-        </td>
-        <td><p>Hacks into plotly internals merge legends across subplots.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="unselected.html">unselected()</a></code> </p>
-        </td>
-        <td><p>Checks if the return value from a selectInput looks like it's unselected</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="with_aesthetics.html">with_aesthetics()</a></code> </p>
-        </td>
-        <td><p>Utility function used by most plotting functions that returns a data.frame
-with columns mapping the observations to colors, shape, etc (adds columns
-for each)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="with_color.html">with_color()</a></code> </p>
-        </td>
-        <td><p>Augment a facile object with a color aesthetic</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>The ggplot object. We assume this has already been faceted.</p></td>
+    </tr>
+    <tr>
+      <th>specs</th>
+      <td><p>A list-of-list object that defines the parameters to update.
+<code><a href='https://rdrr.io/r/base/names.html'>names(specs)</a></code> are the labels of the facets to update, the values are a
+list of things:
+* <code>$fill</code>: background color
+* <code>$border</code>: stroke around the ribbon
+* <code>$color</code>: the color of the text.
+* <code>$label</code>: the text of the label in the facet ribbon</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a <code><a href='https://rdrr.io/pkg/gtable/man/gtable.html'>gtable::gtable()</a></code> object, build by <code><a href='https://ggplot2.tidyverse.org/reference/ggplot_gtable.html'>ggplot2::ggplot_gtable()</a></code>.
+You can plot this using via <code><a href='https://rdrr.io/r/grid/grid.draw.html'>grid::grid.draw()</a></code></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The nitty-gritty of this function (it's rough) was inspired from many a
+google search, with particularly helpful hints from CharlotteWoolley here:
+https://github.com/tidyverse/ggplot2/issues/2096#issuecomment-388545380</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>mpg</span>, <span class='fu'>aes</span>(<span class='no'>displ</span>, <span class='no'>hwy</span>)) +
+  <span class='fu'>geom_point</span>() +
+  <span class='fu'>facet_wrap</span>(~ <span class='no'>cyl</span>)
+<span class='no'>specs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='st'>"4"</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"four"</span>,
+    <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"red"</span>,
+    <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"white"</span>),
+  <span class='st'>"5"</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"purple"</span>,
+    <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"yellow"</span>))
+<span class='no'>updated</span> <span class='kw'>&lt;-</span> <span class='fu'>modify_facets</span>(<span class='no'>x</span>, <span class='no'>specs</span>)
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+  <span class='kw pkg'>grid</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/grid/grid.draw.html'>grid.draw</a></span>(<span class='no'>updated</span>)
+}</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
