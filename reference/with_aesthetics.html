@@ -127,15 +127,16 @@ with columns mapping the observations to colors, shape, etc (adds columns
 for each)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>with_aesthetics</span>(<span class='no'>dat</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>with_aesthetics</span>(<span class='kw'>dat</span>, <span class='kw'>...</span>)</pre>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>,
-                <span class='kw'>b</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>], <span class='kw'>c</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>6</span>:<span class='fl'>10</span>],
-                <span class='kw'>d</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>11</span>:<span class='fl'>15</span>])
-<span class='no'>xx</span> <span class='kw'>&lt;-</span> <span class='fu'>with_aesthetics</span>(<span class='no'>x</span>, <span class='kw'>color_aes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"b"</span>, <span class='st'>"c"</span>), <span class='kw'>shape_aes</span> <span class='kw'>=</span> <span class='st'>"d"</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(x = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, y = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, z = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,
+                b = <span class='kw'>letters</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>], c = <span class='kw'>letters</span>[<span class='fl'>6</span><span class='op'>:</span><span class='fl'>10</span>],
+                d = <span class='kw'>letters</span>[<span class='fl'>11</span><span class='op'>:</span><span class='fl'>15</span>])
+<span class='kw'>xx</span> <span class='op'>&lt;-</span> <span class='fu'>with_aesthetics</span>(<span class='kw'>x</span>, color_aes = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"b"</span>, <span class='st'>"c"</span>), shape_aes = <span class='st'>"d"</span>)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -151,7 +152,7 @@ for each)</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

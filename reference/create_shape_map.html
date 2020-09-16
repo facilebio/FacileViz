@@ -119,7 +119,7 @@ variables." />
 variables.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_shape_map</span>(<span class='no'>vals</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>is3d</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>create_shape_map</span>(<span class='kw'>vals</span>, map = <span class='kw'>NULL</span>, <span class='kw'>...</span>, is3d = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,31 +147,33 @@ http://www.r-graph-gallery.com/125-the-plotlys-symbols/</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># This isn't a real example. It is the code from the aforementioned page</span>
 <span class='co'># that generates the plotly shapes.</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>plotly</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='message'></span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://plotly-r.com'>plotly</a></span>)
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package ‘ggplot2’ was built under R version 4.0.1</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘plotly’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:ggplot2’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    last_plot</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:stats’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    filter</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:graphics’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    layout</span></div><div class='input'><span class='no'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>6</span>) , <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>6</span>))
-<span class='no'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>data</span> , <span class='kw'>my_symbol</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>36</span>))
-<span class='no'>data</span><span class='kw'>=</span><span class='no'>data</span>[<span class='no'>data</span>$<span class='no'>my_symbol</span><span class='kw'>&lt;</span><span class='fl'>33</span> , ]
+#&gt; <span class='message'>    layout</span></div><div class='input'><span class='kw'>data</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>) , <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>))
+<span class='kw'>data</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>data</span> , my_symbol=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>36</span>))
+<span class='kw'>data</span><span class='op'>=</span><span class='kw'>data</span>[<span class='kw'>data</span><span class='op'>$</span><span class='kw'>my_symbol</span><span class='op'>&lt;</span><span class='fl'>33</span> , ]
 
 <span class='co'># Make the graph</span>
-<span class='no'>my_graph</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/pkg/plotly/man/plot_ly.html'>plot_ly</a></span>(<span class='no'>data</span> , <span class='kw'>x</span><span class='kw'>=</span>~<span class='no'>Var1</span> , <span class='kw'>y</span><span class='kw'>=</span>~<span class='no'>Var2</span> , <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"scatter"</span>,
-                 <span class='kw'>mode</span><span class='kw'>=</span><span class='st'>"markers+text"</span> , <span class='kw'>hoverinfo</span><span class='kw'>=</span><span class='st'>"text"</span>, <span class='kw'>text</span><span class='kw'>=</span>~<span class='no'>my_symbol</span>,
-                 <span class='kw'>textposition</span> <span class='kw'>=</span> <span class='st'>"bottom right"</span>,
-                 <span class='kw'>marker</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>symbol</span><span class='kw'>=</span>~<span class='no'>my_symbol</span>, <span class='kw'>size</span><span class='kw'>=</span><span class='fl'>40</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>"red"</span>,
-                             <span class='kw'>opacity</span><span class='kw'>=</span><span class='fl'>0.7</span>)) <span class='kw'>%&gt;%</span>
+<span class='kw'>my_graph</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/plotly/man/plot_ly.html'>plot_ly</a></span>(<span class='kw'>data</span> , x=<span class='op'>~</span><span class='kw'>Var1</span> , y=<span class='op'>~</span><span class='kw'>Var2</span> , type=<span class='st'>"scatter"</span>,
+                 mode=<span class='st'>"markers+text"</span> , hoverinfo=<span class='st'>"text"</span>, text=<span class='op'>~</span><span class='kw'>my_symbol</span>,
+                 textposition = <span class='st'>"bottom right"</span>,
+                 marker=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(symbol=<span class='op'>~</span><span class='kw'>my_symbol</span>, size=<span class='fl'>40</span>, color=<span class='st'>"red"</span>,
+                             opacity=<span class='fl'>0.7</span>)) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://rdrr.io/pkg/plotly/man/layout.html'>layout</a></span>(
-    <span class='kw'>hovermode</span><span class='kw'>=</span><span class='st'>"closest"</span>,
-    <span class='kw'>yaxis</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>autorange</span><span class='kw'>=</span><span class='st'>"reversed"</span>, <span class='kw'>title</span><span class='kw'>=</span><span class='st'>""</span>,
-               <span class='kw'>tickfont</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>color</span><span class='kw'>=</span><span class='st'>"white"</span>)) ,
-    <span class='kw'>xaxis</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>( <span class='kw'>title</span><span class='kw'>=</span><span class='st'>""</span> , <span class='kw'>tickfont</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>color</span><span class='kw'>=</span><span class='st'>"white"</span>))
+    hovermode=<span class='st'>"closest"</span>,
+    yaxis=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(autorange=<span class='st'>"reversed"</span>, title=<span class='st'>""</span>,
+               tickfont=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(color=<span class='st'>"white"</span>)) ,
+    xaxis=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>( title=<span class='st'>""</span> , tickfont=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(color=<span class='st'>"white"</span>))
   )
 <span class='co'># show graph</span>
-<span class='no'>my_graph</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `arrange_()` is deprecated as of dplyr 0.7.0.</span>
+<span class='kw'>my_graph</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: `arrange_()` is deprecated as of dplyr 0.7.0.</span>
 #&gt; <span class='warning'>Please use `arrange()` instead.</span>
 #&gt; <span class='warning'>See vignette('programming') for more help</span>
 #&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once every 8 hours.</span><span></span>
@@ -191,7 +193,7 @@ http://www.r-graph-gallery.com/125-the-plotlys-symbols/</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
