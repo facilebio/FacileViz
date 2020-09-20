@@ -30,6 +30,7 @@ google search, with particularly helpful hints from CharlotteWoolley here:
 https://github.com/tidyverse/ggplot2/issues/2096#issuecomment-388545380
 }
 \examples{
+library(ggplot2)
 x <- ggplot(mpg, aes(displ, hwy)) +
   geom_point() +
   facet_wrap(~ cyl)
