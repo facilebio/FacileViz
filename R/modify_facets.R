@@ -19,6 +19,7 @@
 #' @return a [gtable::gtable()] object, build by [ggplot2::ggplot_gtable()].
 #'   You can plot this using via [grid::grid.draw()]
 #' @examples
+#' library(ggplot2)
 #' x <- ggplot(mpg, aes(displ, hwy)) +
 #'   geom_point() +
 #'   facet_wrap(~ cyl)
