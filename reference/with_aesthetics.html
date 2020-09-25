@@ -127,15 +127,15 @@ with columns mapping the observations to colors, shape, etc (adds columns
 for each)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>with_aesthetics</span>(<span class='kw'>dat</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>with_aesthetics</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(x = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, y = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, z = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,
-                b = <span class='kw'>letters</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>], c = <span class='kw'>letters</span>[<span class='fl'>6</span><span class='op'>:</span><span class='fl'>10</span>],
-                d = <span class='kw'>letters</span>[<span class='fl'>11</span><span class='op'>:</span><span class='fl'>15</span>])
-<span class='kw'>xx</span> <span class='op'>&lt;-</span> <span class='fu'>with_aesthetics</span>(<span class='kw'>x</span>, color_aes = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"b"</span>, <span class='st'>"c"</span>), shape_aes = <span class='st'>"d"</span>)
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, y <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, z <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,
+                b <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>, c <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>6</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>,
+                d <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>11</span><span class='op'>:</span><span class='fl'>15</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>xx</span> <span class='op'>&lt;-</span> <span class='fu'>with_aesthetics</span><span class='op'>(</span><span class='va'>x</span>, color_aes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span>, shape_aes <span class='op'>=</span> <span class='st'>"d"</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

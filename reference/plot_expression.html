@@ -125,19 +125,19 @@ plot_expression(y, gene = &quot;Fxyd6&quot;, group = &quot;genotype&quot;, color
 across the entire dataset grouped by the sample covariate specified by
 <code>group</code>. You can optionally color each point by a second sample covariate
 specified by the <code>color_by</code> parameter.<div class="r"></p><pre><span class='co'># y is a DGEList</span>
-<span class='fu'>plot_expression</span>(<span class='kw'>y</span>, gene = <span class='st'>"Fxyd6"</span>, group = <span class='st'>"genotype"</span>, color_by = <span class='st'>"source"</span>)
+<span class='fu'>plot_expression</span><span class='op'>(</span><span class='va'>y</span>, gene <span class='op'>=</span> <span class='st'>"Fxyd6"</span>, group <span class='op'>=</span> <span class='st'>"genotype"</span>, color_by <span class='op'>=</span> <span class='st'>"source"</span><span class='op'>)</span>
 </pre><p></div></p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_expression</span>(
-  <span class='kw'>y</span>,
-  <span class='kw'>gene</span>,
-  group = <span class='st'>"group"</span>,
-  color_by = <span class='kw'>NULL</span>,
-  wrap_by = <span class='st'>"symbol"</span>,
-  inorder = <span class='fl'>TRUE</span>,
-  <span class='kw'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>plot_expression</span><span class='op'>(</span>
+  <span class='va'>y</span>,
+  <span class='va'>gene</span>,
+  group <span class='op'>=</span> <span class='st'>"group"</span>,
+  color_by <span class='op'>=</span> <span class='cn'>NULL</span>,
+  wrap_by <span class='op'>=</span> <span class='st'>"symbol"</span>,
+  inorder <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
