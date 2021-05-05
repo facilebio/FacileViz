@@ -45,6 +45,8 @@ modify_facets <- function(x, specs, ...) {
   # TODO: we aren't disambiguating between row and colum labels
   any.facet <- c(tops, sides)
 
+  # TODO: use grid::grid.edit and grid::gPath functions to make this simpler?
+  # https://stackoverflow.com/a/34758629/83761
   for (i in any.facet) {
     igrob <- gt$grobs[[i]]$grobs[[1]]
     ichildren <- igrob$children

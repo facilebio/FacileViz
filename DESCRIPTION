@@ -30,6 +30,7 @@ Imports:
     tidyr
 Suggests:
     knitr,
+    rmarkdown,
     testthat
 Remotes:
     facilebio/FacileData
