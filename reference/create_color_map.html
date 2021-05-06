@@ -75,7 +75,7 @@ columns of a data.frame" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FacileViz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.98.0</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ columns of a data.frame" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@ columns of a data.frame" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/facilebio/FacileViz/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -185,9 +185,9 @@ colnames of <code>x</code>. See the examples (<code>cols5</code>) for an example
 <span class='va'>cols2</span> <span class='op'>&lt;-</span> <span class='fu'>create_color_map</span><span class='op'>(</span><span class='va'>dat</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='st'>"Set2"</span>, b <span class='op'>=</span> <span class='st'>"Set1"</span>, <span class='st'>"Set3"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: map parameter is curently ignored for numeric color maps, only viridis is used</span></div><div class='input'><span class='va'>cols3</span> <span class='op'>&lt;-</span> <span class='fu'>create_color_map</span><span class='op'>(</span><span class='va'>dat</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='st'>"viridis"</span>, c <span class='op'>=</span> <span class='st'>"Set2"</span>, <span class='st'>"Set3"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: map parameter is curently ignored for numeric color maps, only viridis is used</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/show_col.html'>show_col</a></span><span class='op'>(</span><span class='va'>cols1</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span>
-  <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/show_col.html'>show_col</a></span><span class='op'>(</span><span class='va'>cols2</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span>
-  <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/show_col.html'>show_col</a></span><span class='op'>(</span><span class='va'>cols3</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span>
+  <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/show_col.html'>show_col</a></span><span class='op'>(</span><span class='va'>cols1</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span>
+  <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/show_col.html'>show_col</a></span><span class='op'>(</span><span class='va'>cols2</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span>
+  <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/show_col.html'>show_col</a></span><span class='op'>(</span><span class='va'>cols3</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>d</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>d</span>, col <span class='op'>=</span> <span class='va'>cols3</span><span class='op'>$</span><span class='fu'>d</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span>, pch <span class='op'>=</span> <span class='fl'>16</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 <span class='va'>cols4</span> <span class='op'>&lt;-</span> <span class='fu'>create_color_map</span><span class='op'>(</span><span class='va'>dat</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>b <span class='op'>=</span> <span class='st'>"Set1"</span>, c <span class='op'>=</span> <span class='st'>"Set2"</span><span class='op'>)</span><span class='op'>)</span>
