@@ -4,7 +4,7 @@
 #   generated from. This is made accessible by alling `fanalysis_result(fp)`.
 # * `fp$input_data`: A slimmed down version of the data used for the final plot.
 #   A bigger version of this data should be available via:
-#   `fp %>% fanalysis_result() %>% tidy()`
+#   `fp |> fanalysis_result() |> tidy()`
 # * `fp$plot`: The plotly (for now) object that is the actual plot itself. This
 #   is made accessible via `plot(fp)` method
 # * `fp$params`: The parameters used to configure the plot, made accessible via

@@ -35,7 +35,9 @@ This is a conveniencde function that takes your expression object
 (\code{DGEList}, or "voomed" object) and plots the expression of one gene (\code{gene})
 across the entire dataset grouped by the sample covariate specified by
 \code{group}. You can optionally color each point by a second sample covariate
-specified by the \code{color_by} parameter.\if{html}{\out{<div class="r">}}\preformatted{# y is a DGEList
+specified by the \code{color_by} parameter.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# y is a DGEList
 plot_expression(y, gene = "Fxyd6", group = "genotype", color_by = "source")
 }\if{html}{\out{</div>}}
 }

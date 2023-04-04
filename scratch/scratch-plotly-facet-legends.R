@@ -9,12 +9,12 @@ dat <- tibble(
 
 colors <- c(a = "blue", b = "red", c = "green", d = "orange")
 
-plot_ly(dat, x = ~x, y = ~y) %>%
+plot_ly(dat, x = ~x, y = ~y) |>
   add_markers(type = "scatter", color = ~a, colors = colors)
 
 plots <- sapply(unique(dat$b), function(val) {
   xdat <- filter(dat, b == val)
-  plot_ly(xdat, x = ~x, y = ~y, legendgroup = ~a, showlegend = val == "y") %>%
+  plot_ly(xdat, x = ~x, y = ~y, legendgroup = ~a, showlegend = val == "y") |>
     add_markers(type = "scatter", color = ~a, colors = colors)
 }, simplify = FALSE)
 
@@ -49,12 +49,12 @@ xaxopts <- list(linecolor = toRGB("black"), linewidth = 2, showline = TRUE,
                 range = range(dat$a))
 yaxopts <- list(linecolor = toRGB("black"), linewidth = 2, showline = TRUE,
                 range = range(dat$b))
-plots <- dat %>%
-  group_by(class) %>%
+plots <- dat |>
+  group_by(class) |>
   do(plot = {
     plot_ly(., x = ~a, y = ~b, legendgroup = ~grp,
-            showlegend = .$class[1] == "g1") %>%
-      add_markers(color = ~grp) %>%
+            showlegend = .$class[1] == "g1") |>
+      add_markers(color = ~grp) |>
       layout(xaxis = axopts, yaxis = axopts)
   })
 subplot(plots, nrows = 2, shareX = TRUE, shareY = TRUE)

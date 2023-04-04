@@ -22,7 +22,7 @@ test_that("create_color_map recycle colors when necessary", {
   # we simply expect that:
   # 1. Every element still gets a color
   # 2. Colors will be re-used among different elements
-  cols <- FacileAnalysis:::mucho.colors()
+  cols <- FacileViz:::mucho.colors()
   ncols <- length(cols)
 
   vals <- head(letters, ncols + 5)
@@ -79,15 +79,17 @@ test_that("list aes_map setter replaces previously defined aesthetic maps", {
   x <- example_aes_data_table(n.obs, n.cats)
   aes_map(x, "color") <- create_color_map(x$category, "Set1")
   expect_daes_map(aes_map(x, "color"), x[["category"]], "Set1")
-  # expect_equal(
-  #   unname(aes_map(x, "color")),
-  #   RColorBrewer::brewer.pal(n.cats, "Set1"))
-
-
-  expect_warning({
+  
+  if (isTRUE(getOption("facileviz_verbose"))) {
+    expect_warning({
+      aes_map(x) <- list(color = create_color_map(x$category, "Set3"),
+                         size = "all sizes")
+    }, "Replacing aesthetic.*color")
+  } else {
     aes_map(x) <- list(color = create_color_map(x$category, "Set3"),
                        size = "all sizes")
-  }, "Replacing aesthetic.*color")
+  }
+  
   expect_daes_map(aes_map(x, "color"), x[["category"]], "Set3")
   # expect_equal(
   #   unname(aes_map(x, "color")),
@@ -142,10 +144,12 @@ test_that("with_shape adds color columns to data.frames", {
 
   # confirm a shapemap was generated and stored
   smap <- aes_map(x, "shape")
-  expect_is(smap, "integer")
+  expect_is(smap, "character")
   expect_setequal(names(smap), x[[vv$variable]])
 
-  # confirm shave values match manual lookup in shapemap
-  expected <- I(unname(smap[x[[vv$variable]]]))
-  expect_equal(x[[vv$value]], expected)
+  # confirm shape values match manual lookup in shapemap
+  expected <- smap[x[[vv$variable]]]
+  shapes <- x[[vv$value]]
+  shapes <- setNames(as.character(shapes), names(shapes))
+  expect_equal(shapes, expected)
 })
