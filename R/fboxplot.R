@@ -32,28 +32,28 @@
 #' dat <- dplyr::sample_n(diamonds, 2000)
 #'
 #' # Grouped boxplots
-#' plot_ly(dat, x = ~cut, y = ~price) %>%
-#'   add_boxplot(color = ~clarity) %>%
+#' plot_ly(dat, x = ~cut, y = ~price) |>
+#'   add_boxplot(color = ~clarity) |>
 #'   layout(boxmode = "group")
 #'
 #' # Grouped boxlpot by facet
-#' plots <- dat %>%
-#'   group_by(cut) %>%
+#' plots <- dat |>
+#'   group_by(cut) |>
 #'   do(plot = {
 #'     name <- as.character(.$cut[1L])
 #'     plot_ly(., x = ~as.numeric(clarity), y = ~price, legendgroup = ~clarity,
-#'             showlegend = .$cut[1] == diamonds$cut[1]) %>%
+#'             showlegend = .$cut[1] == diamonds$cut[1]) |>
 #'       add_boxplot(pointpos = 0,
 #'                   boxpoints = FALSE,
 #'                   color = ~ clarity,
 #'                   # line = list(color = "black"),
-#'                   showlegend = FALSE) %>%
+#'                   showlegend = FALSE) |>
 #'       add_markers(x = ~jitter(as.numeric(clarity)), y = ~price,
-#'                   color = ~ clarity) %>%
+#'                   color = ~ clarity) |>
 #'       add_annotations(text = sprintf("<b>%s</b>", name),
 #'                       x = 0, xref = "paper", xanchor = "left",
 #'                       y = 1, yref = "paper", yanchor = "top", yshift = 15,
-#'                       showarrow = FALSE) %>%
+#'                       showarrow = FALSE) |>
 #'       layout(xaxis = list(tickvals = 1:8, ticktext = levels(diamonds$clarity)))
 #'   })
 #' subplot(plots, nrows = 1, shareY = TRUE)
@@ -263,25 +263,25 @@ fboxplot.data.frame <- function(dat, x, y, with_points = nrow(dat) < 1000,
 
     plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
                    showlegend = showlegend, height = height, width = width,
-                   source = event_source, key = formula(key)) %>%
+                   source = event_source, key = formula(key)) |>
       add_boxplot(boxpoints = FALSE,
                   line = list(color = "black"),
                   fillcolor = "white",
-                  showlegend = FALSE) %>%
-                  # legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
+                  showlegend = FALSE) |>
+                  # legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) |>
       add_markers(x = formula(pf), y = formula(yf),
                   color = .color, colors = .colors,
-                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
+                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) |>
       layout(xaxis = xaxis, yaxis = yaxis)
 
   } else {
     xf <- paste0("~", x)
     plt <- plot_ly(xx, x = formula(xf), y = formula(yf), text = ~.hover,
                    showlegend = showlegend, height = height, width = width,
-                   source = event_source, key = formula(key)) %>%
+                   source = event_source, key = formula(key)) |>
       add_boxplot(boxpoints = "outliers", pointpos = 0,
                   color = .color, colors = .colors,
-                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) %>%
+                  legendgroup = if (is.null(lgroup)) NULL else formula(lgroup)) |>
       layout(xaxis = xaxis, yaxis = yaxis)
 
   }

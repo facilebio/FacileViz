@@ -12,7 +12,7 @@ dat <- data.frame(
 ggplot(dat, aes(x = variety, y = note)) +
   geom_boxplot()
 
-plot_ly(dat, x = ~ variety, y = ~ note) %>%
+plot_ly(dat, x = ~ variety, y = ~ note) |>
   add_boxplot(boxpoints = "outliers", fillcolor = "white", pointpos = 0)
 
 fboxplot(dat, x = "variety", y = "note")
@@ -24,10 +24,10 @@ gg <- ggplot(dat, aes(x = variety, y = note)) +
 gg
 
 # need to ensure x is a factor so you can convert to numeric for point jitter
-plot_ly(dat, x = ~as.numeric(variety), y = ~note) %>%
-  add_boxplot(boxpoints = FALSE, showlegend = FALSE, fillcolor = "white") %>%
+plot_ly(dat, x = ~as.numeric(variety), y = ~note) |>
+  add_boxplot(boxpoints = FALSE, showlegend = FALSE, fillcolor = "white") |>
   add_markers(x = ~jitter(as.numeric(variety), amount = 0.07),
-              color = ~treatment) %>%
+              color = ~treatment) |>
   layout(xaxis = list())
 
 fboxplot(dat, x = "variety", y = "note", color_aes = "treatment")
@@ -45,20 +45,20 @@ gg
 
 # grouped layout boxmode
 text <- ~sprintf("treatment: %s<br>variety: %s", treatment, variety)
-plot_ly(dat, x = ~variety, y = ~note, text = text) %>%
-  # add_boxplot(boxpoints = FALSE, showlegend = FALSE, fillcolor = "white") %>%
-  add_boxplot(boxpoints = "all", color = ~ treatment, pointpos = 0) %>%
+plot_ly(dat, x = ~variety, y = ~note, text = text) |>
+  # add_boxplot(boxpoints = FALSE, showlegend = FALSE, fillcolor = "white") |>
+  add_boxplot(boxpoints = "all", color = ~ treatment, pointpos = 0) |>
   layout(boxmode = "group")
 
 # by interaction
-plot_ly(dat, x = ~interaction(treatment, variety), y = ~note, text = text) %>%
+plot_ly(dat, x = ~interaction(treatment, variety), y = ~note, text = text) |>
   add_boxplot(boxpoints = "all", color = ~ treatment, pointpos = 0)
 
 # using facet insteqd of groups
-plots <- dat %>%
-  group_by(variety) %>%
+plots <- dat |>
+  group_by(variety) |>
   do(plot = {
-    plot_ly(., x = ~treatment, y = ~note) %>%
+    plot_ly(., x = ~treatment, y = ~note) |>
       add_boxplot(boxpoints = "all", color = ~treatment, pointpos = 0)
   })
 subplot(plots, nrows = 1, shareX = TRUE, shareY = TRUE)
@@ -66,8 +66,8 @@ subplot(plots, nrows = 1, shareX = TRUE, shareY = TRUE)
 # diamonds ---------------------------------------------------------------------
 
 # From rbook
-plot_ly(diamonds, x = ~interaction(clarity, cut), y = ~price) %>%
-  add_boxplot(color = ~clarity) %>%
+plot_ly(diamonds, x = ~interaction(clarity, cut), y = ~price) |>
+  add_boxplot(color = ~clarity) |>
   layout(yaxis = list(title = ""))
 
 ggplot(diamonds, aes(cut, price, fill = clarity)) +
@@ -75,23 +75,23 @@ ggplot(diamonds, aes(cut, price, fill = clarity)) +
 
 
 dat <- sample_n(diamonds, 2000)
-plot_ly(dat, x = ~cut, y = ~price) %>%
-  add_boxplot(color = ~clarity) %>%
+plot_ly(dat, x = ~cut, y = ~price) |>
+  add_boxplot(color = ~clarity) |>
   layout(boxmode = "group")
 
-plots <- dat %>%
-  group_by(cut) %>%
+plots <- dat |>
+  group_by(cut) |>
   do(plot = {
     plot_ly(., x = ~as.numeric(clarity), y = ~price, legendgroup = ~clarity,
-            showlegend = .$cut[1] == diamonds$cut[1]) %>%
+            showlegend = .$cut[1] == diamonds$cut[1]) |>
       add_boxplot(pointpos = 0,
                   boxpoints = FALSE,
                   # color = ~ clarity,
                   line = list(color = "black"),
                   fillcolor = "white",
-                  showlegend = FALSE) %>%
+                  showlegend = FALSE) |>
       add_markers(x = ~jitter(as.numeric(clarity)), y = ~price,
-                  color = ~ clarity) %>%
+                  color = ~ clarity) |>
       layout(xaxis = list(tickvals = 1:8, ticktext = levels(diamonds$clarity)))
   })
 subplot(plots, nrows = 1, shareY = TRUE)

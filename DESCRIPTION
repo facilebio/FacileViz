@@ -1,11 +1,12 @@
 Package: FacileViz
 Type: Package
 Title: Interactive vizualizations for FacileData
-Version: 0.98.0
+Version: 0.98.1
 Authors@R: c(
-    person("Steve", "Lianoglou", , "lianoglou@dnli.com", c("aut", "cre"),
+    person("Steve", "Lianoglou", , "slianoglou@gmail.com", c("aut", "cre"),
       comment = c(ORCID = "0000-0002-0924-1754")),
-    person("Denali Therapeutics", role = c("cph", "fnd")))
+    person("Aratus Informatics", role = c("cph", "fnd"), comment = "2023+"),
+    person("Denali Therapeutics", role = c("cph", "fnd"), comment = "2018 - 2022"))
 Description: This package provides basic methods that generate interactive
     vizualizations for FacileData. The "workhorse" method is the "vizualize" S3
     generic method defined within, which must return FacileViz (or subclass)
@@ -38,4 +39,4 @@ License: Apache Version 2.0
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3

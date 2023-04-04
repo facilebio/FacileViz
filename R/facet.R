@@ -108,7 +108,7 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
 #'   xdat <- subset(dat, b == val)
 #'   # You need go guess the appropriate subplot to set `showlegend = TRUE`,
 #'   # but there are none that have all values of `a`.
-#'   plot_ly(xdat, x = ~x, y = ~y, legendgroup = ~a, showlegend = val == "y") %>%
+#'   plot_ly(xdat, x = ~x, y = ~y, legendgroup = ~a, showlegend = val == "y") |>
 #'     add_markers(type = "scatter", color = ~a, colors = colors)
 #' }, simplify = FALSE)
 #'

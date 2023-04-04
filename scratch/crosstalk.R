@@ -38,7 +38,7 @@ shared_df2 <- SharedData$new(df2, ~owner, group = "Choose owner")
 
 df = filter_select("owner", "Car owner:", shared_df1, ~owner)
 
-plot_ly(shared_df1, x = ~id, y = ~hp, color = ~owner) %>%
-  add_markers() %>%
+plot_ly(shared_df1, x = ~id, y = ~hp, color = ~owner) |>
+  add_markers() |>
   highlight("plotly_click")
 

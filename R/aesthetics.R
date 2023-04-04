@@ -85,12 +85,13 @@ aes_map.default <- function(x, aes_name = NULL, ...) {
   x
 }
 
-.update.aes_map <- function(amap, aes_name, value) {
+.update.aes_map <- function(amap, aes_name, value,
+                            verbose = getOption("facileviz_verbose", FALSE)) {
   assert_class(amap, "list")
   assert_string(aes_name)
   assert_subset(aes_name, aes_names())
-  if (aes_name %in% names(amap)) {
-    # warning("Replacing aesthetic map: ", aes_name)
+  if (aes_name %in% names(amap) && isTRUE(verbose)) {
+    warning("Replacing aesthetic map: ", aes_name)
   }
   amap[[aes_name]] <- value
   amap
@@ -301,11 +302,35 @@ with_color.tbl <- function(x, aesthetic = NULL, aes_map = NULL,
 }
 
 # with_shape ===================================================================
+
+
+#' Augment a facile object with a shape aesthetic
+#'
+#' This function augments a variety of objects with shape mappings. For now we
+#' assume objects are only data.frames or tbls.
+#'
+#' @export
+#' @rdname with_shape
+#' @seealso [aes_map()]
+#'
+#' @param x an object to colorize (currently just data.frame or tbls)
+#' @param aesthetic an "attribute" from `x` to map levels -> shapes. 
+#'   The types of object this argument can be is specific to the class of `x`.
+#'   For instance, for a `data.frame`, `aesthetic` would be a character vector
+#'   that specifices the column(s) used to map observations to colors.
+#' @param aes_map unsupported for now, no way to provide your own shapes.
+#' @param ... arguments to pass down to specific implementations
+#' @param .default_shape the default shape used when only one level exists, this
+#'   is a `"circile"`.
+#' @return the object `x` with an upated `aes_map(x, "shape")`
 with_shape <- function(x, aesthetic, aes_map = NULL, ...,
                        .default_shape = I("circle")) {
   UseMethod("with_shape", x)
 }
 
+#' @export
+#' @method with_shape data.frame
+#' @rdname with_shape
 with_shape.data.frame <- function(x, aesthetic, aes_map = NULL,
                                   out_column = ".shape_aes.", ...,
                                   .default_shape = "circle") {
@@ -329,15 +354,22 @@ with_shape.data.frame <- function(x, aesthetic, aes_map = NULL,
   x
 }
 
+#' @export
+#' @rdname with_shape
 with_shape.tbl <- function(x, aesthetic, aes_map = NULL,
                            out_column = ".shape_aes.", ...,
                            .default_shape = I("circle")) {
-  with_shape.data.frame(collect(x), aesthetic, aes_map,
-                        out_column = out_column, ...,
-                        .default_shape = .default_shape)
+  x <- collect(x, n = Inf)
+  NextMethod()
+  # with_shape.data.frame(collect(x), aesthetic, aes_map,
+  #                       out_column = out_column, ...,
+  #                       .default_shape = .default_shape)
 }
 
 # with_size ====================================================================
+
+#' Augment a facile object with a size aesthetic.
+#' @export
 with_size <- function(x, aesthetic, aes_map = NULL,
                       out_column = ".size_aes.", ...,
                       .default_size = I(1L)) {
@@ -345,6 +377,9 @@ with_size <- function(x, aesthetic, aes_map = NULL,
   UseMethod("with_size", x)
 }
 
+#' @export
+#' @method with_size data.frame
+#' @rdname with_size
 with_size.data.frame <- function(x, aesthetic, aes_map = NULL,
                                  out_column = ".size_aes.", ...,
                                  .default_size = I(1L)) {
@@ -353,15 +388,13 @@ with_size.data.frame <- function(x, aesthetic, aes_map = NULL,
   }
 }
 
+#' @export
+#' @rdname with_size
 with_size.tbl <- function(x, aesthetic, aes_map = NULL,
                           out_column = ".size_aes.", ...,
                           .default_size = I(1L)) {
-  with_size.data.frame(collect(x), aesthetic, aes_map,
-                       out_column = out_column, ...,
-                       .default_size = .default_size)
-  if (!is.null(aesthetic)) {
-    warning("We aren't mapping size")
-  }
+  x <- collect(x, n = Inf)
+  NextMethod()
 }
 
 # with_hover ===================================================================

@@ -37,7 +37,7 @@ my_graph=plot_ly(data , x=~Var1 , y=~Var2 , type="scatter",
                  mode="markers+text" , hoverinfo="text", text=~my_symbol,
                  textposition = "bottom right",
                  marker=list(symbol=~my_symbol, size=40, color="red",
-                             opacity=0.7)) \%>\%
+                             opacity=0.7)) |>
   layout(
     hovermode="closest",
     yaxis=list(autorange="reversed", title="",

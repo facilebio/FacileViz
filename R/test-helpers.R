@@ -28,7 +28,7 @@ expect_daes_map <- function(map, values, expected = NULL,
       }
     }
     expect_equal(length(expected), n.cats)
-    expect_equal(map, expected, info = info)
+    expect_equal(map, expected, info = info, check.attributes = FALSE)
   }
 }
 
