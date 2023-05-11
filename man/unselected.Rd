@@ -9,6 +9,9 @@ unselected(value, ignore = c("---", "__initializing__", ""))
 \arguments{
 \item{value}{The (character) object returned from a \code{selectInput}}
 }
+\value{
+a logical (TRUE/FALSE) indicating if something is "selected"
+}
 \description{
 For some reason, sometimes a selectInput returns \code{NULL} and other times
 it returns \code{""}, so I'm just making this utility function to deal with that
@@ -17,5 +20,5 @@ it returns \code{""}, so I'm just making this utility function to deal with that
 NOTE: This is really a function that is used by shiny modules, but instead
 of having every shiny function check if something is "unselected" and setting
 it to NULL, we move that functionality in here so that internal vizualization
-functions can do that jusst once
+functions can do that just once
 }
