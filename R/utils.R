@@ -7,6 +7,8 @@
 #' of having every shiny function check if something is "unselected" and setting
 #' it to NULL, we move that functionality in here so that internal vizualization
 #' functions can do that just once
+#' 
+#' NOTE: If you change this, change sparrow.shiny:::unselected
 #'
 #' @export
 #' @param value The (character) object returned from a `selectInput`
@@ -19,6 +21,7 @@ unselected <- function(value, ignore = c("---", "__initializing__", "")) {
   } else {
     val <- length(value) == 0L || 
       all(sapply(value, function(v) nchar(v) == 0L)) || 
+      any(is.na(value)) ||
       all(value %in% ignore)
   }
   val
