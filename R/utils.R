@@ -1,7 +1,8 @@
 #' Checks if the return value from a selectInput looks like it's unselected
 #'
 #' For some reason, sometimes a selectInput returns `NULL` and other times
-#' it returns `""`, so I'm just making this utility function to deal with that
+#' it returns `""`, so I'm just making this utility function to deal with that.
+#' This function supports selection from inputs that can take multiple values.
 #'
 #' NOTE: This is really a function that is used by shiny modules, but instead
 #' of having every shiny function check if something is "unselected" and setting
