@@ -43,7 +43,7 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
     # faceted plot, not the dimmensions of the individual plots.
     width <- (ncols * facet_width) + (ncols * 10) # last term for margin
     height <- (nrows * facet_height) + (ncols * 10)
-
+    width <- height <- NULL
     facets <- sapply(names(sdat), function(name) {
       fdat <- sdat[[name]]
       i <- match(name, names(sdat))
@@ -79,7 +79,8 @@ maybe_facet <- function(plotfn, plotdat, facet_aes, nrows = NULL,
       width <- width + 100
     }
     p <- plotfn(plotdat, ..., legendside = legendside, showlegend = showlegend,
-                width = width, height = height)
+                # width = width, height = height)
+                width = NULL, height = NULL)
   }
 
   p
