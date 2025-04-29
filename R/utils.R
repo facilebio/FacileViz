@@ -16,6 +16,7 @@
 #' @return a logical (TRUE/FALSE) indicating if something is "selected"
 unselected <- function(value, ignore = c("---", "__initializing__", "")) {
   if (is.null(value)) return(TRUE)
+  if (is.factor(value)) value <- as.character(value)
   # Otherwise this is a character
   if (is(value, "data.frame") || is(value, "tbl")) {
     val <- nrow(value) == 0
